@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.evgeniysharafan.utils.Toasts;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersCardsAdapter;
 import com.indoor.flowers.database.DbOpenHelper;
@@ -24,6 +25,7 @@ import com.indoor.flowers.util.EmptyDataUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FlowersFragment extends Fragment implements LoaderCallbacks<Cursor> {
 
@@ -70,6 +72,11 @@ public class FlowersFragment extends Fragment implements LoaderCallbacks<Cursor>
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
+    }
+
+    @OnClick(R.id.ff_add_flower)
+    public void onAddFlowerClicked() {
+        Toasts.showFuture();
     }
 
     private void initList() {

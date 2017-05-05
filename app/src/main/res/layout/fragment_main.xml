@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/fnd_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -11,22 +11,22 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/toolbar"
+            android:id="@+id/fnd_toolbar"
             layout="@layout/layout_toolbar" />
 
         <!--We need android:clickable="true" because of this issue:
        http://stackoverflow.com/questions/17896052/why-does-drawerlayout-sometimes-glitch-upon-opening-->
         <FrameLayout
-            android:id="@+id/content"
+            android:id="@+id/fnd_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/fnd_toolbar"
             android:clickable="true" />
 
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/fnd_nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
