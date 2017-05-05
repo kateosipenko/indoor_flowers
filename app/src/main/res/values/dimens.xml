@@ -2,6 +2,8 @@
 <resources>
 
     <dimen name="toolbar_elevation">0dp</dimen>
+    <dimen name="tab_size_default">6dp</dimen>
+    <dimen name="tab_size_selected">8dp</dimen>
 
     <!-- text size -->
     <dimen name="text_body_small">12sp</dimen>
@@ -25,5 +27,9 @@
 
     <!--Navigation drawer-->
     <dimen name="nd_header_height">180dp</dimen>
+
+    <!--Add flower-->
+    <dimen name="faf_image_size">150dp</dimen>
+    <dimen name="faf_title_margin">60dp</dimen>
 
 </resources>

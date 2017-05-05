@@ -25,4 +25,12 @@
         <item name="android:layout_margin">@dimen/padding_medium</item>
     </style>
 
+    <style name="TabsStyle">
+        <item name="tabGravity">center</item>
+        <item name="tabBackground">@drawable/tab_selector</item>
+        <item name="android:animateLayoutChanges">true</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="android:layout_gravity">center_horizontal|bottom</item>
+    </style>
+
 </resources>

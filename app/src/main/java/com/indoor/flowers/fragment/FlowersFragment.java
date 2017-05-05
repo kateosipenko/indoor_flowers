@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.evgeniysharafan.utils.Toasts;
+import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersCardsAdapter;
 import com.indoor.flowers.database.DbOpenHelper;
@@ -76,7 +76,7 @@ public class FlowersFragment extends Fragment implements LoaderCallbacks<Cursor>
 
     @OnClick(R.id.ff_add_flower)
     public void onAddFlowerClicked() {
-        Toasts.showFuture();
+        Fragments.replace(getFragmentManager(), android.R.id.content, AddFlowerFragment.newInstance(), null, true);
     }
 
     private void initList() {

@@ -16,6 +16,7 @@
     <color name="primary900">@color/material_green_primary900</color>
 
     <!--accent-->
+    <color name="accent50">@color/material_deep_orange_primary50</color>
     <color name="accent100">@color/material_deep_orange_accent100</color>
     <color name="accent200">@color/material_deep_orange_accent200</color>
     <color name="accent400">@color/material_deep_orange_accent400</color>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/lafd_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/faf_title_margin"
+        android:text="@string/faf_flower_data"
+        android:textColor="@color/primary300"
+        android:textSize="@dimen/text_headline_normal" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/lafd_flower_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/padding_big"
+        android:hint="@string/faf_flower_name_hint"
+        android:textColorHint="@color/primary100">
+
+        <EditText
+            android:id="@+id/lafd_flower_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:textColor="@color/black_secondary_text"
+            tools:ignore="LabelFor"
+            tools:text="Asd asd " />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/lafd_flower_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lafd_flower_name_layout"
+        android:layout_below="@id/lafd_title"
+        android:layout_margin="@dimen/faf_title_margin"
+        android:contentDescription="@string/faf_content_flower_image"
+        app:srcCompat="@drawable/ic_flower" />
+
+    <ImageButton
+        style="@style/ImageButtonStyle"
+        android:layout_alignEnd="@id/lafd_flower_image"
+        android:layout_alignTop="@id/lafd_flower_image"
+        android:contentDescription="@string/faf_content_flower_image_edit"
+        android:src="@android:drawable/ic_menu_edit" />
+
+</android.support.percent.PercentRelativeLayout>

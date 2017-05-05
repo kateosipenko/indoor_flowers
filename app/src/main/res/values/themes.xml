@@ -36,6 +36,8 @@
         <item name="android:windowBackground">@color/window_bg</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:textColor">@color/black_secondary_text</item>
+        <item name="android:textSize">@dimen/text_body_medium</item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
