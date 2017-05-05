@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="toolbar_elevation">0dp</dimen>
+
     <!-- text size -->
     <dimen name="text_body_small">12sp</dimen>
     <dimen name="text_body_normal">14sp</dimen>
@@ -19,5 +21,9 @@
     <dimen name="padding_normal">8dp</dimen>
     <dimen name="padding_medium">12dp</dimen>
     <dimen name="padding_big">16dp</dimen>
+    <dimen name="margin_fab">24dp</dimen>
+
+    <!--Navigation drawer-->
+    <dimen name="nd_header_height">180dp</dimen>
 
 </resources>
