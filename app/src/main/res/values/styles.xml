@@ -1,0 +1,46 @@
+<resources>
+
+    <attr name="src" format="reference" />
+    <attr name="text" format="string" />
+
+    <declare-styleable name="CatalogView">
+        <attr name="groupTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleButton">
+        <attr name="src" />
+        <attr name="showShadow" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomerMenuView">
+        <attr name="src" />
+        <attr name="text" />
+        <attr name="checked" format="boolean" />
+        <attr name="checkable" format="boolean" />
+        <attr name="notificationCount" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="ResizableTextView">
+        <attr name="minTextSize" format="dimension" />
+        <attr name="maxTextSize" format="dimension" />
+    </declare-styleable>
+
+    <style name="Roofing.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowMinWidthMajor">1%</item>
+        <item name="android:windowMinWidthMinor">1%</item>
+    </style>
+
+    <style name="ImageButtonStyle">
+        <item name="android:background">@drawable/sel_image_btn_bg</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="Dialog.Transparent" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Dialog.ProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+    <style name="Dialog.CustomView" parent="Dialog.Transparent" />
+</resources>

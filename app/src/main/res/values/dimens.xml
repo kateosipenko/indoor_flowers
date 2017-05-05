@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- text size -->
+    <dimen name="text_body_small">12sp</dimen>
+    <dimen name="text_body_normal">14sp</dimen>
+    <dimen name="text_body_medium">16sp</dimen>
+    <dimen name="text_body_big">18sp</dimen>
+    <dimen name="text_headline_small">20sp</dimen>
+    <dimen name="text_headline_normal">22sp</dimen>
+    <dimen name="text_headline_medium">24sp</dimen>
+    <dimen name="text_headline_big">26sp</dimen>
+    <dimen name="text_page_title_small">28sp</dimen>
+    <dimen name="text_page_title">36sp</dimen>
+    <dimen name="text_page_title_big">44sp</dimen>
+
+    <!-- margin, padding -->
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_normal">8dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_big">16dp</dimen>
+
+</resources>
