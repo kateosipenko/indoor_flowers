@@ -1,18 +1,43 @@
 <resources>
 
+    <declare-styleable name="ValueSeekBar">
+        <attr name="header" format="string" />
+        <attr name="headerTextColor" format="color" />
+        <attr name="headerTextSize" format="dimension" />
+        <attr name="valueTextColor" format="color" />
+        <attr name="valueTextSize" format="dimension" />
+        <attr name="minValue" format="float" />
+        <attr name="maxValue" format="float" />
+        <attr name="defaultValue" format="float" />
+    </declare-styleable>
+
     <style name="ImageButtonStyle">
         <item name="android:background">@drawable/sel_image_btn_bg</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <style name="Dialog.Transparent" parent="Theme.AppCompat.Light.Dialog">
+    <style name="TextButtonStyle" parent="ImageButtonStyle">
+        <item name="android:textColor">@color/accent</item>
+    </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@color/material_white</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="Dialog.Transparent" parent="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="Dialog.ProgressDialog" parent="Theme.AppCompat.Light.Dialog.Alert" />
-
     <style name="Dialog.CustomView" parent="Dialog.Transparent" />
+
+    <style name="Dialog.ProgressDialog" parent="Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:textColorPrimary">@color/accent</item>
+    </style>
 
     <style name="EmptyTextStyle">
         <item name="android:textSize">@dimen/text_body_big</item>
@@ -26,6 +51,8 @@
     </style>
 
     <style name="TabsStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/tab_height</item>
         <item name="tabGravity">center</item>
         <item name="tabBackground">@drawable/tab_selector</item>
         <item name="android:animateLayoutChanges">true</item>

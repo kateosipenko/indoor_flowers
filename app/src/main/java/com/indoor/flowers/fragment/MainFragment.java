@@ -50,7 +50,7 @@ public class MainFragment extends Fragment implements OnNavigationItemSelectedLi
         initDrawer();
         initNavigationView();
 
-        Fragments.replace(getFragmentManager(), R.id.fnd_content, FlowersFragment.newInstance(), null, true);
+        Fragments.replace(getFragmentManager(), R.id.fnd_content, FlowersFragment.newInstance(), null);
 
         return view;
     }

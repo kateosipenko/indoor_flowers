@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.indoor.flowers.database.FlowersContentProvider;
+import com.indoor.flowers.provider.FlowersContentProvider;
 
 public abstract class Table {
 

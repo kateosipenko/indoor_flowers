@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.indoor.flowers">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".FlowersApp"
         android:allowBackup="true"
@@ -23,9 +27,19 @@
         </activity>
 
         <provider
-            android:name=".database.FlowersContentProvider"
+            android:name=".provider.FlowersContentProvider"
             android:authorities="${authority}"
             android:exported="false" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${fileProviderAuthority}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/temp_file_paths" />
+        </provider>
 
     </application>
 

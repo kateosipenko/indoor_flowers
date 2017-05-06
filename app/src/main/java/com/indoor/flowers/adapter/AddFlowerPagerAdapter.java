@@ -1,18 +1,20 @@
 package com.indoor.flowers.adapter;
 
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.indoor.flowers.R;
+import com.indoor.flowers.fragment.creation.CaringDataFragment;
+import com.indoor.flowers.fragment.creation.FlowerDataFragment;
+import com.indoor.flowers.fragment.creation.RoomDataFragment;
 
-import butterknife.ButterKnife;
-
-public class AddFlowerPagerAdapter extends PagerAdapter {
+public class AddFlowerPagerAdapter extends FragmentStatePagerAdapter {
 
     private static final int PAGES_COUNT = 3;
+
+    public AddFlowerPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
 
     @Override
     public int getCount() {
@@ -20,47 +22,20 @@ public class AddFlowerPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        int layoutId = 0;
-        Holder holder = null;
+    public Fragment getItem(int position) {
+        Fragment fragment = null;
         switch (position) {
             case 0:
-                layoutId = R.layout.layout_add_flower_data;
-                holder = new FlowerDataHolder();
+                fragment = FlowerDataFragment.newInstance();
+                break;
+            case 1:
+                fragment = RoomDataFragment.newInstance();
+                break;
+            case 2:
+                fragment = CaringDataFragment.newInstance();
                 break;
         }
 
-        if (holder != null) {
-            View view = LayoutInflater.from(container.getContext()).inflate(R.layout.layout_add_flower_data, container, false);
-            holder.setItemView(view);
-            view.setTag(holder);
-            container.addView(view);
-            return view;
-        }
-
-        TextView textView = new TextView(container.getContext());
-        textView.setText(String.valueOf(position));
-        container.addView(textView);
-        return textView;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
-
-    static class FlowerDataHolder extends Holder {
-
-    }
-
-    static class Holder {
-        public void setItemView(View itemView) {
-            ButterKnife.bind(this, itemView);
-        }
+        return fragment;
     }
 }

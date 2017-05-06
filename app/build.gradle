@@ -7,6 +7,7 @@ android {
     def appName = "indoor_flowers"
     def packageName = "com.indoor.flowers"
     def authority = packageName + ".database";
+    def fileProviderAuthority = packageName + ".files"
 
     def versionMajor = 0 // 1 - 20000
     def versionMinor = 0 // 0 - 99
@@ -22,6 +23,7 @@ android {
         versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         buildConfigField 'String', 'AUTHORITY', "\"${authority}\""
+        buildConfigField "String", "FILE_PROVIDER_AUTHORITY", "\"" + fileProviderAuthority + "\""
         vectorDrawables.useSupportLibrary true
     }
 
@@ -44,14 +46,14 @@ android {
         debug {
             signingConfig signingConfigs.debug
             manifestPlaceholders = [allowBackup: false, fullBackupContent: false,
-                                    authority  : authority]
+                                    authority  : authority, fileProviderAuthority: fileProviderAuthority]
         }
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [allowBackup: true, fullBackupContent: true,
-                                    authority  : authority]
+                                    authority  : authority, fileProviderAuthority: fileProviderAuthority]
         }
     }
 

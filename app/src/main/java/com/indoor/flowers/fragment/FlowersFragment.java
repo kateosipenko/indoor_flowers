@@ -21,6 +21,7 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersCardsAdapter;
 import com.indoor.flowers.database.DbOpenHelper;
 import com.indoor.flowers.database.table.FlowerTable;
+import com.indoor.flowers.fragment.creation.AddFlowerFragment;
 import com.indoor.flowers.util.EmptyDataUtil;
 
 import butterknife.Bind;

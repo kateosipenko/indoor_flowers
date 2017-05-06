@@ -1,17 +1,40 @@
 <resources>
     <string name="app_name">Indoor Flowers</string>
+    <string name="photo_choose_error">There was an error during photo choosing.</string>
 
+    <!--Permissions-->
+    <string name="permission_dialog_title">Permissions required</string>
+    <string name="permissions_camera_required">Please, enable Camera permission for accessing photos.</string>
+    <string name="permissions_storage_required">Please, enable Storage permission for accessing files.</string>
+
+    <!--Navigation drawer-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--Actions-->
+    <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
+    <string name="action_ok">OK</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
+    <string name="action_cancel">Cancel</string>
     <string name="action_settings">Settings</string>
-
-    <string name="ff_list_empty">You don\'t have any flower.</string>
+    <string name="action_save">Save</string>
+    <string name="action_choose">Choose</string>
 
     <!--Add flower-->
     <string name="faf_flower_data">Add a new flower</string>
     <string name="faf_content_flower_image">Picture of your flower</string>
     <string name="faf_content_flower_image_edit">Choose picture of your flower</string>
     <string name="faf_flower_name_hint">Name of your flower</string>
+    <string name="faf_clarification">You can set up information about room such as air temperature, humidity, illumination. This parameters will be used for more accurate calculation of watering period etc. You can skip this settings and setup all periods by your self.</string>
+    <string name="faf_clarification_content_info">Clarification</string>
+    <string name="frd_title">Room information</string>
+    <string name="frd_temperature">Air temperature (+/- 5°C)</string>
+    <string name="frd_humidity">Air humidity (+/- 10%)</string>
+    <string name="frd_brightness">Brightness level</string>
+    <string name="frd_save_room">Save room</string>
+    <string name="frd_name_room_error">Please, specify name of room and try save again</string>
+    <string name="ff_list_empty">You don\'t have any flower.</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.indoor.flowers.database;
+package com.indoor.flowers.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 
 import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.BuildConfig;
+import com.indoor.flowers.database.DbOpenHelper;
 import com.indoor.flowers.database.table.FlowerTable;
 import com.indoor.flowers.database.table.Table;
 
