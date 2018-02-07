@@ -27,11 +27,6 @@
         </activity>
 
         <provider
-            android:name=".provider.FlowersContentProvider"
-            android:authorities="${authority}"
-            android:exported="false" />
-
-        <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${fileProviderAuthority}"
             android:exported="false"

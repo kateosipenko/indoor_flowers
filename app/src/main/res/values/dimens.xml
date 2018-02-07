@@ -31,7 +31,10 @@
     <dimen name="nd_header_height">180dp</dimen>
 
     <!--Add flower-->
-    <dimen name="faf_image_size">150dp</dimen>
+    <dimen name="faf_image_size">300dp</dimen>
     <dimen name="faf_title_margin">60dp</dimen>
+
+    <!--Flowers-->
+    <dimen name="rf_icon_size">60dp</dimen>
 
 </resources>

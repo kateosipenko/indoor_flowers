@@ -2,7 +2,7 @@ package com.indoor.flowers.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.percent.PercentRelativeLayout;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,18 +13,18 @@ import android.widget.TextView;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ValueSeekBar extends PercentRelativeLayout implements OnSeekBarChangeListener {
+public class ValueSeekBar extends ConstraintLayout implements OnSeekBarChangeListener {
 
     private static final int MAX_PROGRESS = 100;
 
-    @Bind(R.id.vvsb_seek_bar)
+    @BindView(R.id.vvsb_seek_bar)
     AppCompatSeekBar seekBar;
-    @Bind(R.id.vvsb_title)
+    @BindView(R.id.vvsb_title)
     TextView title;
-    @Bind(R.id.vvsb_value)
+    @BindView(R.id.vvsb_value)
     TextView value;
 
     private float minValue = 0;

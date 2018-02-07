@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_big">
+
+    <com.indoor.flowers.view.ValueSeekBar
+        android:id="@+id/fcr_temperature_range"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultValue="24"
+        app:header="@string/fcr_temperature"
+        app:layout_constraintBottom_toTopOf="@+id/fcr_humidity_range"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxValue="50"
+        app:minValue="10" />
+
+    <com.indoor.flowers.view.ValueSeekBar
+        android:id="@+id/fcr_humidity_range"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultValue="40"
+        app:header="@string/fcr_humidity"
+        app:layout_constraintBottom_toTopOf="@+id/fcr_brightness_range"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fcr_temperature_range"
+        app:maxValue="80"
+        app:minValue="15" />
+
+    <com.indoor.flowers.view.ValueSeekBar
+        android:id="@+id/fcr_brightness_range"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultValue="40"
+        app:header="@string/fcr_brightness"
+        app:layout_constraintBottom_toTopOf="@+id/fcr_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fcr_humidity_range"
+        app:maxValue="80"
+        app:minValue="20" />
+
+    <Button
+        android:id="@+id/fcr_save"
+        style="@style/TextButtonStyle"
+        android:layout_height="wrap_content"
+        android:elevation="12dp"
+        android:text="@string/action_create"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fcr_brightness_range" />
+
+</android.support.constraint.ConstraintLayout>

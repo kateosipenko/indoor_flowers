@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rr_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/padding_normal">
+
+    <TextView
+        android:id="@+id/rr_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_primary_text"
+        android:textSize="@dimen/text_body_medium"
+        tools:text="First room" />
+
+    <TextView
+        android:id="@+id/rr_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_small"
+        app:layout_constraintTop_toBottomOf="@id/rr_title"
+        tools:text="Temperature: 14" />
+
+</android.support.constraint.ConstraintLayout>
