@@ -3,10 +3,7 @@ package com.indoor.flowers.fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class CreateRoomFragment extends Fragment {
+public class CreateRoomFragment extends ToolbarFragment {
 
     @BindView(R.id.fcr_temperature_range)
     ValueSeekBar temperatureSeekBar;
@@ -53,7 +50,7 @@ public class CreateRoomFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_room, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupActionBar();
+        setupActionBar(R.string.fcr_title, true);
         return view;
     }
 
@@ -101,13 +98,5 @@ public class CreateRoomFragment extends Fragment {
         room.setTemperature((int) temperatureSeekBar.getValue());
         flowersProvider.createRoom(room);
         getActivity().onBackPressed();
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.fcr_title);
-            actionBar.show();
-        }
     }
 }

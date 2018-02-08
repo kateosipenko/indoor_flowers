@@ -1,12 +1,9 @@
-package com.indoor.flowers.fragment.creation;
+package com.indoor.flowers.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +19,9 @@ import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.fragment.RoomsFragment;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Room;
+import com.indoor.flowers.service.FlowersNotificationsService;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
@@ -39,9 +36,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener {
+public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenListener {
 
-    private static final String KEY_IMAGE_PATH = "key_image_path";
     private static final String KEY_NAME = "key_name";
 
     private static final int REQUEST_CODE_ROOM = 2234;
@@ -54,8 +50,9 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     Button chooseRoomButton;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
+    @BindView(R.id.faf_period)
+    EditText periodText;
 
-    private String imagePath;
     private ProgressShowingUtil progressUtil;
     private PermissionHelper permissionHelper;
 
@@ -92,7 +89,7 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
             restoreState(savedInstanceState);
         }
 
-        setupActionBar();
+        setupActionBar(R.string.faf_flower_title, true);
         if (flower == null) {
             flower = new Flower();
         } else {
@@ -132,9 +129,19 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
 
     @OnClick(R.id.faf_create)
     void onCreateFlowerClicked() {
-        if (!Utils.isEmpty(nameView)) {
+        if (!Utils.isEmpty(nameView) && !Utils.isEmpty(periodText)) {
             flower.setName(nameView.getText().toString());
+
+            int period = 0;
+            try {
+                period = Integer.valueOf(periodText.getText().toString());
+            } catch (NumberFormatException ignore) {
+            }
+
+            flower.setPeriod(period);
             provider.createFlower(flower);
+
+            FlowersNotificationsService.setupNotificationForFlower(getActivity(), flower);
             getActivity().onBackPressed();
         }
     }
@@ -163,7 +170,7 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
 
     @Override
     public void onPhotoTaken(File photo) {
-        this.imagePath = photo.getPath();
+        flower.setImagePath(photo.getPath());
         Picasso.with(getActivity()).load(photo).into(imageView);
         progressUtil.hideProgress();
     }
@@ -177,7 +184,6 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(KEY_IMAGE_PATH, imagePath);
         if (nameView != null) {
             outState.putString(KEY_NAME, nameView.getText().toString());
         }
@@ -189,10 +195,9 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
 
         nameView.setText(flower.getName());
-        imagePath = flower.getImagePath();
-        if (!TextUtils.isEmpty(imagePath)) {
+        if (!TextUtils.isEmpty(flower.getImagePath())) {
             Picasso.with(getActivity())
-                    .load(new File(imagePath))
+                    .load(new File(flower.getImagePath()))
                     .into(imageView);
         }
 
@@ -205,29 +210,15 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
 
         Room room = provider.getRoomById(roomID);
-        chooseRoomButton.setText(Res.getString(R.string.faf_chosen_room, room.getName()));
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.faf_flower_title);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.show();
+        if (room != null) {
+            chooseRoomButton.setText(Res.getString(R.string.faf_chosen_room, room.getName()));
         }
     }
 
-    private void restoreState(Bundle state) {
-        imagePath = state.getString(KEY_IMAGE_PATH);
+    @Override
+    protected void restoreState(Bundle state) {
         String name = state.getString(KEY_NAME);
-        if (imageView != null) {
-            if (!TextUtils.isEmpty(imagePath)) {
-                Picasso.with(getActivity()).load(new File(imagePath)).into(imageView);
-            }
-
-            nameView.setText(name);
-        }
+        nameView.setText(name);
     }
 
 }

@@ -10,4 +10,5 @@ public @interface Columns {
     String HUMIDITY = "humidity";
     String BRIGHTNESS = "brightness";
     String ROOM_ID = "room_id";
+    String PERIOD = "period";
 }

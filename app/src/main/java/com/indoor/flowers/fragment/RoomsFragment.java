@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class RoomsFragment extends Fragment implements RoomClickListener {
+public class RoomsFragment extends ToolbarFragment implements RoomClickListener {
 
     public static final String KEY_SELECTED_ROOM = "key_selected_room";
 
@@ -60,7 +58,7 @@ public class RoomsFragment extends Fragment implements RoomClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rooms, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupActionBar();
+        setupActionBar(R.string.fr_rooms, true);
         initList();
         reloadRooms();
         return view;
@@ -116,14 +114,5 @@ public class RoomsFragment extends Fragment implements RoomClickListener {
         adapter.setListener(this);
         roomsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         roomsList.setAdapter(adapter);
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.fr_rooms);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.show();
-        }
     }
 }

@@ -2,16 +2,13 @@ package com.indoor.flowers.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.indoor.flowers.database.Columns;
 
-@Entity(tableName = Flower.TABLE_NAME,
-        foreignKeys = @ForeignKey(entity = Room.class, parentColumns = Columns.ID,
-                childColumns = Columns.ROOM_ID, onDelete = ForeignKey.CASCADE))
+@Entity(tableName = Flower.TABLE_NAME)
 public class Flower implements Parcelable {
 
     public static final String TABLE_NAME = "FlowerTable";
@@ -25,6 +22,8 @@ public class Flower implements Parcelable {
     private String imagePath;
     @ColumnInfo(name = Columns.ROOM_ID)
     private long roomId;
+    @ColumnInfo(name = Columns.PERIOD)
+    private int period;
 
     public long getId() {
         return id;
@@ -58,6 +57,14 @@ public class Flower implements Parcelable {
         this.imagePath = imagePath;
     }
 
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
+    }
+
     public Flower() {
     }
 
@@ -72,6 +79,7 @@ public class Flower implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.imagePath);
         dest.writeLong(this.roomId);
+        dest.writeInt(this.period);
     }
 
     protected Flower(Parcel in) {
@@ -79,6 +87,7 @@ public class Flower implements Parcelable {
         this.name = in.readString();
         this.imagePath = in.readString();
         this.roomId = in.readLong();
+        this.period = in.readInt();
     }
 
     public static final Creator<Flower> CREATOR = new Creator<Flower>() {

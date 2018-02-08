@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="toolbar_elevation">0dp</dimen>
+    <dimen name="toolbar_elevation">16dp</dimen>
     <dimen name="tab_size_default">6dp</dimen>
     <dimen name="tab_size_selected">7dp</dimen>
     <dimen name="tab_height">20dp</dimen>

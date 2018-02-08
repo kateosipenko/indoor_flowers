@@ -9,54 +9,37 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_medium"
         android:layout_weight="1">
-
-        <android.support.constraint.Guideline
-            android:id="@+id/faf_guideline_image_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3" />
 
         <ImageView
             android:id="@+id/faf_flower_image"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_primary_gradient"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_flower"
             android:contentDescription="@string/faf_content_flower_image"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@id/faf_guideline_image_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/black_shadow_light"
-            app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
-            app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
-            app:layout_constraintStart_toStartOf="@id/faf_flower_image"
-            app:layout_constraintTop_toTopOf="@id/faf_flower_image" />
-
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/faf_choose_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_fab"
-            app:layout_constraintBottom_toBottomOf="@id/faf_guideline_image_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/faf_guideline_image_bottom"
-            app:srcCompat="@drawable/ic_menu_camera" />
+            style="@style/ImageButtonStyle"
+            app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
+            app:layout_constraintTop_toTopOf="@id/faf_flower_image"
+            app:srcCompat="@drawable/ic_edit"
+            tools:ignore="ContentDescription" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/faf_flower_name_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_big"
+            android:layout_marginStart="@dimen/padding_big"
             android:hint="@string/faf_flower_name_hint"
             android:textColorHint="@color/accent200"
-            app:layout_constraintTop_toBottomOf="@id/faf_guideline_image_bottom">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/faf_flower_image"
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/faf_flower_name"
@@ -72,7 +55,7 @@
         <Button
             android:id="@+id/faf_choose_room"
             style="@style/TextButtonStyle"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
             android:layout_marginStart="@dimen/padding_medium"
@@ -80,7 +63,29 @@
             android:text="@string/faf_choose_room"
             android:textColor="@color/black_secondary_text"
             android:textSize="@dimen/text_body_medium"
-            app:layout_constraintTop_toBottomOf="@id/faf_flower_name_layout" />
+            app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/faf_flower_image" />
+
+        <TextView
+            android:id="@+id/faf_period_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:labelFor="@+id/faf_period"
+            android:text="Поливать в режиме активного роста каждые"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium"
+            app:layout_constraintTop_toBottomOf="@id/faf_flower_image" />
+
+        <EditText
+            android:id="@+id/faf_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_normal"
+            app:layout_constraintTop_toBottomOf="@id/faf_period_title" />
 
         <Button
             android:id="@+id/faf_create"

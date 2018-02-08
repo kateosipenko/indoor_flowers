@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_fab"
-        app:layout_behavior="com.indoor.flowers.util.HideOnScrollBehavior"
         app:srcCompat="@drawable/ic_add" />
 
 </android.support.design.widget.CoordinatorLayout>

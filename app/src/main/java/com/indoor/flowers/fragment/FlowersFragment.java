@@ -2,7 +2,6 @@ package com.indoor.flowers.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.fragment.creation.AddFlowerFragment;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.EmptyDataUtil;
 
@@ -25,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class FlowersFragment extends Fragment {
+public class FlowersFragment extends ToolbarFragment {
 
     @BindView(R.id.ff_flowers_list)
     RecyclerView flowersList;
@@ -52,8 +50,10 @@ public class FlowersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flowers, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setupActionBar(R.string.app_name, false);
         initList();
         reloadItems();
+
         return view;
     }
 

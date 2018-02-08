@@ -1,58 +1,46 @@
 <resources>
-    <string name="app_name">Indoor Flowers</string>
-    <string name="photo_choose_error">There was an error during photo choosing.</string>
+    <string name="app_name">Поливака</string>
+    <string name="photo_choose_error">Во время выбора фотографии произошла ошика</string>
 
     <!--Permissions-->
-    <string name="permission_dialog_title">Permissions required</string>
-    <string name="permissions_camera_required">Please, enable Camera permission for accessing photos.</string>
+    <string name="permission_dialog_title">Необходимо разрешение</string>
+    <string name="permissions_camera_required">Пожалуйста, дайте разрешение для использования Камеры, чтобы приложение получило доступ к фотографиям</string>
     <string name="permissions_storage_required">Please, enable Storage permission for accessing files.</string>
 
-    <!--Navigation drawer-->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <!--Actions-->
-    <string name="action_enable">Enable</string>
-    <string name="action_disable">Disable</string>
+    <string name="action_enable">Включить</string>
+    <string name="action_disable">Отключить</string>
     <string name="action_ok">OK</string>
-    <string name="action_yes">Yes</string>
-    <string name="action_no">No</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_save">Save</string>
-    <string name="action_create">Create</string>
-    <string name="action_choose">Choose</string>
+    <string name="action_yes">Да</string>
+    <string name="action_no">Нет</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_create">Создать</string>
+    <string name="action_choose">Выбрать</string>
 
     <!--MainDrawer-->
-    <string name="andd_flowers">Flowers</string>
-    <string name="andd_rooms">Rooms</string>
-    <string name="andd_alerts">Alerts</string>
-    <string name="andd_gallery">Gallery</string>
-    <string name="andd_tools">Tools</string>
-    <string name="andd_community">Community</string>
-    <string name="andd_share">Share</string>
-    <string name="andd_send">Send</string>
+    <string name="andd_flowers">Растения</string>
+    <string name="andd_rooms">Комнаты</string>
 
     <!--Add flower-->
-    <string name="faf_flower_title">Add a new flower</string>
-    <string name="faf_content_flower_image">Picture of your flower</string>
-    <string name="faf_content_flower_image_edit">Choose picture of your flower</string>
-    <string name="faf_flower_name_hint">Name of your flower</string>
-    <string name="faf_clarification">You can set up information about room such as air temperature, humidity, illumination. This parameters will be used for more accurate calculation of watering period etc. You can skip this settings and setup all periods by your self.</string>
-    <string name="faf_clarification_content_info">Clarification</string>
-    <string name="ff_list_empty">You don\'t have any flower.</string>
-    <string name="faf_choose_room">Choose room for flower</string>
-    <string name="faf_chosen_room">Chosen room: %1$s</string>
+    <string name="faf_flower_title">Добавить новое растение</string>
+    <string name="faf_content_flower_image">Фото фашего растения</string>
+    <string name="faf_content_flower_image_edit">Выберите фото вашего растения</string>
+    <string name="faf_flower_name_hint">Имя вашего растения</string>
+    <string name="ff_list_empty">Для начала добавтье растения</string>
+    <string name="faf_choose_room">Выберите комнату для растения</string>
+    <string name="faf_chosen_room">Выбранная комната: %1$s</string>
 
     <!--Create room-->
-    <string name="fr_rooms">Rooms</string>
-    <string name="fcr_title">Create new room</string>
-    <string name="fcr_temperature">Air temperature (+/- 5°C)</string>
-    <string name="fcr_humidity">Air humidity (+/- 10%)</string>
-    <string name="fcr_brightness">Brightness level</string>
-    <string name="fcr_save_room">Save room</string>
-    <string name="fcr_name_room_error">Please, specify name of room and try save again</string>
+    <string name="fr_rooms">Комнаты</string>
+    <string name="fcr_title">Добавить комнату</string>
+    <string name="fcr_temperature">Температура (+/- 5°C)</string>
+    <string name="fcr_humidity">Влажность (+/- 10%)</string>
+    <string name="fcr_brightness">Освещенность</string>
+    <string name="fcr_save_room">Сохранить команту</string>
+    <string name="fcr_name_room_error">Пожалуйста, задайте имя для комнаты</string>
 
-    <string name="rr_data_format">Temperature: %1$s°C;Brightness: %2$s;Humidity %3$s%%</string>
+    <string name="rr_data_format">Температура: %1$s°C;Освещенность: %2$s;Влажность %3$s%%</string>
 
 </resources>
