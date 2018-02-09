@@ -32,6 +32,9 @@
     <string name="ff_list_empty">Для начала добавтье растения</string>
     <string name="faf_choose_room">Выберите комнату для растения</string>
     <string name="faf_chosen_room">Выбранная комната: %1$s</string>
+    <string name="faf_active_period">Период активного роста</string>
+    <string name="faf_passive_period">Период покоя</string>
+    <string name="faf_not_set">Не задан</string>
 
     <!--Create room-->
     <string name="fr_rooms">Комнаты</string>

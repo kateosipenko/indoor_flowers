@@ -3,12 +3,17 @@ package com.indoor.flowers.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.indoor.flowers.database.Columns;
+import com.indoor.flowers.database.DbTypesConverter;
+
+import java.util.Calendar;
 
 @Entity(tableName = Flower.TABLE_NAME)
+@TypeConverters({DbTypesConverter.class})
 public class Flower implements Parcelable {
 
     public static final String TABLE_NAME = "FlowerTable";
@@ -22,8 +27,16 @@ public class Flower implements Parcelable {
     private String imagePath;
     @ColumnInfo(name = Columns.ROOM_ID)
     private long roomId;
-    @ColumnInfo(name = Columns.PERIOD)
-    private int period;
+    @ColumnInfo(name = Columns.ACTIVE_FROM)
+    private int activeFrom = -1;
+    @ColumnInfo(name = Columns.ACTIVE_TO)
+    private int activeTo = -1;
+    @ColumnInfo(name = Columns.PASSIVE_FROM)
+    private int passiveFrom = -1;
+    @ColumnInfo(name = Columns.PASSIVE_TO)
+    private int passiveTo = -1;
+    @ColumnInfo(name = Columns.LAST_WATERING_DATE)
+    private Calendar lastWateringDate;
 
     public long getId() {
         return id;
@@ -57,12 +70,44 @@ public class Flower implements Parcelable {
         this.imagePath = imagePath;
     }
 
-    public int getPeriod() {
-        return period;
+    public int getActiveFrom() {
+        return activeFrom;
     }
 
-    public void setPeriod(int period) {
-        this.period = period;
+    public void setActiveFrom(int activeFrom) {
+        this.activeFrom = activeFrom;
+    }
+
+    public int getActiveTo() {
+        return activeTo;
+    }
+
+    public void setActiveTo(int activeTo) {
+        this.activeTo = activeTo;
+    }
+
+    public int getPassiveFrom() {
+        return passiveFrom;
+    }
+
+    public void setPassiveFrom(int passiveFrom) {
+        this.passiveFrom = passiveFrom;
+    }
+
+    public int getPassiveTo() {
+        return passiveTo;
+    }
+
+    public void setPassiveTo(int passiveTo) {
+        this.passiveTo = passiveTo;
+    }
+
+    public Calendar getLastWateringDate() {
+        return lastWateringDate;
+    }
+
+    public void setLastWateringDate(Calendar lastWateringDate) {
+        this.lastWateringDate = lastWateringDate;
     }
 
     public Flower() {
@@ -79,7 +124,6 @@ public class Flower implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.imagePath);
         dest.writeLong(this.roomId);
-        dest.writeInt(this.period);
     }
 
     protected Flower(Parcel in) {
@@ -87,7 +131,6 @@ public class Flower implements Parcelable {
         this.name = in.readString();
         this.imagePath = in.readString();
         this.roomId = in.readLong();
-        this.period = in.readInt();
     }
 
     public static final Creator<Flower> CREATOR = new Creator<Flower>() {

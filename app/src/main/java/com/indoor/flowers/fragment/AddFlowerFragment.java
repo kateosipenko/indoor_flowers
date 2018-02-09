@@ -9,9 +9,9 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Res;
@@ -23,11 +23,13 @@ import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Room;
 import com.indoor.flowers.service.FlowersNotificationsService;
+import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
+import com.indoor.flowers.view.MonthPeriodChooser;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -49,11 +51,15 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     @BindView(R.id.faf_flower_name)
     EditText nameView;
     @BindView(R.id.faf_choose_room)
-    Button chooseRoomButton;
+    TextView chooseRoomButton;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
-    @BindView(R.id.faf_period)
-    EditText periodText;
+    @BindView(R.id.faf_active_period_value)
+    TextView activePeriodValue;
+    @BindView(R.id.faf_passive_period_value)
+    TextView passivePeriodValue;
+    @BindView(R.id.faf_month_chooser)
+    MonthPeriodChooser monthChooserView;
 
     private ProgressShowingUtil progressUtil;
     private PermissionHelper permissionHelper;
@@ -138,21 +144,41 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
 
     @OnClick(R.id.faf_create)
     void onCreateFlowerClicked() {
-        if (!Utils.isEmpty(nameView) && !Utils.isEmpty(periodText)) {
+        if (!Utils.isEmpty(nameView)) {
             flower.setName(nameView.getText().toString());
-
-            int period = 0;
-            try {
-                period = Integer.valueOf(periodText.getText().toString());
-            } catch (NumberFormatException ignore) {
-            }
-
-            flower.setPeriod(period);
             provider.createFlower(flower);
 
             FlowersNotificationsService.setupNotificationForFlower(getActivity(), flower);
             getActivity().onBackPressed();
         }
+    }
+
+    @OnClick(R.id.faf_active_group)
+    void onActivePeriodClicked() {
+        monthChooserView.setTitle(R.string.faf_active_period);
+        monthChooserView.show(flower.getActiveFrom(), flower.getActiveTo(),
+                flower.getPassiveFrom(), flower.getPassiveTo(), new MonthPeriodChooser.MonthChooserListener() {
+                    @Override
+                    public void onPeriodChosen(int from, int to) {
+                        flower.setActiveFrom(from);
+                        flower.setActiveTo(to);
+                        refreshPeriod(activePeriodValue, from, to);
+                    }
+                });
+    }
+
+    @OnClick(R.id.faf_passive_group)
+    void onPassivePeriodClicked() {
+        monthChooserView.setTitle(R.string.faf_passive_period);
+        monthChooserView.show(flower.getPassiveFrom(), flower.getPassiveTo(),
+                flower.getActiveFrom(), flower.getActiveTo(), new MonthPeriodChooser.MonthChooserListener() {
+                    @Override
+                    public void onPeriodChosen(int from, int to) {
+                        flower.setPassiveFrom(from);
+                        flower.setPassiveTo(to);
+                        refreshPeriod(passivePeriodValue, from, to);
+                    }
+                });
     }
 
     @Override
@@ -211,6 +237,27 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
 
         setupRoomData(flower.getRoomId());
+        refreshPeriods();
+    }
+
+    private void refreshPeriods() {
+        refreshPeriod(activePeriodValue, flower.getActiveFrom(), flower.getActiveTo());
+        refreshPeriod(passivePeriodValue, flower.getPassiveFrom(), flower.getPassiveTo());
+    }
+
+    private void refreshPeriod(TextView periodValueText, int from, int to) {
+        if (periodValueText == null) {
+            return;
+        }
+
+        String fromName = CalendarUtils.getNameForMonth(from);
+        String toName = CalendarUtils.getNameForMonth(to);
+
+        if (TextUtils.isEmpty(fromName) && TextUtils.isEmpty(toName)) {
+            periodValueText.setText(R.string.faf_not_set);
+        } else {
+            periodValueText.setText(fromName + "-" + toName);
+        }
     }
 
     private void setupRoomData(long roomID) {

@@ -7,8 +7,8 @@
         <item name="selectableItemBackground">@drawable/sel_pre_lollipop_item_bg</item>
         <item name="android:selectableItemBackground">?selectableItemBackground</item>
         <item name="colorControlHighlight">@color/control_highlight</item>
-        <item name="colorControlNormal">@color/primary</item>
-        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlNormal">@color/black_disabled_text</item>
+        <item name="colorControlActivated">@color/primary400</item>
         <item name="android:textColor">@color/black_secondary_text</item>
         <item name="android:textSize">@dimen/text_body_medium</item>
     </style>

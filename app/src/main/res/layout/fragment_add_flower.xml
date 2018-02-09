@@ -9,91 +9,168 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/padding_medium"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/faf_guideline_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
 
         <ImageView
             android:id="@+id/faf_flower_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/ic_flower"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_gradient"
             android:contentDescription="@string/faf_content_flower_image"
             android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/faf_guideline_image"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/black_shadow"
+            app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
+            app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
+            app:layout_constraintStart_toStartOf="@id/faf_flower_image"
+            app:layout_constraintTop_toTopOf="@id/faf_flower_image" />
 
         <ImageButton
             android:id="@+id/faf_choose_image"
             style="@style/ImageButtonStyle"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
             app:layout_constraintTop_toTopOf="@id/faf_flower_image"
-            app:srcCompat="@drawable/ic_edit"
             tools:ignore="ContentDescription" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/faf_flower_name_layout"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/faf_flower_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_big"
+            android:layout_margin="@dimen/padding_medium"
             android:hint="@string/faf_flower_name_hint"
-            android:textColorHint="@color/accent200"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/faf_flower_image"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <EditText
-                android:id="@+id/faf_flower_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapWords"
-                android:textColor="@color/black_primary_text"
-                tools:ignore="LabelFor"
-                tools:text="Asd asd " />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:id="@+id/faf_choose_room"
-            style="@style/TextButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_medium"
-            android:layout_marginStart="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/margin_fab"
-            android:text="@string/faf_choose_room"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium"
-            app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/faf_flower_image" />
+            android:inputType="textCapWords"
+            android:textColor="@color/white_primary_text"
+            android:textColorHint="@color/primary200"
+            app:layout_constraintBottom_toBottomOf="@id/faf_guideline_image"
+            tools:ignore="LabelFor" />
 
         <TextView
-            android:id="@+id/faf_period_title"
+            android:id="@+id/faf_choose_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:labelFor="@+id/faf_period"
-            android:text="Поливать в режиме активного роста каждые"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium"
-            app:layout_constraintTop_toBottomOf="@id/faf_flower_image" />
-
-        <EditText
-            android:id="@+id/faf_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
+            android:layout_margin="@dimen/padding_medium"
+            android:background="@drawable/sel_green_primary"
+            android:elevation="@dimen/padding_small"
+            android:gravity="center"
+            android:padding="@dimen/padding_normal"
+            android:text="@string/faf_chosen_room"
             android:textColor="@color/black_primary_text"
-            android:textSize="@dimen/text_body_normal"
-            app:layout_constraintTop_toBottomOf="@id/faf_period_title" />
+            android:textSize="@dimen/text_body_medium"
+            app:layout_constraintTop_toBottomOf="@id/faf_guideline_image" />
+
+        <View
+            android:id="@+id/faf_room_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size"
+            android:layout_marginTop="@dimen/padding_medium"
+            android:background="@color/black_shadow_light"
+            app:layout_constraintTop_toBottomOf="@id/faf_choose_room" />
+
+        <LinearLayout
+            android:id="@+id/faf_active_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_image_btn_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium"
+            app:layout_constraintTop_toBottomOf="@id/faf_room_divider">
+
+            <TextView
+                android:id="@+id/faf_active_period_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/faf_active_period"
+                android:textColor="@color/black_secondary_text"
+                android:textSize="@dimen/text_body_medium" />
+
+            <TextView
+                android:id="@+id/faf_active_period_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_disabled_text"
+                android:textSize="@dimen/text_body_small"
+                tools:text="Январь-Март" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/faf_active_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size"
+            android:background="@color/black_shadow_light"
+            app:layout_constraintTop_toBottomOf="@id/faf_active_group" />
+
+        <LinearLayout
+            android:id="@+id/faf_passive_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_image_btn_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium"
+            app:layout_constraintTop_toBottomOf="@id/faf_active_divider">
+
+            <TextView
+                android:id="@+id/faf_passive_period_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/faf_passive_period"
+                android:textColor="@color/black_secondary_text"
+                android:textSize="@dimen/text_body_medium" />
+
+            <TextView
+                android:id="@+id/faf_passive_period_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_disabled_text"
+                android:textSize="@dimen/text_body_small"
+                tools:text="Январь-Март" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/faf_passive_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size"
+            android:background="@color/black_shadow_light"
+            app:layout_constraintTop_toBottomOf="@id/faf_passive_group" />
 
         <Button
             android:id="@+id/faf_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_medium"
+            android:layout_margin="@dimen/padding_normal"
             android:text="@string/action_create"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.indoor.flowers.view.MonthPeriodChooser
+            android:id="@+id/faf_month_chooser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/padding_big"
+            android:visibility="gone" />
 
     </android.support.constraint.ConstraintLayout>
 

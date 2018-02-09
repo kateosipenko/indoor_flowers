@@ -1,10 +1,8 @@
 package com.indoor.flowers.service;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -16,8 +14,6 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
-
-import java.util.Calendar;
 
 public class FlowersNotificationsService extends IntentService {
 
@@ -32,20 +28,23 @@ public class FlowersNotificationsService extends IntentService {
     }
 
     public static void setupNotificationForFlower(Context context, Flower flower) {
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Calendar notificationTime = Calendar.getInstance();
-        notificationTime.add(Calendar.SECOND, flower.getPeriod());
 
-        Intent intent = new Intent(context, FlowersNotificationsService.class);
-        intent.setAction(ACTION_FLOWER_WATERING);
-        intent.putExtra(EXTRA_FLOWER_ID, flower.getId());
+        // TODO: implement
 
-        PendingIntent pendingIntent = PendingIntent.getService(context,
-                REQUEST_CODE_NOTIFICATION, intent, 0);
-
-        if (manager != null) {
-            manager.set(AlarmManager.RTC, notificationTime.getTimeInMillis(), pendingIntent);
-        }
+//        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        Calendar notificationTime = Calendar.getInstance();
+//        notificationTime.add(Calendar.SECOND, flower.getPeriod());
+//
+//        Intent intent = new Intent(context, FlowersNotificationsService.class);
+//        intent.setAction(ACTION_FLOWER_WATERING);
+//        intent.putExtra(EXTRA_FLOWER_ID, flower.getId());
+//
+//        PendingIntent pendingIntent = PendingIntent.getService(context,
+//                REQUEST_CODE_NOTIFICATION, intent, 0);
+//
+//        if (manager != null) {
+//            manager.set(AlarmManager.RTC, notificationTime.getTimeInMillis(), pendingIntent);
+//        }
     }
 
     @Override

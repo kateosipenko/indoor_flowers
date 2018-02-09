@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/vmc_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_shadow"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vmc_guide_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vmc_guide_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vmc_guide_start"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vmc_guide_end"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/material_white"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/vmc_guide_bottom"
+        app:layout_constraintEnd_toEndOf="@id/vmc_guide_end"
+        app:layout_constraintStart_toStartOf="@id/vmc_guide_start"
+        app:layout_constraintTop_toTopOf="@id/vmc_guide_top">
+
+        <TextView
+            android:id="@+id/vmc_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_normal"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_big"
+            tools:text="Title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size"
+            android:background="@color/black_disabled_text" />
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/vmc_months_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/padding_normal"
+            android:layout_weight="1"
+            app:columnCount="4">
+
+            <TextView
+                android:id="@+id/vmc_one"
+                style="@style/MonthViewItem"
+                android:tag="0"
+                tools:text="Январь" />
+
+            <TextView
+                android:id="@+id/vmc_two"
+                style="@style/MonthViewItem"
+                android:tag="1"
+                tools:text="Февраль" />
+
+            <TextView
+                android:id="@+id/vmc_three"
+                style="@style/MonthViewItem"
+                android:tag="2"
+                tools:text="Март" />
+
+            <TextView
+                android:id="@+id/vmc_four"
+                style="@style/MonthViewItem"
+                android:tag="3"
+                tools:text="Апрель" />
+
+            <TextView
+                android:id="@+id/vmc_five"
+                style="@style/MonthViewItem"
+                android:tag="4"
+                tools:text="Май" />
+
+            <TextView
+                android:id="@+id/vmc_six"
+                style="@style/MonthViewItem"
+                android:tag="5"
+                tools:text="Июнь" />
+
+            <TextView
+                android:id="@+id/vmc_seven"
+                style="@style/MonthViewItem"
+                android:tag="6"
+                tools:text="Июль" />
+
+            <TextView
+                android:id="@+id/vmc_eight"
+                style="@style/MonthViewItem"
+                android:tag="7"
+                tools:text="Август" />
+
+            <TextView
+                android:id="@+id/vmc_nine"
+                style="@style/MonthViewItem"
+                android:tag="8"
+                tools:text="Сентябрь" />
+
+            <TextView
+                android:id="@+id/vmc_ten"
+                style="@style/MonthViewItem"
+                android:tag="9"
+                tools:text="Октябрь" />
+
+            <TextView
+                android:id="@+id/vmc_eleven"
+                style="@style/MonthViewItem"
+                android:tag="10"
+                tools:text="Ноябрь" />
+
+            <TextView
+                android:id="@+id/vmc_twelve"
+                style="@style/MonthViewItem"
+                android:tag="11"
+                tools:text="Декабрь" />
+        </android.support.v7.widget.GridLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/vmc_cancel"
+                style="@style/TextButtonStyle"
+                android:text="@string/action_cancel" />
+
+            <Button
+                android:id="@+id/vmc_ok"
+                style="@style/TextButtonStyle"
+                android:text="@string/action_choose" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</merge>
