@@ -4,8 +4,6 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.DbTypesConverter;
@@ -14,7 +12,7 @@ import java.util.Calendar;
 
 @Entity(tableName = Flower.TABLE_NAME)
 @TypeConverters({DbTypesConverter.class})
-public class Flower implements Parcelable {
+public class Flower {
 
     public static final String TABLE_NAME = "FlowerTable";
 
@@ -37,6 +35,8 @@ public class Flower implements Parcelable {
     private int passiveTo = -1;
     @ColumnInfo(name = Columns.LAST_WATERING_DATE)
     private Calendar lastWateringDate;
+    @ColumnInfo(name = Columns.WATERING_PERIOD)
+    private int wateringPeriod;
 
     public long getId() {
         return id;
@@ -110,38 +110,11 @@ public class Flower implements Parcelable {
         this.lastWateringDate = lastWateringDate;
     }
 
-    public Flower() {
+    public int getWateringPeriod() {
+        return wateringPeriod;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setWateringPeriod(int wateringPeriod) {
+        this.wateringPeriod = wateringPeriod;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeString(this.name);
-        dest.writeString(this.imagePath);
-        dest.writeLong(this.roomId);
-    }
-
-    protected Flower(Parcel in) {
-        this.id = in.readLong();
-        this.name = in.readString();
-        this.imagePath = in.readString();
-        this.roomId = in.readLong();
-    }
-
-    public static final Creator<Flower> CREATOR = new Creator<Flower>() {
-        @Override
-        public Flower createFromParcel(Parcel source) {
-            return new Flower(source);
-        }
-
-        @Override
-        public Flower[] newArray(int size) {
-            return new Flower[size];
-        }
-    };
 }

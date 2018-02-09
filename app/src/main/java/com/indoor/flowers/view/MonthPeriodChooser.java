@@ -69,6 +69,7 @@ public class MonthPeriodChooser extends ConstraintLayout {
                 selectedFrom = pair.second;
             } else if (!pair.first.isSelected() && selectedFrom != -1) {
                 selectedTo = pair.second - 1;
+                break;
             }
         }
 
@@ -85,6 +86,9 @@ public class MonthPeriodChooser extends ConstraintLayout {
     void onMonthClicked(View view) {
         int month = getMonthFromTag(view);
         if (selectedFrom == -1) {
+            selectedFrom = month;
+        } else if (selectedTo != -1) {
+            selectedTo = -1;
             selectedFrom = month;
         } else if (selectedFrom == month) {
             selectedFrom = -1;

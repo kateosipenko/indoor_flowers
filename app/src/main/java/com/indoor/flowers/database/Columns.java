@@ -15,4 +15,5 @@ public @interface Columns {
     String PASSIVE_FROM = "passive_from";
     String PASSIVE_TO = "passive_to";
     String LAST_WATERING_DATE = "last_watering_date";
+    String WATERING_PERIOD = "watering_period";
 }

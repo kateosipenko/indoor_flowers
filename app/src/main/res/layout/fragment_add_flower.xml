@@ -45,7 +45,7 @@
         <ImageButton
             android:id="@+id/faf_choose_image"
             style="@style/ImageButtonStyle"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/padding_normal"
             android:src="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
             app:layout_constraintTop_toTopOf="@id/faf_flower_image"
@@ -55,7 +55,7 @@
             android:id="@+id/faf_flower_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_medium"
+            android:layout_margin="@dimen/padding_normal"
             android:hint="@string/faf_flower_name_hint"
             android:inputType="textCapWords"
             android:textColor="@color/white_primary_text"
@@ -67,7 +67,7 @@
             android:id="@+id/faf_choose_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_medium"
+            android:layout_margin="@dimen/padding_normal"
             android:background="@drawable/sel_green_primary"
             android:elevation="@dimen/padding_small"
             android:gravity="center"
@@ -81,7 +81,7 @@
             android:id="@+id/faf_room_divider"
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_size"
-            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_normal"
             android:background="@color/black_shadow_light"
             app:layout_constraintTop_toBottomOf="@id/faf_choose_room" />
 
@@ -93,7 +93,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/padding_normal"
             app:layout_constraintTop_toBottomOf="@id/faf_room_divider">
 
             <TextView
@@ -129,7 +129,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
-            android:padding="@dimen/padding_medium"
+            android:padding="@dimen/padding_normal"
             app:layout_constraintTop_toBottomOf="@id/faf_active_divider">
 
             <TextView
@@ -156,6 +156,72 @@
             android:layout_height="@dimen/divider_size"
             android:background="@color/black_shadow_light"
             app:layout_constraintTop_toBottomOf="@id/faf_passive_group" />
+
+        <LinearLayout
+            android:id="@+id/faf_last_watering_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_image_btn_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_normal"
+            app:layout_constraintTop_toBottomOf="@id/faf_passive_divider">
+
+            <TextView
+                android:id="@+id/faf_last_watering_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/faf_last_watering"
+                android:textColor="@color/black_secondary_text"
+                android:textSize="@dimen/text_body_medium" />
+
+            <TextView
+                android:id="@+id/faf_last_watering_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_disabled_text"
+                android:textSize="@dimen/text_body_small"
+                tools:text="Январь-Март" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/faf_watering_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sel_image_btn_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_normal"
+            app:layout_constraintTop_toBottomOf="@id/faf_last_watering_group">
+
+            <TextView
+                android:id="@+id/faf_watering_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/faf_watering_value"
+                android:text="@string/faf_watering"
+                android:textColor="@color/black_secondary_text"
+                android:textSize="@dimen/text_body_medium" />
+
+            <EditText
+                android:id="@+id/faf_watering_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:textColor="@color/black_disabled_text"
+                android:textSize="@dimen/text_body_small"
+                tools:text="5 дней" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/faf_watering_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_size"
+            android:background="@color/black_shadow_light"
+            app:layout_constraintTop_toBottomOf="@id/faf_watering_group" />
 
         <Button
             android:id="@+id/faf_create"

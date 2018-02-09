@@ -20,6 +20,9 @@
     <string name="action_choose">Выбрать</string>
     <string name="action_add">Добавить</string>
 
+    <!--Dates-->
+    <string name="full_date_format">%1$td %1$tB %1$ty</string>
+
     <!--MainDrawer-->
     <string name="andd_flowers">Растения</string>
     <string name="andd_rooms">Комнаты</string>
@@ -35,6 +38,8 @@
     <string name="faf_active_period">Период активного роста</string>
     <string name="faf_passive_period">Период покоя</string>
     <string name="faf_not_set">Не задан</string>
+    <string name="faf_last_watering">Дата последнего полива</string>
+    <string name="faf_watering">Периодичность полива в днях</string>
 
     <!--Create room-->
     <string name="fr_rooms">Комнаты</string>
