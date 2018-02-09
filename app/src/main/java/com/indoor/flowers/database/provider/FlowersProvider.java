@@ -51,5 +51,9 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getFlowersDao().getFlowersForRoom(selectedRoomId);
     }
 
+    public void updateFlower(Flower flower) {
+        database.getFlowersDao().update(flower);
+    }
+
     // endregion FLOWER
 }

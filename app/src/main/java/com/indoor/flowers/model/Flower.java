@@ -117,4 +117,12 @@ public class Flower {
     public void setWateringPeriod(int wateringPeriod) {
         this.wateringPeriod = wateringPeriod;
     }
+
+    public Calendar getNextWateringTime() {
+        Calendar result = Calendar.getInstance();
+        result.clear();
+        result.setTimeInMillis(lastWateringDate.getTimeInMillis());
+        result.add(Calendar.DAY_OF_MONTH, wateringPeriod);
+        return result;
+    }
 }

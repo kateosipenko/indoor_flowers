@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.util.CalendarUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,8 +65,8 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
         ImageView iconView;
         @BindView(R.id.rf_title)
         TextView nameView;
-        @BindView(R.id.rf_room)
-        TextView roomView;
+        @BindView(R.id.rf_days_to_watering)
+        TextView daysToWateringView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,7 +77,7 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
             if (flower == null) {
                 iconView.setImageBitmap(null);
                 nameView.setText(null);
-                roomView.setText(null);
+                daysToWateringView.setText(null);
             } else {
                 if (!TextUtils.isEmpty(flower.getImagePath())) {
                     Picasso.with(itemView.getContext())
@@ -85,6 +87,9 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
                     iconView.setImageBitmap(null);
                 }
                 nameView.setText(flower.getName());
+
+                daysToWateringView.setText(CalendarUtils.getDaysToWateringText(flower.getLastWateringDate(),
+                        Calendar.getInstance()));
             }
         }
     }

@@ -21,14 +21,14 @@
         android:layout_marginStart="@dimen/padding_medium"
         android:textColor="@color/black_primary_text"
         android:textSize="@dimen/text_body_big"
-        app:layout_constraintBottom_toTopOf="@+id/rf_room"
+        app:layout_constraintBottom_toTopOf="@+id/rf_days_to_watering"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/rf_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Flowers" />
 
     <TextView
-        android:id="@+id/rf_room"
+        android:id="@+id/rf_days_to_watering"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="bottom"

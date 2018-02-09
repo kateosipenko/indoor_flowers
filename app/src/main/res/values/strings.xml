@@ -22,6 +22,7 @@
 
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
+    <string name="days_to_watering_format">%1$s дней до полива</string>
 
     <!--MainDrawer-->
     <string name="andd_flowers">Растения</string>
