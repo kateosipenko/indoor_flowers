@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class RoomsFragment extends ToolbarFragment implements RoomClickListener {
+public class RoomsFragment extends Fragment implements RoomClickListener {
 
     public static final String KEY_SELECTED_ROOM = "key_selected_room";
 
@@ -58,7 +58,6 @@ public class RoomsFragment extends ToolbarFragment implements RoomClickListener 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rooms, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupActionBar(R.string.fr_rooms, true);
         initList();
         reloadRooms();
         return view;
@@ -78,7 +77,7 @@ public class RoomsFragment extends ToolbarFragment implements RoomClickListener 
 
     @OnClick(R.id.fr_create_room)
     void onCreateRoomClicked() {
-        Fragments.replace(getFragmentManager(), R.id.am_content, CreateRoomFragment.newInstance(),
+        Fragments.replace(getFragmentManager(), android.R.id.content, CreateRoomFragment.newInstance(),
                 null, true);
     }
 

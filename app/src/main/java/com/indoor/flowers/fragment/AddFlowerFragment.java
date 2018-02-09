@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +37,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenListener {
+public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener {
 
     private static final String KEY_NAME = "key_name";
+    private static final String KEY_ROOM_ID = "key_room_id";
 
     private static final int REQUEST_CODE_ROOM = 2234;
 
@@ -70,6 +72,14 @@ public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenLi
         return new AddFlowerFragment();
     }
 
+    public static AddFlowerFragment newInstance(long roomId) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_ROOM_ID, roomId);
+        AddFlowerFragment fragment = new AddFlowerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +99,12 @@ public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenLi
             restoreState(savedInstanceState);
         }
 
-        setupActionBar(R.string.faf_flower_title, true);
         if (flower == null) {
             flower = new Flower();
-        } else {
-            refreshViewWithFlower();
+            flower.setRoomId(getRoomIdFromArgs());
         }
 
+        refreshViewWithFlower();
         return view;
     }
 
@@ -123,7 +132,7 @@ public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenLi
 
     @OnClick(R.id.faf_choose_room)
     void onChooseRoomClicked() {
-        Fragments.replace(getFragmentManager(), R.id.am_content,
+        Fragments.replace(getFragmentManager(), android.R.id.content,
                 RoomsFragment.newInstance(this, REQUEST_CODE_ROOM), null, true);
     }
 
@@ -215,10 +224,13 @@ public class AddFlowerFragment extends ToolbarFragment implements OnPhotoTakenLi
         }
     }
 
-    @Override
-    protected void restoreState(Bundle state) {
+    private void restoreState(Bundle state) {
         String name = state.getString(KEY_NAME);
         nameView.setText(name);
     }
 
+    private long getRoomIdFromArgs() {
+        return getArguments() != null && getArguments().containsKey(KEY_ROOM_ID)
+                ? getArguments().getLong(KEY_ROOM_ID, -1) : -1;
+    }
 }

@@ -10,7 +10,7 @@
         <item name="android:colorControlHighlight">@color/control_highlight</item>
         <item name="android:colorControlNormal">@color/primary</item>
         <item name="android:colorControlActivated">@color/primary</item>
-        <item name="android:windowTranslucentStatus">false</item>
+        <!--<item name="android:windowTranslucentStatus">false</item>-->
         <item name="android:windowActionBarOverlay">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>

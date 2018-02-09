@@ -18,6 +18,7 @@
     <string name="action_save">Сохранить</string>
     <string name="action_create">Создать</string>
     <string name="action_choose">Выбрать</string>
+    <string name="action_add">Добавить</string>
 
     <!--MainDrawer-->
     <string name="andd_flowers">Растения</string>
@@ -34,9 +35,10 @@
 
     <!--Create room-->
     <string name="fr_rooms">Комнаты</string>
+    <string name="fcr_room_name">Имя комнаты</string>
     <string name="fcr_title">Добавить комнату</string>
-    <string name="fcr_temperature">Температура (+/- 5°C)</string>
-    <string name="fcr_humidity">Влажность (+/- 10%)</string>
+    <string name="fcr_temperature">Температура</string>
+    <string name="fcr_humidity">Влажность</string>
     <string name="fcr_brightness">Освещенность</string>
     <string name="fcr_save_room">Сохранить команту</string>
     <string name="fcr_name_room_error">Пожалуйста, задайте имя для комнаты</string>

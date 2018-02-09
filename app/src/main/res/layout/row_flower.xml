@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/padding_medium"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/rf_icon"
-        android:layout_width="@dimen/rf_icon_size"
-        android:layout_height="@dimen/rf_icon_size"
+        android:layout_width="@dimen/fm_rooms_width"
+        android:layout_height="@dimen/fm_rooms_width"
         android:background="@drawable/ic_flower"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />

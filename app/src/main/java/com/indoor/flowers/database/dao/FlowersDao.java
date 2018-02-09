@@ -8,8 +8,6 @@ import android.arch.persistence.room.Query;
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.model.Flower;
 
-import org.intellij.lang.annotations.Flow;
-
 import java.util.List;
 
 @Dao
@@ -24,4 +22,8 @@ public interface FlowersDao {
     @Query("select * from " + Flower.TABLE_NAME
             + " where " + Columns.ID + "=:flowerId")
     Flower getFlowerById(long flowerId);
+
+    @Query("select * from " + Flower.TABLE_NAME
+            + " where " + Columns.ROOM_ID + "=:selectedRoomId")
+    List<Flower> getFlowersForRoom(long selectedRoomId);
 }

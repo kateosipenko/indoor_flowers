@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rrc_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_small"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rrc_icon"
+        android:layout_width="@dimen/rrc_icons_size"
+        android:layout_height="@dimen/rrc_icons_size"
+        android:layout_margin="@dimen/padding_small"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/room_dining" />
+
+</android.support.constraint.ConstraintLayout>

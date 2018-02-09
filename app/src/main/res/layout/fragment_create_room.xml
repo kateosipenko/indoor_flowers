@@ -1,57 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding_big">
+    android:fitsSystemWindows="true">
 
-    <com.indoor.flowers.view.ValueSeekBar
-        android:id="@+id/fcr_temperature_range"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultValue="24"
-        app:header="@string/fcr_temperature"
-        app:layout_constraintBottom_toTopOf="@+id/fcr_humidity_range"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/fcr_room_icon"
+        android:layout_width="@dimen/fcr_icon_size"
+        android:layout_height="@dimen/fcr_icon_size"
+        android:layout_margin="@dimen/padding_medium"
+        android:background="@drawable/ic_photo_holder"
+        android:backgroundTint="@color/gray_light"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:maxValue="50"
-        app:minValue="10" />
+        tools:ignore="ContentDescription" />
 
-    <com.indoor.flowers.view.ValueSeekBar
-        android:id="@+id/fcr_humidity_range"
+    <ImageView
+        android:id="@+id/fcr_change_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/fcr_room_icon"
+        app:layout_constraintTop_toTopOf="@id/fcr_room_icon"
+        tools:ignore="ContentDescription" />
+
+    <EditText
+        android:id="@+id/fcr_name"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultValue="40"
-        app:header="@string/fcr_humidity"
-        app:layout_constraintBottom_toTopOf="@+id/fcr_brightness_range"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_medium"
+        android:layout_marginStart="@dimen/padding_medium"
+        android:hint="@string/fcr_room_name"
+        android:inputType="textCapWords"
+        android:textColor="@color/black_primary_text"
+        android:textColorHint="@color/primary200"
+        android:textSize="@dimen/text_body_medium"
+        app:layout_constraintBottom_toBottomOf="@id/fcr_room_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fcr_room_icon"
+        app:layout_constraintTop_toTopOf="@id/fcr_room_icon"
+        tools:ignore="LabelFor" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fcr_default_icons_list"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fcr_default_icon_size"
+        android:layout_margin="@dimen/padding_big"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fcr_temperature_range"
-        app:maxValue="80"
-        app:minValue="15" />
+        app:layout_constraintTop_toBottomOf="@id/fcr_room_icon" />
 
-    <com.indoor.flowers.view.ValueSeekBar
-        android:id="@+id/fcr_brightness_range"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:defaultValue="40"
-        app:header="@string/fcr_brightness"
-        app:layout_constraintBottom_toTopOf="@+id/fcr_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fcr_humidity_range"
-        app:maxValue="80"
-        app:minValue="20" />
+    <RadioGroup
+        android:id="@+id/fcr_brightness_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_medium"
+        android:layout_marginStart="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_big"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/fcr_default_icons_list">
+
+        <TextView
+            android:id="@+id/fcr_brightness_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fcr_brightness"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/fcr_brightness_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_sun"
+            tools:checked="true" />
+
+        <RadioButton
+            android:id="@+id/fcr_brightness_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_sun_medium" />
+
+        <RadioButton
+            android:id="@+id/fcr_brightness_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_sun_full" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/fcr_humidity_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_medium"
+        android:layout_marginStart="@dimen/padding_medium"
+        android:layout_marginTop="@dimen/padding_big"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/fcr_brightness_group">
+
+        <TextView
+            android:id="@+id/fcr_humidity_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fcr_humidity"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/fcr_humidity_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_water_small"
+            tools:checked="true" />
+
+        <RadioButton
+            android:id="@+id/fcr_humidity_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_water_medium" />
+
+        <RadioButton
+            android:id="@+id/fcr_humidity_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_normal"
+            android:layout_marginStart="@dimen/padding_normal"
+            android:button="@drawable/sel_water_full" />
+
+    </RadioGroup>
 
     <Button
         android:id="@+id/fcr_save"
         style="@style/TextButtonStyle"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:layout_marginEnd="@dimen/padding_medium"
         android:elevation="12dp"
         android:text="@string/action_create"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fcr_brightness_range" />
+        app:layout_constraintBottom_toTopOf="@id/fcr_snackbar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/fcr_snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

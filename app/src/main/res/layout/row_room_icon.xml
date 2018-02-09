@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rri_icon"
+    android:layout_width="@dimen/fcr_default_icon_size"
+    android:layout_height="@dimen/fcr_default_icon_size"
+    android:layout_marginEnd="@dimen/padding_normal"
+    android:layout_marginStart="@dimen/padding_normal"
+    android:background="@drawable/bg_frame"
+    android:padding="@dimen/padding_small"
+    tools:ignore="ContentDescription"
+    tools:src="@drawable/room_bed" />

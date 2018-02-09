@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fm_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_shadow_light"
+    android:padding="@dimen/padding_normal">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fm_rooms_container"
+        android:layout_width="@dimen/fm_rooms_width"
+        android:layout_height="0dp"
+        android:background="@drawable/sel_white_rounded"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fm_flowers_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fm_rooms_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listItem="@layout/row_room" />
+
+        <ImageButton
+            android:id="@+id/fm_rooms_settings"
+            style="@style/ImageButtonStyle"
+            android:layout_width="@dimen/fm_settings_size"
+            android:layout_height="@dimen/fm_settings_size"
+            android:layout_marginBottom="@dimen/padding_normal"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_settings_big"
+            tools:ignore="ContentDescription" />
+
+        <Button
+            android:id="@+id/fm_add_room"
+            style="@style/TextButtonStyle"
+            android:text="@string/action_add"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_big_plus_button"
+            tools:ignore="ContentDescription" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fm_flowers_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/padding_normal"
+        android:background="@drawable/sel_white_rounded"
+        android:clipToPadding="false"
+        android:padding="@dimen/padding_normal"
+        app:layout_constraintBottom_toBottomOf="@id/fm_rooms_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fm_rooms_container"
+        app:layout_constraintTop_toTopOf="@id/fm_rooms_container">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fm_flowers_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listItem="@layout/row_room" />
+
+        <ImageButton
+            android:id="@+id/fm_flowers_settings"
+            style="@style/ImageButtonStyle"
+            android:layout_width="@dimen/fm_settings_size"
+            android:layout_height="@dimen/fm_settings_size"
+            android:layout_marginBottom="@dimen/padding_normal"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_settings_big"
+            tools:ignore="ContentDescription" />
+
+        <Button
+            android:id="@+id/fm_add_flower"
+            style="@style/TextButtonStyle"
+            android:text="@string/action_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_big_plus_button"
+            tools:ignore="ContentDescription" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -23,12 +23,19 @@
     <!-- margin, padding -->
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_normal">8dp</dimen>
-    <dimen name="padding_medium">12dp</dimen>
-    <dimen name="padding_big">16dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_big">24dp</dimen>
     <dimen name="margin_fab">24dp</dimen>
 
-    <!--Navigation drawer-->
-    <dimen name="nd_header_height">180dp</dimen>
+    <!--MainFragment-->
+    <dimen name="fm_rooms_width">60dp</dimen>
+    <dimen name="fm_settings_size">32dp</dimen>
+    <dimen name="rrc_icons_size">48dp</dimen>
+
+    <!--CreateRoom-->
+    <dimen name="fcr_icon_size">70dp</dimen>
+    <dimen name="fcr_sun_size">50dp</dimen>
+    <dimen name="fcr_default_icon_size">40dp</dimen>
 
     <!--Add flower-->
     <dimen name="faf_image_size">300dp</dimen>

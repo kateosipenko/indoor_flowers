@@ -4,12 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Room;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
 
     private RoomClickListener listener;
     private List<Room> rooms = new ArrayList<>();
+
+    private int selectedPosition = 0;
 
     public void setListener(RoomClickListener listener) {
         this.listener = listener;
@@ -35,9 +38,14 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
         notifyDataSetChanged();
     }
 
+    public Room getSelectedRoom() {
+        return selectedPosition >= 0 && selectedPosition < rooms.size()
+                ? rooms.get(selectedPosition) : null;
+    }
+
     @Override
     public RoomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_room, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_room_collapsed, parent, false);
         return new RoomViewHolder(view, this);
     }
 
@@ -55,12 +63,17 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
         return position >= 0 && position < rooms.size() ? rooms.get(position) : null;
     }
 
+    private void setSelectedPosition(int position) {
+        int old = selectedPosition;
+        this.selectedPosition = position;
+        notifyItemChanged(old);
+        notifyItemChanged(selectedPosition);
+    }
+
     static class RoomViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.rr_title)
-        TextView titleView;
-        @BindView(R.id.rr_data)
-        TextView dataView;
+        @BindView(R.id.rrc_icon)
+        ImageView iconView;
 
         private RoomsAdapter adapter;
 
@@ -70,18 +83,29 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
             this.adapter = adapter;
         }
 
-        @OnClick(R.id.rr_root)
+        @OnClick(R.id.rrc_root)
         void onRootClicked() {
             Room room = adapter.getItemByPosition(getAdapterPosition());
+            adapter.setSelectedPosition(getAdapterPosition());
             if (room != null && adapter.listener != null) {
                 adapter.listener.onRoomClicked(room);
             }
         }
 
         private void update(Room room) {
-            this.titleView.setText(room != null ? room.getName() : null);
-            this.dataView.setText(room != null ? Res.getString(R.string.rr_data_format,
-                    room.getTemperature(), room.getBrightness(), room.getHumidity()) : null);
+            if (room.getIconRes() != -1) {
+                iconView.setImageResource(room.getIconRes());
+            } else {
+                Picasso.with(itemView.getContext())
+                        .load(new File(room.getImagePath()))
+                        .into(iconView);
+            }
+
+            if (getAdapterPosition() != adapter.selectedPosition) {
+                iconView.setAlpha(0.7f);
+            } else {
+                iconView.setAlpha(1f);
+            }
         }
     }
 
