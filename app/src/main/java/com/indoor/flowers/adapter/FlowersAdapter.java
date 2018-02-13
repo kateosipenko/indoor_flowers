@@ -1,5 +1,7 @@
 package com.indoor.flowers.adapter;
 
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.CalendarUtils;
@@ -24,6 +27,7 @@ import butterknife.ButterKnife;
 public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHolder> {
 
     private List<Flower> flowers = new ArrayList<>();
+    private Calendar today = Calendar.getInstance();
 
     public void setFlowers(List<Flower> items) {
         this.flowers.clear();
@@ -34,15 +38,10 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public void clear() {
-        this.flowers.clear();
-        notifyDataSetChanged();
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_flower, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, this);
     }
 
     @Override
@@ -61,16 +60,25 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.rf_root)
+        ConstraintLayout rootLayout;
         @BindView(R.id.rf_icon)
         ImageView iconView;
         @BindView(R.id.rf_title)
         TextView nameView;
         @BindView(R.id.rf_days_to_watering)
         TextView daysToWateringView;
+        @BindView(R.id.rf_last_watering)
+        TextView lastWateringView;
 
-        public ViewHolder(View itemView) {
+        ConstraintSet set = new ConstraintSet();
+
+        private FlowersAdapter adapter;
+
+        public ViewHolder(View itemView, FlowersAdapter adapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.adapter = adapter;
         }
 
         private void update(Flower flower) {
@@ -87,10 +95,27 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
                     iconView.setImageBitmap(null);
                 }
                 nameView.setText(flower.getName());
-
-                daysToWateringView.setText(CalendarUtils.getDaysToWateringText(flower.getLastWateringDate(),
-                        Calendar.getInstance()));
+                lastWateringView.setText(Res.getString(R.string.full_date_format,
+                        flower.getSettings().getLastWateringDate()));
+                long daysToWatering = CalendarUtils.getDaysDiff(flower.getSettings().getLastWateringDate(),
+                        adapter.today);
+                daysToWateringView.setText(Res.getString(R.string.days_to_watering_format, daysToWatering));
+                refreshWateringLevel(flower);
             }
+        }
+
+        private void refreshWateringLevel(Flower flower) {
+            int marginEnd = 0;
+            if (flower != null && flower.getSettings() != null) {
+                Calendar lastWatering = flower.getSettings().getLastWateringDate();
+                long daysToWatering = CalendarUtils.getDaysDiff(lastWatering, adapter.today);
+                double ratio = (double) daysToWatering / (double) flower.getSettings().getWateringFrequency();
+                marginEnd = (int) (itemView.getMeasuredWidth() - itemView.getMeasuredWidth() * ratio);
+            }
+
+            set.clone(rootLayout);
+            set.setMargin(R.id.rf_watering_level, ConstraintSet.END, marginEnd);
+            set.applyTo(rootLayout);
         }
     }
 }

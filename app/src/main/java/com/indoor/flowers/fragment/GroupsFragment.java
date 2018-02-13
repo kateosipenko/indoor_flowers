@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
-import com.indoor.flowers.adapter.RoomsAdapter;
-import com.indoor.flowers.adapter.RoomsAdapter.RoomClickListener;
+import com.indoor.flowers.adapter.GroupsAdapter;
+import com.indoor.flowers.adapter.GroupsAdapter.GroupClickListener;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Room;
+import com.indoor.flowers.model.Group;
 
 import java.util.List;
 
@@ -25,24 +25,24 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class RoomsFragment extends Fragment implements RoomClickListener {
+public class GroupsFragment extends Fragment implements GroupClickListener {
 
-    public static final String KEY_SELECTED_ROOM = "key_selected_room";
+    public static final String KEY_SELECTED_GROUP = "key_selected_group";
 
-    @BindView(R.id.fr_rooms_list)
-    RecyclerView roomsList;
+    @BindView(R.id.fr_groups_list)
+    RecyclerView groupsList;
 
     private Unbinder unbinder;
 
-    private RoomsAdapter adapter;
+    private GroupsAdapter adapter;
     private FlowersProvider provider;
 
-    public static RoomsFragment newInstance() {
-        return new RoomsFragment();
+    public static GroupsFragment newInstance() {
+        return new GroupsFragment();
     }
 
-    public static RoomsFragment newInstance(Fragment targetFragment, int requestCode) {
-        RoomsFragment fragment = new RoomsFragment();
+    public static GroupsFragment newInstance(Fragment targetFragment, int requestCode) {
+        GroupsFragment fragment = new GroupsFragment();
         fragment.setTargetFragment(targetFragment, requestCode);
         return fragment;
     }
@@ -56,10 +56,10 @@ public class RoomsFragment extends Fragment implements RoomClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_rooms, container, false);
+        View view = inflater.inflate(R.layout.fragment_groups, container, false);
         unbinder = ButterKnife.bind(this, view);
         initList();
-        reloadRooms();
+        reloadGroups();
         return view;
     }
 
@@ -75,43 +75,43 @@ public class RoomsFragment extends Fragment implements RoomClickListener {
         super.onDestroy();
     }
 
-    @OnClick(R.id.fr_create_room)
-    void onCreateRoomClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content, CreateRoomFragment.newInstance(),
+    @OnClick(R.id.fr_create_group)
+    void onCreateGroupClicked() {
+        Fragments.replace(getFragmentManager(), android.R.id.content, CreateGroupFragment.newInstance(),
                 null, true);
     }
 
     @Override
-    public void onRoomClicked(Room room) {
+    public void onGroupClicked(Group group) {
         if (getTargetFragment() != null) {
-            setActivityResult(room);
+            setActivityResult(group);
             getActivity().onBackPressed();
         }
     }
 
-    private void reloadRooms() {
-        List<Room> allRooms = provider.getAllRooms();
-        adapter.setRooms(allRooms);
+    private void reloadGroups() {
+        List<Group> allGroups = provider.getAllGroups();
+        adapter.setGroups(allGroups);
     }
 
-    private void setActivityResult(Room room) {
+    private void setActivityResult(Group group) {
         Fragment targetFragment = getTargetFragment();
         if (targetFragment == null) {
             return;
         }
 
         Intent data = new Intent();
-        data.putExtra(KEY_SELECTED_ROOM, room.getId());
+        data.putExtra(KEY_SELECTED_GROUP, group.getId());
         targetFragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
     }
 
     private void initList() {
         if (adapter == null) {
-            adapter = new RoomsAdapter();
+            adapter = new GroupsAdapter();
         }
 
         adapter.setListener(this);
-        roomsList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        roomsList.setAdapter(adapter);
+        groupsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        groupsList.setAdapter(adapter);
     }
 }

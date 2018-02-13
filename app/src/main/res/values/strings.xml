@@ -20,13 +20,15 @@
     <string name="action_choose">Выбрать</string>
     <string name="action_add">Добавить</string>
 
+    <string name="sdv_data_empty">Задайте частоту полива и дату последнего полива</string>
+
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="days_to_watering_format">%1$s дней до полива</string>
 
-    <!--MainDrawer-->
-    <string name="andd_flowers">Растения</string>
-    <string name="andd_rooms">Комнаты</string>
+    <string name="rng_title">Без группы</string>
+    <string name="fm_add_flower">Добавить цветок</string>
+    <string name="fm_add_group">Создать группу</string>
 
     <!--Add flower-->
     <string name="faf_flower_title">Добавить новое растение</string>
@@ -34,23 +36,24 @@
     <string name="faf_content_flower_image_edit">Выберите фото вашего растения</string>
     <string name="faf_flower_name_hint">Имя вашего растения</string>
     <string name="ff_list_empty">Для начала добавтье растения</string>
-    <string name="faf_choose_room">Выберите комнату для растения</string>
-    <string name="faf_chosen_room">Выбранная комната: %1$s</string>
     <string name="faf_active_period">Период активного роста</string>
     <string name="faf_passive_period">Период покоя</string>
     <string name="faf_not_set">Не задан</string>
     <string name="faf_last_watering">Дата последнего полива</string>
     <string name="faf_watering">Периодичность полива в днях</string>
+    <string name="faf_error_name_empty">Задайте имя цветка</string>
 
-    <!--Create room-->
-    <string name="fr_rooms">Комнаты</string>
-    <string name="fcr_room_name">Имя комнаты</string>
-    <string name="fcr_title">Добавить комнату</string>
+    <!--Create group-->
+    <string name="fr_groups">Группы</string>
+    <string name="fcr_use_common_settings">Использовать общие настройки для группы</string>
+    <string name="fcr_use_flower_settings">Использовать настройки каждого цветка в отдельности, подстраивать общую дату полива</string>
+    <string name="fcr_group_name">Имя группы</string>
+    <string name="fcr_title">Добавить группу</string>
     <string name="fcr_temperature">Температура</string>
     <string name="fcr_humidity">Влажность</string>
     <string name="fcr_brightness">Освещенность</string>
-    <string name="fcr_save_room">Сохранить команту</string>
-    <string name="fcr_name_room_error">Пожалуйста, задайте имя для комнаты</string>
+    <string name="fcr_save_group">Сохранить группу</string>
+    <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
 
     <string name="rr_data_format">Температура: %1$s°C;Освещенность: %2$s;Влажность %3$s%%</string>
 

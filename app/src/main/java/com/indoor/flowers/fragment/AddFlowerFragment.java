@@ -1,6 +1,5 @@
 package com.indoor.flowers.fragment;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,31 +9,24 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.evgeniysharafan.utils.Fragments;
-import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.Toasts;
 import com.indoor.flowers.R;
-import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
-import com.indoor.flowers.model.Room;
+import com.indoor.flowers.model.SettingData;
 import com.indoor.flowers.service.FlowersNotificationsService;
-import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
-import com.indoor.flowers.view.MonthPeriodChooser;
+import com.indoor.flowers.view.SettingsDataView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,28 +37,16 @@ import butterknife.Unbinder;
 public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener {
 
     private static final String KEY_NAME = "key_name";
-    private static final String KEY_ROOM_ID = "key_room_id";
-
-    private static final int REQUEST_CODE_ROOM = 2234;
+    private static final String KEY_GROUP_ID = "key_group_id";
 
     @BindView(R.id.faf_flower_image)
     ImageView imageView;
     @BindView(R.id.faf_flower_name)
     EditText nameView;
-    @BindView(R.id.faf_watering_value)
-    EditText wateringView;
-    @BindView(R.id.faf_choose_room)
-    TextView chooseRoomButton;
+    @BindView(R.id.faf_setting_data)
+    SettingsDataView settingsDataView;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
-    @BindView(R.id.faf_active_period_value)
-    TextView activePeriodValue;
-    @BindView(R.id.faf_passive_period_value)
-    TextView passivePeriodValue;
-    @BindView(R.id.faf_month_chooser)
-    MonthPeriodChooser monthChooserView;
-    @BindView(R.id.faf_last_watering_value)
-    TextView lastWateringView;
 
     private ProgressShowingUtil progressUtil;
     private PermissionHelper permissionHelper;
@@ -85,9 +65,9 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         return new AddFlowerFragment();
     }
 
-    public static AddFlowerFragment newInstance(long roomId) {
+    public static AddFlowerFragment newInstance(long groupId) {
         Bundle args = new Bundle();
-        args.putLong(KEY_ROOM_ID, roomId);
+        args.putLong(KEY_GROUP_ID, groupId);
         AddFlowerFragment fragment = new AddFlowerFragment();
         fragment.setArguments(args);
         return fragment;
@@ -114,7 +94,7 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
 
         if (flower == null) {
             flower = new Flower();
-            flower.setRoomId(getRoomIdFromArgs());
+            flower.setGroupId(getGroupIdFromArgs());
         }
 
         refreshViewWithFlower();
@@ -143,89 +123,28 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
     }
 
-    @OnClick(R.id.faf_choose_room)
-    void onChooseRoomClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                RoomsFragment.newInstance(this, REQUEST_CODE_ROOM), null, true);
-    }
-
     @OnClick(R.id.faf_create)
     void onCreateFlowerClicked() {
-        if (canCreateFlower()) {
-            provider.createFlower(flower);
-            FlowersNotificationsService.setupNotificationForFlower(getActivity(), flower);
-            getActivity().onBackPressed();
-        }
-    }
-
-    @OnClick(R.id.faf_active_group)
-    void onActivePeriodClicked() {
-        monthChooserView.setTitle(R.string.faf_active_period);
-        monthChooserView.show(flower.getActiveFrom(), flower.getActiveTo(),
-                flower.getPassiveFrom(), flower.getPassiveTo(), new MonthPeriodChooser.MonthChooserListener() {
-                    @Override
-                    public void onPeriodChosen(int from, int to) {
-                        flower.setActiveFrom(from);
-                        flower.setActiveTo(to);
-                        refreshPeriod(activePeriodValue, from, to);
-                    }
-                });
-    }
-
-    @OnClick(R.id.faf_passive_group)
-    void onPassivePeriodClicked() {
-        monthChooserView.setTitle(R.string.faf_passive_period);
-        monthChooserView.show(flower.getPassiveFrom(), flower.getPassiveTo(),
-                flower.getActiveFrom(), flower.getActiveTo(), new MonthPeriodChooser.MonthChooserListener() {
-                    @Override
-                    public void onPeriodChosen(int from, int to) {
-                        flower.setPassiveFrom(from);
-                        flower.setPassiveTo(to);
-                        refreshPeriod(passivePeriodValue, from, to);
-                    }
-                });
-    }
-
-    @OnClick(R.id.faf_last_watering_group)
-    void onLastWateringGroupClicked() {
-        final Calendar lastWatering;
-        if (flower.getLastWateringDate() == null) {
-            lastWatering = Calendar.getInstance();
-        } else {
-            lastWatering = flower.getLastWateringDate();
+        if (TextUtils.isEmpty(flower.getName())) {
+            Toasts.showLong(R.string.faf_error_name_empty);
+            return;
         }
 
-        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                if (flower != null) {
-                    lastWatering.clear();
-                    lastWatering.set(Calendar.YEAR, year);
-                    lastWatering.set(Calendar.MONTH, month);
-                    lastWatering.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    flower.setLastWateringDate(lastWatering);
-                    refreshLastWateringDate();
-                }
-            }
-        }, lastWatering.get(Calendar.YEAR), lastWatering.get(Calendar.MONTH),
-                lastWatering.get(Calendar.DAY_OF_MONTH))
-                .show();
+        SettingData data = settingsDataView.getSettingData();
+        if (data.getLastWateringDate() == null || data.getWateringFrequency() <= 0) {
+            Toasts.showLong(R.string.sdv_data_empty);
+            return;
+        }
+
+        flower.setSettings(data);
+        provider.createFlower(flower);
+        FlowersNotificationsService.setupNotificationForFlower(getActivity(), flower);
+        getActivity().onBackPressed();
     }
 
     @OnTextChanged(R.id.faf_flower_name)
     void onNameTextChanged(CharSequence s, int start, int before, int count) {
         flower.setName(nameView.getText().toString());
-    }
-
-    @OnTextChanged(R.id.faf_watering_value)
-    void onWateringTextChanged(CharSequence s, int start, int before, int count) {
-        int wateringPeriod = 0;
-        try {
-            wateringPeriod = Integer.valueOf(wateringView.getText().toString());
-        } catch (NumberFormatException ignore) {
-        }
-
-        flower.setWateringPeriod(wateringPeriod);
     }
 
     @Override
@@ -240,13 +159,6 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
                     TakePhotoUtils.getInstance().onActivityResult(requestCode, resultCode, data, this);
                 }
                 break;
-            case REQUEST_CODE_ROOM:
-                if (data != null && data.hasExtra(RoomsFragment.KEY_SELECTED_ROOM)) {
-                    long id = data.getLongExtra(RoomsFragment.KEY_SELECTED_ROOM, DatabaseProvider.DEFAULT_ID);
-                    flower.setRoomId(id);
-                }
-                break;
-
         }
     }
 
@@ -271,77 +183,16 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
     }
 
-    private boolean canCreateFlower() {
-        return !TextUtils.isEmpty(flower.getName())
-                && !TextUtils.isEmpty(flower.getImagePath())
-                && flower.getLastWateringDate() != null
-                && flower.getWateringPeriod() > 0
-                && flower.getRoomId() != DatabaseProvider.DEFAULT_ID;
-    }
-
     private void refreshViewWithFlower() {
         if (nameView == null) {
             return;
         }
 
         nameView.setText(flower.getName());
-        if (flower.getWateringPeriod() > 0) {
-            wateringView.setText(String.valueOf(flower.getWateringPeriod()));
-        } else {
-            wateringView.setText(null);
-        }
-
         if (!TextUtils.isEmpty(flower.getImagePath())) {
             Picasso.with(getActivity())
                     .load(new File(flower.getImagePath()))
                     .into(imageView);
-        }
-
-        setupRoomData(flower.getRoomId());
-        refreshPeriods();
-        refreshLastWateringDate();
-    }
-
-    private void refreshLastWateringDate() {
-        if (lastWateringView == null) {
-            return;
-        }
-
-        if (flower.getLastWateringDate() == null) {
-            lastWateringView.setText(R.string.faf_not_set);
-        } else {
-            lastWateringView.setText(Res.getString(R.string.full_date_format, flower.getLastWateringDate()));
-        }
-    }
-
-    private void refreshPeriods() {
-        refreshPeriod(activePeriodValue, flower.getActiveFrom(), flower.getActiveTo());
-        refreshPeriod(passivePeriodValue, flower.getPassiveFrom(), flower.getPassiveTo());
-    }
-
-    private void refreshPeriod(TextView periodValueText, int from, int to) {
-        if (periodValueText == null) {
-            return;
-        }
-
-        String fromName = CalendarUtils.getNameForMonth(from);
-        String toName = CalendarUtils.getNameForMonth(to);
-
-        if (TextUtils.isEmpty(fromName) && TextUtils.isEmpty(toName)) {
-            periodValueText.setText(R.string.faf_not_set);
-        } else {
-            periodValueText.setText(fromName + "-" + toName);
-        }
-    }
-
-    private void setupRoomData(long roomID) {
-        if (chooseRoomButton == null) {
-            return;
-        }
-
-        Room room = provider.getRoomById(roomID);
-        if (room != null) {
-            chooseRoomButton.setText(Res.getString(R.string.faf_chosen_room, room.getName()));
         }
     }
 
@@ -350,8 +201,8 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         nameView.setText(name);
     }
 
-    private long getRoomIdFromArgs() {
-        return getArguments() != null && getArguments().containsKey(KEY_ROOM_ID)
-                ? getArguments().getLong(KEY_ROOM_ID, -1) : -1;
+    private long getGroupIdFromArgs() {
+        return getArguments() != null && getArguments().containsKey(KEY_GROUP_ID)
+                ? getArguments().getLong(KEY_GROUP_ID, -1) : -1;
     }
 }

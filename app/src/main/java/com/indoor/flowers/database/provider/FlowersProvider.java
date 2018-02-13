@@ -3,7 +3,7 @@ package com.indoor.flowers.database.provider;
 import android.content.Context;
 
 import com.indoor.flowers.model.Flower;
-import com.indoor.flowers.model.Room;
+import com.indoor.flowers.model.Group;
 
 import java.util.List;
 
@@ -13,23 +13,23 @@ public class FlowersProvider extends DatabaseProvider {
         super(context);
     }
 
-    // region ROOM
+    // region GROUP
 
-    public void createRoom(Room room) {
-        room.setId(invalidateIdForInsert(room.getId()));
-        long id = database.getRoomDao().insert(room);
-        room.setId(id);
+    public void createGroup(Group group) {
+        group.setId(invalidateIdForInsert(group.getId()));
+        long id = database.getGroupDao().insert(group);
+        group.setId(id);
     }
 
-    public List<Room> getAllRooms() {
-        return database.getRoomDao().getAllRooms();
+    public List<Group> getAllGroups() {
+        return database.getGroupDao().getAllGroups();
     }
 
-    public Room getRoomById(long roomID) {
-        return database.getRoomDao().geRoomById(roomID);
+    public Group getGroupById(long groupId) {
+        return database.getGroupDao().getGroupById(groupId);
     }
 
-    // endregion ROOM
+    // endregion GROUP
 
     // region FLOWER
 
@@ -47,12 +47,16 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getFlowersDao().getFlowerById(flowerId);
     }
 
-    public List<Flower> getFlowersForRoom(long selectedRoomId) {
-        return database.getFlowersDao().getFlowersForRoom(selectedRoomId);
+    public List<Flower> getFlowersForGroup(long groupId) {
+        return database.getFlowersDao().getFlowersForGroup(groupId);
     }
 
     public void updateFlower(Flower flower) {
         database.getFlowersDao().update(flower);
+    }
+
+    public List<Flower> getFlowersWithoutGroup() {
+        return database.getFlowersDao().getFlowersWithoutGroup();
     }
 
     // endregion FLOWER

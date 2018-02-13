@@ -6,20 +6,20 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.indoor.flowers.database.Columns;
-import com.indoor.flowers.model.Room;
+import com.indoor.flowers.model.Group;
 
 import java.util.List;
 
 @Dao
-public interface RoomDao {
+public interface GroupDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(Room room);
+    long insert(Group group);
 
-    @Query("select * from " + Room.TABLE_NAME)
-    List<Room> getAllRooms();
+    @Query("select * from " + Group.TABLE_NAME)
+    List<Group> getAllGroups();
 
-    @Query("select * from " + Room.TABLE_NAME + " where "
-            + Columns.ID + "=:roomID")
-    Room geRoomById(long roomID);
+    @Query("select * from " + Group.TABLE_NAME + " where "
+            + Columns.ID + "=:groupId")
+    Group getGroupById(long groupId);
 }

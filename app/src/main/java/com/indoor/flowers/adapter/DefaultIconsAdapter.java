@@ -16,7 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RoomDefaultIconsAdapter extends RecyclerView.Adapter<RoomDefaultIconsAdapter.ViewHolder> {
+public class DefaultIconsAdapter extends RecyclerView.Adapter<DefaultIconsAdapter.ViewHolder> {
 
     private OnItemClickListener<Integer> callback;
     private List<Integer> iconsRes = new ArrayList<>();
@@ -33,7 +33,7 @@ public class RoomDefaultIconsAdapter extends RecyclerView.Adapter<RoomDefaultIco
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_room_icon, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_group_icon, parent, false);
         return new ViewHolder(view, this);
     }
 
@@ -52,9 +52,9 @@ public class RoomDefaultIconsAdapter extends RecyclerView.Adapter<RoomDefaultIco
         @BindView(R.id.rri_icon)
         ImageView iconView;
 
-        private RoomDefaultIconsAdapter adapter;
+        private DefaultIconsAdapter adapter;
 
-        public ViewHolder(View itemView, RoomDefaultIconsAdapter adapter) {
+        public ViewHolder(View itemView, DefaultIconsAdapter adapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.adapter = adapter;

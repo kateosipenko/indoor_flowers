@@ -67,7 +67,7 @@ public class FlowersNotificationsService extends IntentService {
             return;
         }
 
-        flower.setLastWateringDate(Calendar.getInstance());
+        flower.getSettings().setLastWateringDate(Calendar.getInstance());
         provider.updateFlower(flower);
         setupNotificationForFlower(this, flower);
 

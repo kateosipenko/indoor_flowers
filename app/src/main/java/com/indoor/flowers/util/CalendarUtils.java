@@ -1,8 +1,5 @@
 package com.indoor.flowers.util;
 
-import com.evgeniysharafan.utils.Res;
-import com.indoor.flowers.R;
-
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -22,10 +19,9 @@ public class CalendarUtils {
         return result;
     }
 
-    public static String getDaysToWateringText(Calendar start, Calendar end) {
+    public static int getDaysDiff(Calendar start, Calendar end) {
         long startDays = TimeUnit.MILLISECONDS.toDays(start.getTimeInMillis());
         long endDays = TimeUnit.MILLISECONDS.toDays(end.getTimeInMillis());
-        long daysDiff = endDays - startDays;
-        return Res.getString(R.string.days_to_watering_format, daysDiff);
+        return (int) (endDays - startDays);
     }
 }

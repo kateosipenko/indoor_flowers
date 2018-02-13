@@ -2,8 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rf_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
     <ImageView
@@ -20,12 +23,25 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/padding_medium"
         android:textColor="@color/black_primary_text"
-        android:textSize="@dimen/text_body_big"
-        app:layout_constraintBottom_toTopOf="@+id/rf_days_to_watering"
+        android:textSize="@dimen/text_body_medium"
+        app:layout_constraintBottom_toTopOf="@+id/rf_last_watering"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/rf_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Flowers" />
+
+    <TextView
+        android:id="@+id/rf_last_watering"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal"
+        app:layout_constraintBottom_toTopOf="@+id/rf_days_to_watering"
+        app:layout_constraintEnd_toEndOf="@id/rf_title"
+        app:layout_constraintStart_toStartOf="@id/rf_title"
+        app:layout_constraintTop_toBottomOf="@id/rf_title"
+        tools:text="15 Feb 2018" />
 
     <TextView
         android:id="@+id/rf_days_to_watering"
@@ -33,11 +49,21 @@
         android:layout_height="0dp"
         android:gravity="bottom"
         android:textColor="@color/black_secondary_text"
-        android:textSize="@dimen/text_body_medium"
+        android:textSize="@dimen/text_body_small"
         app:layout_constraintBottom_toBottomOf="@id/rf_icon"
         app:layout_constraintEnd_toEndOf="@id/rf_title"
         app:layout_constraintStart_toStartOf="@id/rf_title"
-        app:layout_constraintTop_toBottomOf="@id/rf_title"
+        app:layout_constraintTop_toBottomOf="@id/rf_last_watering"
         tools:text="Room 1" />
+
+    <View
+        android:id="@+id/rf_watering_level"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/watering_tab_height"
+        android:layout_marginTop="@dimen/padding_small"
+        android:background="@color/material_blue_primary400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rf_icon" />
 
 </android.support.constraint.ConstraintLayout>

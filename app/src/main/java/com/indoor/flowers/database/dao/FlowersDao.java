@@ -28,6 +28,11 @@ public interface FlowersDao {
     Flower getFlowerById(long flowerId);
 
     @Query("select * from " + Flower.TABLE_NAME
-            + " where " + Columns.ROOM_ID + "=:selectedRoomId")
-    List<Flower> getFlowersForRoom(long selectedRoomId);
+            + " where " + Columns.GROUP_ID + "=:groupId")
+    List<Flower> getFlowersForGroup(long groupId);
+
+    @Query("select * from " + Flower.TABLE_NAME
+            + " where " + Columns.GROUP_ID + " is null or "
+            + Columns.GROUP_ID + "=-1")
+    List<Flower> getFlowersWithoutGroup();
 }

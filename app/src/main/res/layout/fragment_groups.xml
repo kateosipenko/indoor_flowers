@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/fr_rooms_list"
+        android:id="@+id/fr_groups_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -13,7 +13,7 @@
         android:padding="@dimen/padding_medium" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fr_create_room"
+        android:id="@+id/fr_create_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_fab"
