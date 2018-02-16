@@ -22,7 +22,7 @@ import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.adapter.GroupsAdapter;
 import com.indoor.flowers.adapter.GroupsAdapter.GroupClickListener;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.util.AnimationUtils;
 import com.indoor.flowers.util.OnItemClickListener;
@@ -36,7 +36,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class MainFragment extends Fragment implements GroupClickListener,
-        OnItemClickListener<Flower> {
+        OnItemClickListener<FlowerWithSetting> {
 
     @BindView(R.id.fm_root)
     ConstraintLayout rootLayout;
@@ -116,14 +116,14 @@ public class MainFragment extends Fragment implements GroupClickListener,
     }
 
     @Override
-    public void onItemClicked(Flower item) {
+    public void onItemClicked(FlowerWithSetting item) {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                FlowerDetailsFragment.newInstance(item.getId()), null, true);
+                FlowerDetailsFragment.newInstance(item.getFlower().getId()), null, true);
     }
 
     private void reloadFlowers() {
         Group selectedGroup = groupsAdapter.getSelectedGroup();
-        List<Flower> flowers = null;
+        List<FlowerWithSetting> flowers = null;
         if (selectedGroup != null) {
             flowers = provider.getFlowersForGroup(selectedGroup.getId());
         } else {

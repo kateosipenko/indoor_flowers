@@ -5,7 +5,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.GroupWithSetting;
 import com.indoor.flowers.receiver.AlarmBroadcastReceiver;
 
 import java.util.concurrent.TimeUnit;
@@ -27,13 +29,13 @@ public class FlowersAlarmsUtils {
         NotificationsUtils.cancelAllForFlower(context, flower);
     }
 
-    public static void refreshAlarmsForFlower(Context context, Flower flower) {
+    public static void refreshAlarmsForFlower(Context context, FlowerWithSetting flower) {
         if (flower == null || flower.getSettingData() == null) {
             return;
         }
 
-        updateAlarmsForItem(context, false, flower.getId(),
-                flower.getSettingData().getNextWateringTime().getTimeInMillis(),
+        updateAlarmsForItem(context, false, flower.getFlower().getId(),
+                flower.getSettingData().getNextWateringDate().getTimeInMillis(),
                 flower.getSettingData().getWateringFrequency());
     }
 
@@ -52,13 +54,13 @@ public class FlowersAlarmsUtils {
         NotificationsUtils.cancelAllForGroup(context, group);
     }
 
-    public static void refreshAlarmsForGroup(Context context, Group group) {
+    public static void refreshAlarmsForGroup(Context context, GroupWithSetting group) {
         if (group == null || group.getSettingData() == null) {
             return;
         }
 
-        updateAlarmsForItem(context, true, group.getId(),
-                group.getSettingData().getNextWateringTime().getTimeInMillis(),
+        updateAlarmsForItem(context, true, group.getGroup().getId(),
+                group.getSettingData().getNextWateringDate().getTimeInMillis(),
                 group.getSettingData().getWateringFrequency());
     }
 

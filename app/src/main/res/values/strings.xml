@@ -50,6 +50,14 @@
     <string name="fm_add_flower">Добавить цветок</string>
     <string name="fm_add_group">Создать группу</string>
 
+    <!--Settings-->
+    <string name="vsd_last_watering">Дата последнего полива</string>
+    <string name="vsd_preferred_time">Предпочтительное время уведомлений</string>
+    <string name="vsd_last_nutrition_title">Дата последней подкормки</string>
+    <string name="vsd_nutrition_title">Переодичность подкормки</string>
+    <string name="vsd_last_transplanting">Дата последней пересадки</string>
+    <string name="vsd_next_transplanting">Дата следующей пересадки</string>
+
     <!--Add flower-->
     <string name="faf_flower_title">Добавить новое растение</string>
     <string name="faf_content_flower_image">Фото фашего растения</string>
@@ -59,9 +67,8 @@
     <string name="faf_active_period">Период активного роста</string>
     <string name="faf_passive_period">Период покоя</string>
     <string name="faf_not_set">Не задан</string>
-    <string name="faf_last_watering">Дата последнего полива</string>
+
     <string name="faf_watering">Периодичность полива в днях</string>
-    <string name="faf_preferred_time">Предпочтительное время полива</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
 
     <!--Create group-->

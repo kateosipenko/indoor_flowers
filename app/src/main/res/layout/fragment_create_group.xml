@@ -6,57 +6,62 @@
     android:layout_height="match_parent"
     android:background="@color/material_white">
 
-    <EditText
-        android:id="@+id/fcr_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default"
-        android:hint="@string/fcr_group_name"
-        android:imeOptions="actionDone"
-        android:inputType="textCapWords"
-        android:textColor="@color/black_primary_text"
-        android:textColorHint="@color/primary200"
-        android:textSize="@dimen/text_body_medium"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
-
-    <RadioGroup
-        android:id="@+id/fcr_settings_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default"
-        app:layout_constraintTop_toBottomOf="@id/fcr_name">
-
-        <RadioButton
-            android:id="@+id/fcr_use_flower_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fcr_use_flower_settings"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-        <RadioButton
-            android:id="@+id/fcr_use_common_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_default"
-            android:text="@string/fcr_use_common_settings"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-    </RadioGroup>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/margin_default"
-        app:layout_constraintBottom_toTopOf="@+id/fcr_save"
-        app:layout_constraintTop_toBottomOf="@id/fcr_settings_group">
+        android:layout_height="wrap_content">
 
-        <com.indoor.flowers.view.SettingsDataView
-            android:id="@+id/fcr_setting_data"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/fcr_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_default"
+                android:hint="@string/fcr_group_name"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                android:textColor="@color/black_primary_text"
+                android:textColorHint="@color/primary200"
+                android:textSize="@dimen/text_body_medium"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="LabelFor" />
+
+            <RadioGroup
+                android:id="@+id/fcr_settings_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_default"
+                app:layout_constraintTop_toBottomOf="@id/fcr_name">
+
+                <RadioButton
+                    android:id="@+id/fcr_use_flower_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fcr_use_flower_settings"
+                    android:textColor="@color/black_secondary_text"
+                    android:textSize="@dimen/text_body_medium" />
+
+                <RadioButton
+                    android:id="@+id/fcr_use_common_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:text="@string/fcr_use_common_settings"
+                    android:textColor="@color/black_secondary_text"
+                    android:textSize="@dimen/text_body_medium" />
+
+            </RadioGroup>
+
+            <com.indoor.flowers.view.SettingsDataView
+                android:id="@+id/fcr_setting_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_default" />
+        </LinearLayout>
+
     </ScrollView>
 
     <Button
@@ -70,10 +75,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.indoor.flowers.view.MonthPeriodChooser
-        android:id="@+id/fcr_month_chooser"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="@dimen/margin_big"
-        android:visibility="gone" />
 </android.support.constraint.ConstraintLayout>

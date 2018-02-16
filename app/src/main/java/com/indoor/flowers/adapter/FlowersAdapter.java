@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.OnItemClickListener;
 import com.squareup.picasso.Picasso;
@@ -29,16 +29,16 @@ import butterknife.OnClick;
 
 public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHolder> {
 
-    private List<Flower> flowers = new ArrayList<>();
+    private List<FlowerWithSetting> flowers = new ArrayList<>();
     private Calendar today = Calendar.getInstance();
 
-    private OnItemClickListener<Flower> flowerClickListener;
+    private OnItemClickListener<FlowerWithSetting> flowerClickListener;
 
-    public void setFlowerClickListener(OnItemClickListener<Flower> flowerClickListener) {
+    public void setFlowerClickListener(OnItemClickListener<FlowerWithSetting> flowerClickListener) {
         this.flowerClickListener = flowerClickListener;
     }
 
-    public void setFlowers(List<Flower> items) {
+    public void setFlowers(List<FlowerWithSetting> items) {
         this.flowers.clear();
         if (items != null) {
             this.flowers.addAll(items);
@@ -63,7 +63,7 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
         return flowers.size();
     }
 
-    private Flower getItemByPosition(int position) {
+    private FlowerWithSetting getItemByPosition(int position) {
         return position >= 0 && position < flowers.size() ? flowers.get(position) : null;
     }
 
@@ -100,20 +100,20 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
             }
         }
 
-        private void update(Flower flower) {
+        private void update(FlowerWithSetting flower) {
             if (flower == null) {
                 iconView.setImageBitmap(null);
                 nameView.setText(null);
                 daysToWateringView.setText(null);
             } else {
-                if (!TextUtils.isEmpty(flower.getImagePath())) {
+                if (!TextUtils.isEmpty(flower.getFlower().getImagePath())) {
                     Picasso.with(itemView.getContext())
-                            .load(new File(flower.getImagePath()))
+                            .load(new File(flower.getFlower().getImagePath()))
                             .into(iconView);
                 } else {
                     iconView.setImageBitmap(null);
                 }
-                nameView.setText(flower.getName());
+                nameView.setText(flower.getFlower().getName());
                 lastWateringView.setText(Res.getString(R.string.full_date_format,
                         flower.getSettingData().getLastWateringDate()));
                 long daysToWatering = CalendarUtils.getDaysDiff(flower.getSettingData().getLastWateringDate(),
@@ -123,7 +123,7 @@ public class FlowersAdapter extends RecyclerView.Adapter<FlowersAdapter.ViewHold
             }
         }
 
-        private void refreshWateringLevel(Flower flower) {
+        private void refreshWateringLevel(FlowerWithSetting flower) {
             int progress = 100;
             if (flower != null && flower.getSettingData() != null) {
                 Calendar lastWatering = flower.getSettingData().getLastWateringDate();

@@ -22,6 +22,12 @@ android {
         buildConfigField 'String', 'AUTHORITY', "\"${authority}\""
         buildConfigField "String", "FILE_PROVIDER_AUTHORITY", "\"" + fileProviderAuthority + "\""
         vectorDrawables.useSupportLibrary true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     signingConfigs {
         debug {
@@ -86,7 +92,7 @@ android {
 dependencies {
     def supportLibVersion = "27.0.2"
     def utilsVersion = "1.1.2"
-    def roomVersion = "1.0.0"
+    def roomVersion = "1.1.0-alpha2"
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile "com.android.support:appcompat-v7:$supportLibVersion"

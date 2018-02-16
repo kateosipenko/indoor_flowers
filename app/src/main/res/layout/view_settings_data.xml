@@ -1,190 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RadioGroup
-        android:id="@+id/vsd_brightness_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_normal"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/vsd_brightness_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fcr_brightness"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:id="@+id/vsd_brightness_small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_sun"
-            tools:checked="true" />
-
-        <RadioButton
-            android:id="@+id/vsd_brightness_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_sun_medium" />
-
-        <RadioButton
-            android:id="@+id/vsd_brightness_full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_sun_full" />
-
-    </RadioGroup>
-
-    <RadioGroup
-        android:id="@+id/vsd_humidity_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_normal"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_brightness_group">
-
-        <TextView
-            android:id="@+id/vsd_humidity_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fcr_humidity"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:id="@+id/vsd_humidity_small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_water_small"
-            tools:checked="true" />
-
-        <RadioButton
-            android:id="@+id/vsd_humidity_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_water_medium" />
-
-        <RadioButton
-            android:id="@+id/vsd_humidity_full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginStart="@dimen/margin_normal"
-            android:button="@drawable/sel_water_full" />
-
-    </RadioGroup>
-
-    <View
-        android:id="@+id/vsd_room_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_humidity_group" />
-
-    <LinearLayout
-        android:id="@+id/vsd_active_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/sel_image_btn_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_room_divider">
-
-        <TextView
-            android:id="@+id/vsd_active_period_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/faf_active_period"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-        <TextView
-            android:id="@+id/vsd_active_period_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black_disabled_text"
-            android:textSize="@dimen/text_body_small"
-            tools:text="Январь-Март" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/vsd_active_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_active_group" />
-
-    <LinearLayout
-        android:id="@+id/vsd_passive_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/sel_image_btn_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_active_divider">
-
-        <TextView
-            android:id="@+id/vsd_passive_period_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/faf_passive_period"
-            android:textColor="@color/black_secondary_text"
-            android:textSize="@dimen/text_body_medium" />
-
-        <TextView
-            android:id="@+id/vsd_passive_period_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black_disabled_text"
-            android:textSize="@dimen/text_body_small"
-            tools:text="Январь-Март" />
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/vsd_passive_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_passive_group" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/vsd_last_watering_group"
@@ -194,14 +13,13 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_passive_divider">
+        android:padding="@dimen/margin_normal">
 
         <TextView
             android:id="@+id/vsd_last_watering_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/faf_last_watering"
+            android:text="@string/vsd_last_watering"
             android:textColor="@color/black_secondary_text"
             android:textSize="@dimen/text_body_medium" />
 
@@ -216,11 +34,9 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/vsd_last_watering_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_last_watering_group" />
+        android:background="@color/black_shadow_light" />
 
     <LinearLayout
         android:id="@+id/vsd_watering_group"
@@ -228,8 +44,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sel_image_btn_bg"
         android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_last_watering_group">
+        android:padding="@dimen/margin_normal">
 
         <TextView
             android:id="@+id/vsd_watering_title"
@@ -253,11 +68,134 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/vsd_watering_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_watering_group" />
+        android:background="@color/black_shadow_light" />
+
+    <LinearLayout
+        android:id="@+id/vsd_last_nutrition_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal">
+
+        <TextView
+            android:id="@+id/vsd_last_nutrition_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vsd_last_nutrition_title"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <TextView
+            android:id="@+id/vsd_last_nutrition_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_small"
+            tools:text="Январь-Март" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/black_shadow_light" />
+
+    <LinearLayout
+        android:id="@+id/vsd_nutrition_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal">
+
+        <TextView
+            android:id="@+id/vsd_nutrition_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/vsd_nutrition_value"
+            android:text="@string/vsd_nutrition_title"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <EditText
+            android:id="@+id/vsd_nutrition_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textColor="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_small"
+            tools:text="5 дней" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/black_shadow_light" />
+
+    <LinearLayout
+        android:id="@+id/vsd_last_transplanting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vsd_last_transplanting"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <TextView
+            android:id="@+id/vsd_last_transplanting_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_small"
+            tools:text="Январь-Март" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/black_shadow_light" />
+
+    <LinearLayout
+        android:id="@+id/vsd_next_transplanting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vsd_next_transplanting"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <TextView
+            android:id="@+id/vsd_next_transplanting_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_small"
+            tools:text="Январь-Март" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/black_shadow_light" />
 
     <LinearLayout
         android:id="@+id/vsd_preferred_time"
@@ -265,14 +203,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sel_image_btn_bg"
         android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/vsd_watering_group">
+        android:padding="@dimen/margin_normal">
 
         <TextView
             android:id="@+id/vsd_preferred_time_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/faf_preferred_time"
+            android:text="@string/vsd_preferred_time"
             android:textColor="@color/black_secondary_text"
             android:textSize="@dimen/text_body_medium" />
 
@@ -287,10 +224,8 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/vsd_preferred_time_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
-        android:background="@color/black_shadow_light"
-        app:layout_constraintTop_toBottomOf="@id/vsd_preferred_time" />
+        android:background="@color/black_shadow_light" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

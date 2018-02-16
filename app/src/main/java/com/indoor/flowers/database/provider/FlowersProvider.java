@@ -3,7 +3,9 @@ package com.indoor.flowers.database.provider;
 import android.content.Context;
 
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.SettingData;
 
 import java.util.List;
 
@@ -15,7 +17,9 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region GROUP
 
-    public void createGroup(Group group) {
+    public void createGroup(Group group, SettingData data) {
+        createSettingData(data);
+        group.setSettingDataId(data.getId());
         group.setId(invalidateIdForInsert(group.getId()));
         long id = database.getGroupDao().insert(group);
         group.setId(id);
@@ -41,13 +45,16 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region FLOWER
 
-    public void createFlower(Flower flower) {
+    public void createFlower(Flower flower, SettingData data) {
+        createSettingData(data);
+        flower.setSettingDataId(data.getId());
+
         flower.setId(invalidateIdForInsert(flower.getId()));
         long id = database.getFlowersDao().insert(flower);
         flower.setId(id);
     }
 
-    public List<Flower> getAllFlowers() {
+    public List<FlowerWithSetting> getAllFlowers() {
         return database.getFlowersDao().getAllFlowers();
     }
 
@@ -55,7 +62,7 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getFlowersDao().getFlowerById(flowerId);
     }
 
-    public List<Flower> getFlowersForGroup(long groupId) {
+    public List<FlowerWithSetting> getFlowersForGroup(long groupId) {
         return database.getFlowersDao().getFlowersForGroup(groupId);
     }
 
@@ -63,7 +70,7 @@ public class FlowersProvider extends DatabaseProvider {
         database.getFlowersDao().update(flower);
     }
 
-    public List<Flower> getFlowersWithoutGroup() {
+    public List<FlowerWithSetting> getFlowersWithoutGroup() {
         return database.getFlowersDao().getFlowersWithoutGroup();
     }
 
@@ -76,4 +83,14 @@ public class FlowersProvider extends DatabaseProvider {
     }
 
     // endregion FLOWER
+
+    // region SETTING_DATA
+
+    public void createSettingData(SettingData data) {
+        data.setId(invalidateIdForInsert(data.getId()));
+        long id = database.getSettingDao().insert(data);
+        data.setId(id);
+    }
+
+    // endregion SETTING_DATA
 }

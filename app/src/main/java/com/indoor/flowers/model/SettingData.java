@@ -1,97 +1,47 @@
 package com.indoor.flowers.model;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.DbTypesConverter;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Calendar;
 
+@Entity(tableName = SettingData.TABLE_NAME)
 @TypeConverters({DbTypesConverter.class})
 public class SettingData {
 
-    @HumidityLevel
-    @ColumnInfo(name = Columns.HUMIDITY)
-    private int humidityLevel = HumidityLevel.NOT_SET;
-    @BrightnessLevel
-    @ColumnInfo(name = Columns.BRIGHTNESS)
-    private int brightnessLevel = BrightnessLevel.NOT_SET;
-    @ColumnInfo(name = Columns.WATERING_PERIOD)
-    private int wateringFrequency;
-    @ColumnInfo(name = Columns.ACTIVE_FROM)
-    private int activeFrom = -1;
-    @ColumnInfo(name = Columns.ACTIVE_TO)
-    private int activeTo = -1;
-    @ColumnInfo(name = Columns.PASSIVE_FROM)
-    private int passiveFrom = -1;
-    @ColumnInfo(name = Columns.PASSIVE_TO)
-    private int passiveTo = -1;
+    public static final String TABLE_NAME = "SettingDataTable";
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = Columns.SETTING_ID)
+    private long id;
     @ColumnInfo(name = Columns.LAST_WATERING_DATE)
     private Calendar lastWateringDate;
+    @ColumnInfo(name = Columns.WATERING_PERIOD)
+    private int wateringFrequency;
+    @ColumnInfo(name = Columns.LAST_NUTRITION_DATE)
+    private Calendar lastNutritionDate;
+    @ColumnInfo(name = Columns.NUTRITION_FREQ)
+    private int nutritionFreq;
+    @ColumnInfo(name = Columns.LAST_TRANSPLANTING_DATE)
+    private Calendar lastTransplanting;
+    @ColumnInfo(name = Columns.NEXT_TRANSPLANTING_DATE)
+    private Calendar nextTransplanting;
     @ColumnInfo(name = Columns.PREFERRED_TIME)
     private Calendar preferredTime;
 
-    public boolean isEmpty() {
-        return wateringFrequency <= 0 && lastWateringDate == null;
+    public long getId() {
+        return id;
     }
 
-    @HumidityLevel
-    public int getHumidityLevel() {
-        return humidityLevel;
-    }
-
-    public void setHumidityLevel(@HumidityLevel int humidityLevel) {
-        this.humidityLevel = humidityLevel;
-    }
-
-    @BrightnessLevel
-    public int getBrightnessLevel() {
-        return brightnessLevel;
-    }
-
-    public void setBrightnessLevel(@BrightnessLevel int brightnessLevel) {
-        this.brightnessLevel = brightnessLevel;
-    }
-
-    public int getWateringFrequency() {
-        return wateringFrequency;
-    }
-
-    public void setWateringFrequency(int wateringFrequency) {
-        this.wateringFrequency = wateringFrequency;
-    }
-
-    public int getActiveFrom() {
-        return activeFrom;
-    }
-
-    public void setActiveFrom(int activeFrom) {
-        this.activeFrom = activeFrom;
-    }
-
-    public int getActiveTo() {
-        return activeTo;
-    }
-
-    public void setActiveTo(int activeTo) {
-        this.activeTo = activeTo;
-    }
-
-    public int getPassiveFrom() {
-        return passiveFrom;
-    }
-
-    public void setPassiveFrom(int passiveFrom) {
-        this.passiveFrom = passiveFrom;
-    }
-
-    public int getPassiveTo() {
-        return passiveTo;
-    }
-
-    public void setPassiveTo(int passiveTo) {
-        this.passiveTo = passiveTo;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Calendar getLastWateringDate() {
@@ -102,6 +52,46 @@ public class SettingData {
         this.lastWateringDate = lastWateringDate;
     }
 
+    public int getWateringFrequency() {
+        return wateringFrequency;
+    }
+
+    public void setWateringFrequency(int wateringFrequency) {
+        this.wateringFrequency = wateringFrequency;
+    }
+
+    public Calendar getLastNutritionDate() {
+        return lastNutritionDate;
+    }
+
+    public void setLastNutritionDate(Calendar lastNutritionDate) {
+        this.lastNutritionDate = lastNutritionDate;
+    }
+
+    public int getNutritionFreq() {
+        return nutritionFreq;
+    }
+
+    public void setNutritionFreq(int nutritionFreq) {
+        this.nutritionFreq = nutritionFreq;
+    }
+
+    public Calendar getLastTransplanting() {
+        return lastTransplanting;
+    }
+
+    public void setLastTransplanting(Calendar lastTransplanting) {
+        this.lastTransplanting = lastTransplanting;
+    }
+
+    public Calendar getNextTransplanting() {
+        return nextTransplanting;
+    }
+
+    public void setNextTransplanting(Calendar nextTransplanting) {
+        this.nextTransplanting = nextTransplanting;
+    }
+
     public Calendar getPreferredTime() {
         return preferredTime;
     }
@@ -110,12 +100,37 @@ public class SettingData {
         this.preferredTime = preferredTime;
     }
 
-    public Calendar getNextWateringTime() {
-        Calendar result = Calendar.getInstance();
-        result.setTimeInMillis(lastWateringDate.getTimeInMillis());
-        result.add(Calendar.DAY_OF_MONTH, wateringFrequency);
-        result.set(Calendar.HOUR_OF_DAY, preferredTime.get(Calendar.HOUR_OF_DAY));
-        result.set(Calendar.MINUTE, preferredTime.get(Calendar.MINUTE));
+    @Nullable
+    public Calendar getNextWateringDate() {
+        return getNextDate(lastWateringDate, wateringFrequency);
+    }
+
+    @Nullable
+    public Calendar getNextNutritionDate() {
+        return getNextDate(lastNutritionDate, nutritionFreq);
+    }
+
+    @Nullable
+    public Calendar getNextTransplantingDate() {
+        return getNextDate(nextTransplanting, null);
+    }
+
+    @Nullable
+    private Calendar getNextDate(Calendar from, Integer frequency) {
+        if (from == null) {
+            return null;
+        }
+
+        Calendar result = (Calendar) from.clone();
+        if (frequency != null) {
+            result.add(Calendar.DAY_OF_YEAR, frequency);
+        }
+
+        if (preferredTime != null) {
+            result.set(Calendar.HOUR_OF_DAY, preferredTime.get(Calendar.HOUR_OF_DAY));
+            result.set(Calendar.MINUTE, preferredTime.get(Calendar.MINUTE));
+        }
+
         return result;
     }
 }

@@ -1,7 +1,6 @@
 package com.indoor.flowers.model;
 
 import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -19,8 +18,8 @@ public class Group {
     private String name;
     @ColumnInfo(name = Columns.USE_COMMON_SETTINGS)
     private boolean useCommonSettings;
-    @Embedded(prefix = Columns.SETTINGS_PREFIX)
-    private SettingData settingData;
+    @ColumnInfo(name = Columns.SETTING_DATA_ID)
+    private long settingDataId;
 
     public long getId() {
         return id;
@@ -46,11 +45,11 @@ public class Group {
         this.useCommonSettings = useCommonSettings;
     }
 
-    public SettingData getSettingData() {
-        return settingData;
+    public long getSettingDataId() {
+        return settingDataId;
     }
 
-    public void setSettingData(SettingData settingData) {
-        this.settingData = settingData;
+    public void setSettingDataId(long settingDataId) {
+        this.settingDataId = settingDataId;
     }
 }

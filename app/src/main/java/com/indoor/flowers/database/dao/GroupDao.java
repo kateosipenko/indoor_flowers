@@ -6,7 +6,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.model.Group;
 
 import java.util.List;
@@ -17,16 +16,16 @@ public interface GroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Group group);
 
-    @Query("select * from " + Group.TABLE_NAME)
+    @Query("select * from GroupTable")
     List<Group> getAllGroups();
 
-    @Query("select * from " + Group.TABLE_NAME + " where "
-            + Columns.ID + "=:groupId")
+    @Query("select * from GroupTable where _id=:groupId")
     Group getGroupById(long groupId);
 
     @Update
     void update(Group group);
 
-    @Query("update GroupTable set stg_last_watering_date=:timeInMillis where _id=:groupId")
+    @Query("update SettingDataTable set last_watering_date=:timeInMillis "
+            + " where setting_id=(select setting_data_id from GroupTable where _id=:groupId)")
     void setGroupLastTimeWatering(long groupId, long timeInMillis);
 }

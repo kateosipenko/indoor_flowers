@@ -7,8 +7,8 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 
 import java.util.List;
 
@@ -24,22 +24,21 @@ public interface FlowersDao {
     @Delete
     void delete(Flower flower);
 
-    @Query("select * from " + Flower.TABLE_NAME)
-    List<Flower> getAllFlowers();
+    @Query("select * from FlowerTable inner join SettingDataTable on FlowerTable.setting_data_id=SettingDataTable.setting_id")
+    List<FlowerWithSetting> getAllFlowers();
 
-    @Query("select * from " + Flower.TABLE_NAME
-            + " where " + Columns.ID + "=:flowerId")
+    @Query("select * from FlowerTable where _id=:flowerId")
     Flower getFlowerById(long flowerId);
 
-    @Query("select * from " + Flower.TABLE_NAME
-            + " where " + Columns.GROUP_ID + "=:groupId")
-    List<Flower> getFlowersForGroup(long groupId);
+    @Query("select * from FlowerTable inner join SettingDataTable on FlowerTable.setting_data_id=SettingDataTable.setting_id"
+            + " and FlowerTable._id in (select flower_id from GroupFlowerTable where group_id=:groupId)")
+    List<FlowerWithSetting> getFlowersForGroup(long groupId);
 
-    @Query("select * from " + Flower.TABLE_NAME
-            + " where " + Columns.GROUP_ID + " is null or "
-            + Columns.GROUP_ID + "=-1")
-    List<Flower> getFlowersWithoutGroup();
+    @Query("select * from FlowerTable inner join SettingDataTable on FlowerTable.setting_data_id=SettingDataTable.setting_id"
+            + " and FlowerTable._id not in (select flower_id from GroupFlowerTable)")
+    List<FlowerWithSetting> getFlowersWithoutGroup();
 
-    @Query("update FlowerTable set stg_last_watering_date=:timeInMillis where _id=:flowerId")
+    @Query("update SettingDataTable set last_watering_date=:timeInMillis " +
+            "where setting_id=(select setting_data_id from FlowerTable where _id=:flowerId)")
     void setFlowerLastTimeWatering(long flowerId, long timeInMillis);
 }

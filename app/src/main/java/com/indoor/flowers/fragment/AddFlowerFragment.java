@@ -16,6 +16,7 @@ import com.evgeniysharafan.utils.Toasts;
 import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.SettingData;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.PermissionHelper;
@@ -23,7 +24,6 @@ import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
-import com.indoor.flowers.view.MonthPeriodChooser;
 import com.indoor.flowers.view.SettingsDataView;
 import com.squareup.picasso.Picasso;
 
@@ -46,8 +46,6 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     EditText nameView;
     @BindView(R.id.faf_setting_data)
     SettingsDataView settingsDataView;
-    @BindView(R.id.faf_month_chooser)
-    MonthPeriodChooser monthPeriodChooser;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
 
@@ -97,10 +95,7 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
 
         if (flower == null) {
             flower = new Flower();
-            flower.setGroupId(getGroupIdFromArgs());
         }
-
-        settingsDataView.setMonthChooserView(monthPeriodChooser);
 
         refreshViewWithFlower();
         return view;
@@ -141,9 +136,11 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
             return;
         }
 
-        flower.setSettingData(data);
-        provider.createFlower(flower);
-        FlowersAlarmsUtils.refreshAlarmsForFlower(getActivity(), flower);
+        provider.createFlower(flower, data);
+        FlowerWithSetting flowerWithSetting = new FlowerWithSetting();
+        flowerWithSetting.setFlower(flower);
+        flowerWithSetting.setSettingData(data);
+        FlowersAlarmsUtils.refreshAlarmsForFlower(getActivity(), flowerWithSetting);
         getActivity().onBackPressed();
     }
 
