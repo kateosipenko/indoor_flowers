@@ -29,6 +29,18 @@
     <string name="notification_title_watering">Время поливаки</string>
     <string name="notification_message_watering_format">Пора полить %1$s</string>
 
+    <!--NavigationDrawerActivity-->
+    <string name="mnd_flowers">Цветы</string>
+    <string name="mnd_groups">Группы</string>
+    <string name="mnd_calendar">Календарь</string>
+    <string name="and_drawer_open">Открыть</string>
+    <string name="and_drawer_close">Закрыть</string>
+
+    <!--Flowers-->
+    <string name="mf_filter">Фильтровать</string>
+    <string name="mf_filter_all_flowers">Все цветы</string>
+    <string name="mf_filter_without_group">Только без группы</string>
+
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="full_time_format">%1$tH:%1$tM</string>

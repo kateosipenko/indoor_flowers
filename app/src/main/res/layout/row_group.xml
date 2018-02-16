@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rg_root"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
@@ -13,14 +13,14 @@
     <TextView
         android:id="@+id/rg_title"
         style="@style/GroupTitleStyle"
-        android:layout_marginStart="@dimen/padding_normal"
+        android:layout_marginStart="@dimen/margin_normal"
         tools:text="Kitchen" />
 
     <View
         android:id="@+id/rg_alert"
         android:layout_width="@dimen/circle_notification_size"
         android:layout_height="@dimen/circle_notification_size"
-        android:layout_marginTop="@dimen/padding_normal"
+        android:layout_marginTop="@dimen/margin_normal"
         android:background="@drawable/shape_circle_accent"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/rg_title"

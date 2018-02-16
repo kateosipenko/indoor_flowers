@@ -32,7 +32,7 @@ public class FlowerDetailsFragment extends Fragment {
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
-    @BindView(R.id.ffd_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     private Unbinder unbinder;

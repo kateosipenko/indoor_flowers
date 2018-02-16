@@ -55,7 +55,7 @@
             android:id="@+id/vmc_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_normal"
+            android:padding="@dimen/margin_normal"
             android:textColor="@color/black_primary_text"
             android:textSize="@dimen/text_body_big"
             tools:text="Title" />
@@ -69,7 +69,7 @@
             android:id="@+id/vmc_months_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_normal"
+            android:layout_margin="@dimen/margin_normal"
             android:layout_weight="1"
             app:columnCount="4">
 

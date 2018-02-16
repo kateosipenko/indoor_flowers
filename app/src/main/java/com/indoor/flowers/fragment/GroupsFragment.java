@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,6 +53,7 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         provider = new FlowersProvider(getActivity());
+        setHasOptionsMenu(false);
     }
 
     @Nullable
@@ -58,6 +61,7 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setupActionBar();
         initList();
         reloadGroups();
         return view;
@@ -87,6 +91,15 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
             setActivityResult(group);
             getActivity().onBackPressed();
         }
+    }
+
+    private void setupActionBar() {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
+
+        actionBar.setTitle(R.string.mnd_groups);
     }
 
     private void reloadGroups() {

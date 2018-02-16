@@ -21,13 +21,15 @@
     <dimen name="text_page_title_big">44sp</dimen>
 
     <!-- margin, padding -->
-    <dimen name="padding_small">4dp</dimen>
-    <dimen name="padding_normal">8dp</dimen>
-    <dimen name="padding_medium">16dp</dimen>
-    <dimen name="padding_big">24dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_big">24dp</dimen>
     <dimen name="margin_fab">24dp</dimen>
 
     <dimen name="watering_tab_height">5dp</dimen>
+
+    <dimen name="and_header_height">176dp</dimen>
 
     <!--MainFragment-->
     <dimen name="fm_rooms_width">60dp</dimen>

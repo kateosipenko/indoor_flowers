@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="@dimen/padding_medium" />
+        android:padding="@dimen/margin_default" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fr_create_group"

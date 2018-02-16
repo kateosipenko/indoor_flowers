@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/material_white"
     android:orientation="vertical">
 
     <android.support.design.widget.CoordinatorLayout
@@ -40,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
-                    android:layout_margin="@dimen/padding_normal"
+                    android:layout_margin="@dimen/margin_normal"
                     android:hint="@string/faf_flower_name_hint"
                     android:imeOptions="actionDone"
                     android:inputType="textCapWords"
@@ -49,19 +50,14 @@
                     app:layout_collapseMode="parallax"
                     tools:ignore="LabelFor" />
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/faf_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                <include layout="@layout/toolbar_main" />
 
                 <ImageButton
                     android:id="@+id/faf_choose_image"
                     style="@style/ImageButtonStyle"
                     android:layout_gravity="top|end"
                     android:layout_margin="@dimen/margin_fab"
-                    android:padding="@dimen/padding_normal"
+                    android:padding="@dimen/margin_normal"
                     android:src="@drawable/ic_edit"
                     tools:ignore="ContentDescription" />
 
@@ -97,7 +93,7 @@
             android:id="@+id/faf_month_chooser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="@dimen/padding_big"
+            android:elevation="@dimen/margin_big"
             android:visibility="gone" />
 
     </android.support.design.widget.CoordinatorLayout>

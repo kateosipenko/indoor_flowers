@@ -9,9 +9,9 @@
         android:id="@+id/vsd_brightness_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_normal"
-        android:layout_marginStart="@dimen/padding_normal"
-        android:layout_marginTop="@dimen/padding_normal"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_normal"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -32,8 +32,8 @@
             android:id="@+id/vsd_brightness_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_sun"
             tools:checked="true" />
 
@@ -41,16 +41,16 @@
             android:id="@+id/vsd_brightness_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_sun_medium" />
 
         <RadioButton
             android:id="@+id/vsd_brightness_full"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_sun_full" />
 
     </RadioGroup>
@@ -59,9 +59,9 @@
         android:id="@+id/vsd_humidity_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_normal"
-        android:layout_marginStart="@dimen/padding_normal"
-        android:layout_marginTop="@dimen/padding_normal"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_normal"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/vsd_brightness_group">
@@ -83,8 +83,8 @@
             android:id="@+id/vsd_humidity_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_water_small"
             tools:checked="true" />
 
@@ -92,16 +92,16 @@
             android:id="@+id/vsd_humidity_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_water_medium" />
 
         <RadioButton
             android:id="@+id/vsd_humidity_full"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_normal"
-            android:layout_marginStart="@dimen/padding_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_normal"
             android:button="@drawable/sel_water_full" />
 
     </RadioGroup>
@@ -110,7 +110,7 @@
         android:id="@+id/vsd_room_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
-        android:layout_marginTop="@dimen/padding_normal"
+        android:layout_marginTop="@dimen/margin_normal"
         android:background="@color/black_shadow_light"
         app:layout_constraintTop_toBottomOf="@id/vsd_humidity_group" />
 
@@ -122,7 +122,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="@dimen/padding_normal"
+        android:padding="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/vsd_room_divider">
 
         <TextView
@@ -158,7 +158,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="@dimen/padding_normal"
+        android:padding="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/vsd_active_divider">
 
         <TextView
@@ -194,7 +194,7 @@
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
-        android:padding="@dimen/padding_normal"
+        android:padding="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/vsd_passive_divider">
 
         <TextView
@@ -228,7 +228,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sel_image_btn_bg"
         android:orientation="vertical"
-        android:padding="@dimen/padding_normal"
+        android:padding="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/vsd_last_watering_group">
 
         <TextView
@@ -265,7 +265,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/sel_image_btn_bg"
         android:orientation="vertical"
-        android:padding="@dimen/padding_normal"
+        android:padding="@dimen/margin_normal"
         app:layout_constraintTop_toBottomOf="@id/vsd_watering_group">
 
         <TextView

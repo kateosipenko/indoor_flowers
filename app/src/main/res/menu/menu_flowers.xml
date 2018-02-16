@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/mf_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/mf_filter"
+        app:showAsAction="ifRoom"
+        tools:checked="true">
+        <menu>
+            <item
+                android:id="@+id/mf_filter_without_group"
+                android:title="@string/mf_filter_without_group"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/mf_filter_all_flowers"
+                android:title="@string/mf_filter_all_flowers"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>

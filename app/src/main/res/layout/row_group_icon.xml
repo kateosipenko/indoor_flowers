@@ -4,9 +4,9 @@
     android:id="@+id/rri_icon"
     android:layout_width="@dimen/fcr_default_icon_size"
     android:layout_height="@dimen/fcr_default_icon_size"
-    android:layout_marginEnd="@dimen/padding_normal"
-    android:layout_marginStart="@dimen/padding_normal"
+    android:layout_marginEnd="@dimen/margin_normal"
+    android:layout_marginStart="@dimen/margin_normal"
     android:background="@drawable/bg_frame"
-    android:padding="@dimen/padding_small"
+    android:padding="@dimen/margin_small"
     tools:ignore="ContentDescription"
     tools:src="@drawable/room_bed" />

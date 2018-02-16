@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="and_navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/mnd_flowers"
+            android:icon="@drawable/ic_flower_flat"
+            android:title="@string/mnd_flowers"
+            tools:checked="true" />
+        <item
+            android:id="@+id/mnd_groups"
+            android:icon="@drawable/ic_grouping"
+            android:title="@string/mnd_groups" />
+        <item
+            android:id="@+id/mnd_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/mnd_calendar" />
+    </group>
+
+</menu>

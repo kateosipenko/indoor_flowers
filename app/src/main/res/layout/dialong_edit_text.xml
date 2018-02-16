@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/padding_big">
+    android:padding="@dimen/margin_big">
 
     <EditText
         android:id="@+id/det_text"

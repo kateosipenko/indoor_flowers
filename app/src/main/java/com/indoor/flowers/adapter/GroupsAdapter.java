@@ -1,6 +1,5 @@
 package com.indoor.flowers.adapter;
 
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,9 +19,6 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
-
-    private static final int VIEW_TYPE_NO_GROUP = 0;
-    private static final int VIEW_TYPE_GROUP = 1;
 
     private GroupClickListener listener;
     private List<Group> groups = new ArrayList<>();
@@ -48,18 +44,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return VIEW_TYPE_NO_GROUP;
-        }
-
-        return VIEW_TYPE_GROUP;
-    }
-
-    @Override
     public GroupViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @LayoutRes int layout = viewType == VIEW_TYPE_NO_GROUP ? R.layout.row_no_group : R.layout.row_group;
-        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_group, parent, false);
         return new GroupViewHolder(view, this);
     }
 
@@ -70,16 +56,11 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
 
     @Override
     public int getItemCount() {
-        return groups.size() + 1;
+        return groups.size();
     }
 
     private Group getItemByPosition(int position) {
-        if (position == 0) {
-            return null;
-        }
-
-        int itemPosition = position - 1;
-        return itemPosition >= 0 && itemPosition < groups.size() ? groups.get(itemPosition) : null;
+        return position >= 0 && position < groups.size() ? groups.get(position) : null;
     }
 
     private void setSelectedPosition(int position) {

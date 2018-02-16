@@ -144,7 +144,7 @@ public class MainFragment extends Fragment implements GroupClickListener,
         }
 
         groupsAdapter.setListener(this);
-        groupsList.addItemDecoration(new SpaceItemDecoration(0, Res.getDimensionPixelSize(R.dimen.padding_small)));
+        groupsList.addItemDecoration(new SpaceItemDecoration(0, Res.getDimensionPixelSize(R.dimen.margin_small)));
         groupsList.setAdapter(groupsAdapter);
     }
 
@@ -155,7 +155,7 @@ public class MainFragment extends Fragment implements GroupClickListener,
 
         flowersAdapter.setFlowerClickListener(this);
 
-        int space = Res.getDimensionPixelSize(R.dimen.padding_normal);
+        int space = Res.getDimensionPixelSize(R.dimen.margin_normal);
         flowersList.addItemDecoration(new SpaceItemDecoration(space, space));
         flowersList.setAdapter(flowersAdapter);
     }

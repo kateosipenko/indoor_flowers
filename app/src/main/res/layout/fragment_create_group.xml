@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:background="@color/material_white">
 
     <EditText
         android:id="@+id/fcr_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_medium"
+        android:layout_margin="@dimen/margin_default"
         android:hint="@string/fcr_group_name"
         android:imeOptions="actionDone"
         android:inputType="textCapWords"
@@ -24,7 +24,7 @@
         android:id="@+id/fcr_settings_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_medium"
+        android:layout_margin="@dimen/margin_default"
         app:layout_constraintTop_toBottomOf="@id/fcr_name">
 
         <RadioButton
@@ -39,7 +39,7 @@
             android:id="@+id/fcr_use_common_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/margin_default"
             android:text="@string/fcr_use_common_settings"
             android:textColor="@color/black_secondary_text"
             android:textSize="@dimen/text_body_medium" />
@@ -49,7 +49,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="@dimen/padding_medium"
+        android:layout_margin="@dimen/margin_default"
         app:layout_constraintBottom_toTopOf="@+id/fcr_save"
         app:layout_constraintTop_toBottomOf="@id/fcr_settings_group">
 
@@ -63,8 +63,8 @@
         android:id="@+id/fcr_save"
         style="@style/TextButtonStyle"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:layout_marginEnd="@dimen/padding_medium"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
         android:elevation="12dp"
         android:text="@string/action_create"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,6 +74,6 @@
         android:id="@+id/fcr_month_chooser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/padding_big"
+        android:elevation="@dimen/margin_big"
         android:visibility="gone" />
 </android.support.constraint.ConstraintLayout>
