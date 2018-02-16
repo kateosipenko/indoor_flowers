@@ -32,9 +32,11 @@ public class SettingsDataView extends LinearLayout {
     TextView preferredTimeValue;
     @BindView(R.id.vsd_last_nutrition_value)
     TextView lastNutritionValueView;
-    @BindView(R.id.vsd_last_transplanting)
+    @BindView(R.id.vsd_nutrition_value)
+    TextView nutritionView;
+    @BindView(R.id.vsd_last_transplanting_value)
     TextView lastTransplantingView;
-    @BindView(R.id.vsd_next_transplanting)
+    @BindView(R.id.vsd_next_transplanting_value)
     TextView nextTransplantingView;
 
     private SettingData settingData = new SettingData();
@@ -148,7 +150,7 @@ public class SettingsDataView extends LinearLayout {
     void onNutritionTextChanged(CharSequence s, int start, int before, int count) {
         int nutritionFreq = 0;
         try {
-            nutritionFreq = Integer.valueOf(wateringView.getText().toString());
+            nutritionFreq = Integer.valueOf(nutritionView.getText().toString());
         } catch (NumberFormatException ignore) {
         }
 

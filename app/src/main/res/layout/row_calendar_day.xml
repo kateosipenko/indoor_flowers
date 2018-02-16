@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rcd_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/rcd_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/divider_size"
+        android:background="@drawable/sel_calendar_day"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/rcd_day_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_small"
+        android:gravity="center"
+        android:textColor="@color/sel_tabs"
+        android:textSize="@dimen/text_body_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="35" />
+
+    <View
+        android:id="@+id/rcd_notification_created"
+        android:layout_width="@dimen/rcd_notification_size"
+        android:layout_height="@dimen/rcd_notification_size"
+        android:layout_margin="@dimen/margin_small"
+        android:background="@drawable/bg_day_notification"
+        android:backgroundTint="@color/material_deep_orange_primary200"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rcd_notification_watering"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/rcd_notification_watering"
+        android:layout_width="@dimen/rcd_notification_size"
+        android:layout_height="@dimen/rcd_notification_size"
+        android:layout_margin="@dimen/margin_small"
+        android:background="@drawable/bg_day_notification"
+        android:backgroundTint="@color/material_blue_primary200"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rcd_notification_nutrition"
+        app:layout_constraintStart_toEndOf="@id/rcd_notification_created"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/rcd_notification_nutrition"
+        android:layout_width="@dimen/rcd_notification_size"
+        android:layout_height="@dimen/rcd_notification_size"
+        android:layout_margin="@dimen/margin_small"
+        android:background="@drawable/bg_day_notification"
+        android:backgroundTint="@color/material_green_accent200"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rcd_notification_transplantation"
+        app:layout_constraintStart_toEndOf="@id/rcd_notification_watering"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/rcd_notification_transplantation"
+        android:layout_width="@dimen/rcd_notification_size"
+        android:layout_height="@dimen/rcd_notification_size"
+        android:layout_margin="@dimen/margin_small"
+        android:background="@drawable/bg_day_notification"
+        android:backgroundTint="@color/material_brown_primary300"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rcd_notification_nutrition"
+        tools:visibility="visible" />
+
+</android.support.constraint.ConstraintLayout>

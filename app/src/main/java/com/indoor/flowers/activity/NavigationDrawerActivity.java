@@ -12,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.evgeniysharafan.utils.Fragments;
-import com.evgeniysharafan.utils.Toasts;
 import com.indoor.flowers.R;
+import com.indoor.flowers.fragment.EventsCalendarFragment;
 import com.indoor.flowers.fragment.FlowersFragment;
 import com.indoor.flowers.fragment.GroupsFragment;
 import com.indoor.flowers.util.FragmentCommunicator;
@@ -77,8 +77,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             case R.id.mnd_groups:
                 fragment = GroupsFragment.newInstance();
                 break;
-            default:
-                Toasts.showFuture();
+            case R.id.mnd_calendar:
+                fragment = EventsCalendarFragment.newInstance();
                 break;
         }
 

@@ -25,4 +25,13 @@ public class CalendarUtils {
         long diff = endDays - startDays;
         return (int) diff;
     }
+
+    public static boolean isToday(Calendar calendar) {
+        if (calendar == null)
+            return false;
+
+        Calendar current = Calendar.getInstance();
+        return current.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+                && current.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR);
+    }
 }

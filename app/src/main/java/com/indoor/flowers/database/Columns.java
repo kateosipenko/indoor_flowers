@@ -18,4 +18,12 @@ public @interface Columns {
     String LAST_TRANSPLANTING_DATE = "last_transplanting_date";
     String NEXT_TRANSPLANTING_DATE = "next_transplanting_date";
     String FLOWER_ID = "flower_id";
+    String EVENT_TYPE = "event_type";
+    String TARGET_ID = "target_id";
+    String CREATION_DATE = "creation_date";
+    String EVENT_DATE = "event_date";
+    String TARGET_TABLE = "target_table";
+    String FREQUENCY = "frequency";
+    String END_DATE = "end_date";
+    String TITLE = "title";
 }

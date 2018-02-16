@@ -45,10 +45,16 @@
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="full_time_format">%1$tH:%1$tM</string>
     <string name="days_to_watering_format">%1$s дней до полива</string>
+    <string name="month_title_format">%1$tB %1$tY</string>
 
     <string name="rng_title">Без группы</string>
     <string name="fm_add_flower">Добавить цветок</string>
     <string name="fm_add_group">Создать группу</string>
+
+    <!--Events-->
+    <string name="event_watering_format">Полив %1$s</string>
+    <string name="event_nutrition_format">Подкормка %1$s</string>
+    <string name="event_transplanting_format">Пересадка %1$s</string>
 
     <!--Settings-->
     <string name="vsd_last_watering">Дата последнего полива</string>

@@ -5,9 +5,11 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.support.annotation.IntDef;
 
+import com.indoor.flowers.database.dao.EventDao;
 import com.indoor.flowers.database.dao.FlowersDao;
 import com.indoor.flowers.database.dao.GroupDao;
 import com.indoor.flowers.database.dao.SettingDao;
+import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.GroupFlower;
@@ -21,7 +23,8 @@ import java.lang.annotation.RetentionPolicy;
                 Group.class,
                 Flower.class,
                 SettingData.class,
-                GroupFlower.class
+                GroupFlower.class,
+                Event.class
         })
 public abstract class FlowersDatabase extends RoomDatabase {
 
@@ -38,6 +41,8 @@ public abstract class FlowersDatabase extends RoomDatabase {
     public abstract GroupDao getGroupDao();
 
     public abstract SettingDao getSettingDao();
+
+    public abstract EventDao getEventDao();
 
     @IntDef({Versions.VERSION_1})
     @Retention(RetentionPolicy.SOURCE)

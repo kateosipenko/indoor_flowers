@@ -85,7 +85,7 @@ public class FlowerDetailsFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.mfd_delete:
                 FlowersAlarmsUtils.deleteAlarmsForFlower(getActivity(), flower);
-                provider.deleteFlower(flower);
+                provider.deleteFlower(flower, true);
                 getActivity().onBackPressed();
                 break;
         }
