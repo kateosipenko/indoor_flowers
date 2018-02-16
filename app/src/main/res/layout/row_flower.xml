@@ -56,14 +56,18 @@
         app:layout_constraintTop_toBottomOf="@id/rf_last_watering"
         tools:text="Room 1" />
 
-    <View
+    <ProgressBar
         android:id="@+id/rf_watering_level"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/watering_tab_height"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/padding_small"
-        android:background="@color/material_blue_primary400"
+        android:backgroundTint="@color/material_blue_primary400"
+        android:max="100"
+        android:progressTint="@color/material_blue_primary400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rf_icon" />
+        app:layout_constraintTop_toBottomOf="@id/rf_icon"
+        tools:progress="50" />
 
 </android.support.constraint.ConstraintLayout>

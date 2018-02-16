@@ -29,6 +29,8 @@ public class SettingData {
     private int passiveTo = -1;
     @ColumnInfo(name = Columns.LAST_WATERING_DATE)
     private Calendar lastWateringDate;
+    @ColumnInfo(name = Columns.PREFERRED_TIME)
+    private Calendar preferredTime;
 
     public boolean isEmpty() {
         return wateringFrequency <= 0 && lastWateringDate == null;
@@ -98,5 +100,22 @@ public class SettingData {
 
     public void setLastWateringDate(Calendar lastWateringDate) {
         this.lastWateringDate = lastWateringDate;
+    }
+
+    public Calendar getPreferredTime() {
+        return preferredTime;
+    }
+
+    public void setPreferredTime(Calendar preferredTime) {
+        this.preferredTime = preferredTime;
+    }
+
+    public Calendar getNextWateringTime() {
+        Calendar result = Calendar.getInstance();
+        result.setTimeInMillis(lastWateringDate.getTimeInMillis());
+        result.add(Calendar.DAY_OF_MONTH, wateringFrequency);
+        result.set(Calendar.HOUR_OF_DAY, preferredTime.get(Calendar.HOUR_OF_DAY));
+        result.set(Calendar.MINUTE, preferredTime.get(Calendar.MINUTE));
+        return result;
     }
 }

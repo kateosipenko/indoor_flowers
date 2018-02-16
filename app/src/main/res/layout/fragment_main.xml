@@ -47,47 +47,38 @@
         tools:itemCount="25"
         tools:listitem="@layout/row_flower" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fm_add_flower"
-        android:layout_width="@dimen/fab_size_mini"
-        android:layout_height="@dimen/fab_size_mini"
-        android:layout_marginBottom="@dimen/padding_normal"
-        android:src="@drawable/ic_add"
-        app:fab_colorNormal="@color/accent100"
-        app:fab_colorPressed="@color/accent400"
-        app:fab_labelStyle="@style/FabLabelStyle"
-        app:fab_size="mini"
-        app:fab_title="@string/fm_add_flower"
-        app:layout_constraintBottom_toBottomOf="@+id/fm_fab_menu"
-        app:layout_constraintEnd_toEndOf="@+id/fm_fab_menu"
-        app:layout_constraintStart_toStartOf="@+id/fm_fab_menu"
-        tools:visibility="visible" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fm_add_group"
-        android:layout_width="@dimen/fab_size_mini"
-        android:layout_height="@dimen/fab_size_mini"
-        android:layout_marginBottom="@dimen/padding_normal"
-        android:src="@drawable/ic_add"
-        app:fab_colorNormal="@color/accent200"
-        app:fab_colorPressed="@color/accent700"
-        app:fab_labelStyle="@style/FabLabelStyle"
-        app:fab_size="mini"
-        app:fab_title="@string/fm_add_group"
-        app:layout_constraintBottom_toBottomOf="@+id/fm_fab_menu"
-        app:layout_constraintEnd_toEndOf="@+id/fm_fab_menu"
-        app:layout_constraintStart_toStartOf="@+id/fm_fab_menu" />
-
-    <android.support.design.widget.FloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fm_fab_menu"
-        android:layout_width="@dimen/fab_size_normal"
-        android:layout_height="@dimen/fab_size_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_fab"
         android:src="@drawable/ic_add"
-        app:fab_colorNormal="@color/accent400"
-        app:fab_colorPressed="@color/accent700"
-        app:fab_title="@string/action_add"
+        app:fab_addButtonColorNormal="@color/accent400"
+        app:fab_addButtonColorPressed="@color/accent700"
+        app:fab_labelStyle="@style/FabLabelStyle"
+        app:fab_labelsPosition="left"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fm_add_flower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/accent100"
+            app:fab_colorPressed="@color/accent200"
+            app:fab_icon="@drawable/ic_flower_flat"
+            app:fab_size="mini"
+            app:fab_title="@string/fm_add_flower" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fm_add_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/accent200"
+            app:fab_colorPressed="@color/accent400"
+            app:fab_icon="@drawable/ic_grouping"
+            app:fab_size="mini"
+            app:fab_title="@string/fm_add_group" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.constraint.ConstraintLayout>

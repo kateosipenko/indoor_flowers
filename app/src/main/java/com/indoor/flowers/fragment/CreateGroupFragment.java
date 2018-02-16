@@ -16,6 +16,8 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.SettingData;
+import com.indoor.flowers.util.FlowersAlarmsUtils;
+import com.indoor.flowers.view.MonthPeriodChooser;
 import com.indoor.flowers.view.SettingsDataView;
 
 import butterknife.BindView;
@@ -32,6 +34,8 @@ public class CreateGroupFragment extends Fragment implements OnCheckedChangeList
     RadioGroup settingsGroup;
     @BindView(R.id.fcr_setting_data)
     SettingsDataView settingsDataView;
+    @BindView(R.id.fcr_month_chooser)
+    MonthPeriodChooser monthPeriodChooser;
 
     private FlowersProvider flowersProvider;
     private Unbinder unbinder;
@@ -54,6 +58,7 @@ public class CreateGroupFragment extends Fragment implements OnCheckedChangeList
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
         unbinder = ButterKnife.bind(this, view);
         settingsGroup.setOnCheckedChangeListener(this);
+        settingsDataView.setMonthChooserView(monthPeriodChooser);
         if (savedInstanceState == null) {
             settingsGroup.check(R.id.fcr_use_flower_settings);
         }
@@ -104,6 +109,7 @@ public class CreateGroupFragment extends Fragment implements OnCheckedChangeList
         }
 
         flowersProvider.createGroup(group);
+        FlowersAlarmsUtils.refreshAlarmsForGroup(getActivity(), group);
         getActivity().onBackPressed();
     }
 }

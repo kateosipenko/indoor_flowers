@@ -17,12 +17,13 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.SettingData;
-import com.indoor.flowers.service.FlowersNotificationsService;
+import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
+import com.indoor.flowers.view.MonthPeriodChooser;
 import com.indoor.flowers.view.SettingsDataView;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +46,8 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     EditText nameView;
     @BindView(R.id.faf_setting_data)
     SettingsDataView settingsDataView;
+    @BindView(R.id.faf_month_chooser)
+    MonthPeriodChooser monthPeriodChooser;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
 
@@ -97,6 +100,8 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
             flower.setGroupId(getGroupIdFromArgs());
         }
 
+        settingsDataView.setMonthChooserView(monthPeriodChooser);
+
         refreshViewWithFlower();
         return view;
     }
@@ -136,9 +141,9 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
             return;
         }
 
-        flower.setSettings(data);
+        flower.setSettingData(data);
         provider.createFlower(flower);
-        FlowersNotificationsService.setupNotificationForFlower(getActivity(), flower);
+        FlowersAlarmsUtils.refreshAlarmsForFlower(getActivity(), flower);
         getActivity().onBackPressed();
     }
 

@@ -29,6 +29,14 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getGroupDao().getGroupById(groupId);
     }
 
+    public void updateGroup(Group group) {
+        database.getGroupDao().update(group);
+    }
+
+    public void setGroupLastTimeWatering(long groupId, long timeInMillis) {
+        database.getGroupDao().setGroupLastTimeWatering(groupId, timeInMillis);
+    }
+
     // endregion GROUP
 
     // region FLOWER
@@ -57,6 +65,14 @@ public class FlowersProvider extends DatabaseProvider {
 
     public List<Flower> getFlowersWithoutGroup() {
         return database.getFlowersDao().getFlowersWithoutGroup();
+    }
+
+    public void deleteFlower(Flower flower) {
+        database.getFlowersDao().delete(flower);
+    }
+
+    public void setFlowerLastTimeWatering(long flowerId, long timeInMillis) {
+        database.getFlowersDao().setFlowerLastTimeWatering(flowerId, timeInMillis);
     }
 
     // endregion FLOWER

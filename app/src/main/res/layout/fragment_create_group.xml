@@ -46,13 +46,18 @@
 
     </RadioGroup>
 
-    <com.indoor.flowers.view.SettingsDataView
-        android:id="@+id/fcr_setting_data"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/padding_medium"
         app:layout_constraintBottom_toTopOf="@+id/fcr_save"
-        app:layout_constraintTop_toBottomOf="@id/fcr_settings_group" />
+        app:layout_constraintTop_toBottomOf="@id/fcr_settings_group">
+
+        <com.indoor.flowers.view.SettingsDataView
+            android:id="@+id/fcr_setting_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
 
     <Button
         android:id="@+id/fcr_save"
@@ -65,4 +70,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.indoor.flowers.view.MonthPeriodChooser
+        android:id="@+id/fcr_month_chooser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/padding_big"
+        android:visibility="gone" />
 </android.support.constraint.ConstraintLayout>

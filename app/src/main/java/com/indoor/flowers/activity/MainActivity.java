@@ -9,11 +9,16 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.evgeniysharafan.utils.Fragments;
-import com.indoor.flowers.R;
 import com.indoor.flowers.fragment.MainFragment;
 import com.indoor.flowers.util.FragmentCommunicator;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final int REQUEST_CODE_OPEN_FLOWER = 2345;
+    public static final int REQUEST_CODE_OPEN_GROUP = 2346;
+
+    public static final String EXTRA_FLOWER_ID = "extra_flower_id";
+    public static final String EXTRA_GROUP_ID = "extra_group_id";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

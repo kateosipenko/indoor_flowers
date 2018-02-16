@@ -4,16 +4,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionManager;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Res;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.adapter.GroupsAdapter;
@@ -21,6 +24,8 @@ import com.indoor.flowers.adapter.GroupsAdapter.GroupClickListener;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.util.AnimationUtils;
+import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.SpaceItemDecoration;
 
 import java.util.List;
@@ -30,7 +35,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class MainFragment extends Fragment implements GroupClickListener {
+public class MainFragment extends Fragment implements GroupClickListener,
+        OnItemClickListener<Flower> {
 
     @BindView(R.id.fm_root)
     ConstraintLayout rootLayout;
@@ -39,6 +45,8 @@ public class MainFragment extends Fragment implements GroupClickListener {
     RecyclerView flowersList;
     @BindView(R.id.fm_groups_list)
     RecyclerView groupsList;
+    @BindView(R.id.fm_fab_menu)
+    FloatingActionsMenu fabMenu;
 
     private Unbinder unbinder;
 
@@ -47,11 +55,6 @@ public class MainFragment extends Fragment implements GroupClickListener {
     private GroupsAdapter groupsAdapter;
     private FlowersAdapter flowersAdapter;
 
-    private ConstraintSet openFabSet = new ConstraintSet();
-    private ConstraintSet closeFabSet = new ConstraintSet();
-
-    private boolean isFabMenuVisible = false;
-
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -59,6 +62,7 @@ public class MainFragment extends Fragment implements GroupClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupMainTransitions();
         provider = new FlowersProvider(getActivity());
     }
 
@@ -67,7 +71,6 @@ public class MainFragment extends Fragment implements GroupClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         unbinder = ButterKnife.bind(this, view);
-        createFabSets();
         initGroupsList();
         initFlowersList();
         reloadGroups();
@@ -89,6 +92,8 @@ public class MainFragment extends Fragment implements GroupClickListener {
 
     @OnClick(R.id.fm_add_flower)
     void onAddFlowerClicked() {
+        fabMenu.collapse();
+
         Group selected = groupsAdapter.getSelectedGroup();
         AddFlowerFragment fragment = selected == null ? AddFlowerFragment.newInstance()
                 : AddFlowerFragment.newInstance(selected.getId());
@@ -99,6 +104,8 @@ public class MainFragment extends Fragment implements GroupClickListener {
 
     @OnClick(R.id.fm_add_group)
     void onAddGroupClicked() {
+        fabMenu.collapse();
+
         Fragments.replace(getFragmentManager(), android.R.id.content,
                 CreateGroupFragment.newInstance(), null, true);
     }
@@ -108,16 +115,10 @@ public class MainFragment extends Fragment implements GroupClickListener {
         reloadFlowers();
     }
 
-    @OnClick(R.id.fm_fab_menu)
-    void onFabMenuClicked() {
-        TransitionManager.beginDelayedTransition(rootLayout);
-        if (isFabMenuVisible) {
-            isFabMenuVisible = false;
-            closeFabSet.applyTo(rootLayout);
-        } else {
-            isFabMenuVisible = true;
-            openFabSet.applyTo(rootLayout);
-        }
+    @Override
+    public void onItemClicked(Flower item) {
+        Fragments.replace(getFragmentManager(), android.R.id.content,
+                FlowerDetailsFragment.newInstance(item.getId()), null, true);
     }
 
     private void reloadFlowers() {
@@ -152,19 +153,26 @@ public class MainFragment extends Fragment implements GroupClickListener {
             flowersAdapter = new FlowersAdapter();
         }
 
+        flowersAdapter.setFlowerClickListener(this);
+
         int space = Res.getDimensionPixelSize(R.dimen.padding_normal);
         flowersList.addItemDecoration(new SpaceItemDecoration(space, space));
         flowersList.setAdapter(flowersAdapter);
     }
 
-    private void createFabSets() {
-        closeFabSet.clone(rootLayout);
-
-        openFabSet.clone(rootLayout);
-        openFabSet.setVisibility(R.id.fm_add_flower, ConstraintSet.VISIBLE);
-        openFabSet.setVisibility(R.id.fm_add_group, ConstraintSet.VISIBLE);
-        openFabSet.connect(R.id.fm_add_group, ConstraintSet.BOTTOM, R.id.fm_fab_menu, ConstraintSet.TOP);
-        openFabSet.connect(R.id.fm_add_flower, ConstraintSet.BOTTOM, R.id.fm_add_group, ConstraintSet.TOP);
-//        openFabSet.setRotationX(R.id.fm_fab_menu, 90);
+    private void setupMainTransitions() {
+        TransitionSet set = new TransitionSet();
+        set.addTransition(new Slide(AnimationUtils.getGravityDirection(Gravity.START))
+                .addTarget(R.id.fm_flowers_list));
+        set.addTransition(new Slide(Gravity.BOTTOM)
+                .addTarget(R.id.fm_fab_menu));
+        set.addTransition(new Slide(Gravity.TOP)
+                .addTarget(R.id.fm_groups_list));
+        set.setDuration(300);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        setEnterTransition(set);
+        setReenterTransition(set);
+        setReturnTransition(set);
+        setExitTransition(set);
     }
 }

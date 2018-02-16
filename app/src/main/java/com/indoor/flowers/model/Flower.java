@@ -27,7 +27,7 @@ public class Flower {
     @ColumnInfo(name = Columns.GROUP_ID)
     private long groupId;
     @Embedded(prefix = Columns.SETTINGS_PREFIX)
-    private SettingData settings;
+    private SettingData settingData;
 
     public long getId() {
         return id;
@@ -61,18 +61,24 @@ public class Flower {
         this.imagePath = imagePath;
     }
 
-    public SettingData getSettings() {
-        return settings;
+    public SettingData getSettingData() {
+        return settingData;
     }
 
-    public void setSettings(SettingData settings) {
-        this.settings = settings;
+    public void setSettingData(SettingData settingData) {
+        this.settingData = settingData;
     }
 
     public Calendar getNextWateringTime() {
         Calendar result = Calendar.getInstance();
-        result.setTimeInMillis(settings.getLastWateringDate().getTimeInMillis());
-        result.add(Calendar.DAY_OF_MONTH, settings.getWateringFrequency());
+        result.setTimeInMillis(settingData.getLastWateringDate().getTimeInMillis());
+        // TODO: remove fake
+//        result.add(Calendar.DAY_OF_MONTH, settingData.getWateringFrequency());
+//        result.set(Calendar.HOUR_OF_DAY, settingData.getPreferredTime().get(Calendar.HOUR_OF_DAY));
+//        result.set(Calendar.MINUTE, settingData.getPreferredTime().get(Calendar.MINUTE));
+
+        result.add(Calendar.SECOND, settingData.getWateringFrequency());
+
         return result;
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Поливака</string>
+    <string name="app_name">Поливалка</string>
     <string name="photo_choose_error">Во время выбора фотографии произошла ошика</string>
 
     <!--Permissions-->
@@ -19,11 +19,19 @@
     <string name="action_create">Создать</string>
     <string name="action_choose">Выбрать</string>
     <string name="action_add">Добавить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_done">Готово</string>
+    <string name="action_postpone">Отложить</string>
+    <string name="action_open">Открыть</string>
 
     <string name="sdv_data_empty">Задайте частоту полива и дату последнего полива</string>
 
+    <string name="notification_title_watering">Время поливаки</string>
+    <string name="notification_message_watering_format">Пора полить %1$s</string>
+
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
+    <string name="full_time_format">%1$tH:%1$tM</string>
     <string name="days_to_watering_format">%1$s дней до полива</string>
 
     <string name="rng_title">Без группы</string>
@@ -41,6 +49,7 @@
     <string name="faf_not_set">Не задан</string>
     <string name="faf_last_watering">Дата последнего полива</string>
     <string name="faf_watering">Периодичность полива в днях</string>
+    <string name="faf_preferred_time">Предпочтительное время полива</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
 
     <!--Create group-->

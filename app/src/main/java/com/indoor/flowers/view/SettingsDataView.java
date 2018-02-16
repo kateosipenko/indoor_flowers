@@ -1,6 +1,7 @@
 package com.indoor.flowers.view;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
@@ -39,7 +41,9 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
     TextView lastWateringView;
     @BindView(R.id.vsd_watering_value)
     TextView wateringView;
-    @BindView(R.id.vsd_month_chooser)
+    @BindView(R.id.vsd_preferred_time_value)
+    TextView preferredTimeValue;
+
     MonthPeriodChooser monthChooserView;
 
     private SettingData settingData = new SettingData();
@@ -63,6 +67,10 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
         return settingData;
     }
 
+    public void setMonthChooserView(MonthPeriodChooser chooser) {
+        this.monthChooserView = chooser;
+    }
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -83,6 +91,10 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
 
     @OnClick(R.id.vsd_active_group)
     void onActivePeriodClicked() {
+        if (monthChooserView == null) {
+            return;
+        }
+
         monthChooserView.setTitle(R.string.faf_active_period);
         monthChooserView.show(settingData.getActiveFrom(), settingData.getActiveTo(),
                 settingData.getPassiveFrom(), settingData.getPassiveTo(), new MonthPeriodChooser.MonthChooserListener() {
@@ -97,6 +109,10 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
 
     @OnClick(R.id.vsd_passive_group)
     void onPassivePeriodClicked() {
+        if (monthChooserView == null) {
+            return;
+        }
+
         monthChooserView.setTitle(R.string.faf_passive_period);
         monthChooserView.show(settingData.getPassiveFrom(), settingData.getPassiveTo(),
                 settingData.getActiveFrom(), settingData.getActiveTo(), new MonthPeriodChooser.MonthChooserListener() {
@@ -135,6 +151,28 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
                 .show();
     }
 
+    @OnClick(R.id.vsd_preferred_time)
+    void onPreferredTimeClicked() {
+        final Calendar preferredTime;
+        if (settingData.getPreferredTime() == null) {
+            preferredTime = Calendar.getInstance();
+        } else {
+            preferredTime = settingData.getPreferredTime();
+        }
+
+        new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                preferredTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                preferredTime.set(Calendar.MINUTE, minute);
+
+                settingData.setPreferredTime(preferredTime);
+                refreshPreferredTime();
+            }
+        }, preferredTime.get(Calendar.HOUR_OF_DAY), preferredTime.get(Calendar.MINUTE), true)
+                .show();
+    }
+
     @OnTextChanged(R.id.vsd_watering_value)
     void onWateringTextChanged(CharSequence s, int start, int before, int count) {
         int wateringPeriod = 0;
@@ -155,6 +193,18 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
             lastWateringView.setText(R.string.faf_not_set);
         } else {
             lastWateringView.setText(Res.getString(R.string.full_date_format, settingData.getLastWateringDate()));
+        }
+    }
+
+    private void refreshPreferredTime() {
+        if (preferredTimeValue == null) {
+            return;
+        }
+
+        if (settingData.getPreferredTime() == null) {
+            preferredTimeValue.setText(R.string.faf_not_set);
+        } else {
+            preferredTimeValue.setText(Res.getString(R.string.full_time_format, settingData.getPreferredTime()));
         }
     }
 
@@ -207,5 +257,10 @@ public class SettingsDataView extends ConstraintLayout implements OnCheckedChang
 
         brightnessGroup.setOnCheckedChangeListener(this);
         humidityGroup.setOnCheckedChangeListener(this);
+
+        refreshLastWateringDate();
+        refreshPreferredTime();
+        refreshPeriod(activePeriodValue, -1, -1);
+        refreshPeriod(passivePeriodValue, -1, -1);
     }
 }

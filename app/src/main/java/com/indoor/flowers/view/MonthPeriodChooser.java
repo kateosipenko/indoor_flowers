@@ -62,17 +62,6 @@ public class MonthPeriodChooser extends ConstraintLayout {
 
     @OnClick(R.id.vmc_ok)
     void onSaveClicked() {
-        int selectedFrom = -1;
-        int selectedTo = -1;
-        for (Pair<TextView, Integer> pair : monthesViews) {
-            if (pair.first.isSelected() && selectedFrom == -1) {
-                selectedFrom = pair.second;
-            } else if (!pair.first.isSelected() && selectedFrom != -1) {
-                selectedTo = pair.second - 1;
-                break;
-            }
-        }
-
         if (listener != null) {
             listener.onPeriodChosen(selectedFrom, selectedTo);
         }
@@ -98,12 +87,6 @@ public class MonthPeriodChooser extends ConstraintLayout {
                     || selectedFrom > disabledTo && month > disabledTo)) {
                 selectedTo = month;
             }
-        }
-
-        if (selectedTo < selectedFrom) {
-            int temp = selectedFrom;
-            selectedFrom = selectedTo;
-            selectedTo = temp;
         }
 
         setSelection(selectedFrom, selectedTo);
@@ -135,7 +118,11 @@ public class MonthPeriodChooser extends ConstraintLayout {
         for (Pair<TextView, Integer> pair : monthesViews) {
             boolean isSelected = false;
             if (selectedFrom != -1 && selectedTo != -1) {
-                isSelected = pair.second >= selectedFrom && pair.second <= selectedTo;
+                if (selectedFrom < selectedTo) {
+                    isSelected = pair.second >= selectedFrom && pair.second <= selectedTo;
+                } else {
+                    isSelected = pair.second >= selectedFrom || pair.second <= selectedTo;
+                }
             } else {
                 isSelected = pair.second == selectedFrom || pair.second == selectedTo;
             }
@@ -148,8 +135,16 @@ public class MonthPeriodChooser extends ConstraintLayout {
         this.disabledFrom = disabledFrom;
         this.disabledTo = disabledTo;
         for (Pair<TextView, Integer> pair : monthesViews) {
-            pair.first.setEnabled(disabledFrom == -1 || disabledTo == -1
-                    || pair.second < disabledFrom || pair.second > disabledTo);
+            boolean isEnabled = disabledFrom == -1 || disabledTo == -1;
+
+            if (!isEnabled) {
+                boolean isDisabled = disabledFrom > disabledTo
+                        ? pair.second >= disabledFrom || pair.second <= disabledTo
+                        : pair.second >= disabledFrom && pair.second <= disabledTo;
+                isEnabled = !isDisabled;
+            }
+
+            pair.first.setEnabled(isEnabled);
         }
     }
 

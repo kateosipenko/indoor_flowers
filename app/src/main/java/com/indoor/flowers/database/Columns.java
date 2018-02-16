@@ -14,6 +14,7 @@ public @interface Columns {
     String PASSIVE_FROM = "passive_from";
     String PASSIVE_TO = "passive_to";
     String LAST_WATERING_DATE = "last_watering_date";
+    String PREFERRED_TIME = "preferred_time";
     String WATERING_PERIOD = "watering_period";
     String SETTING_DATA_ID = "setting_data_id";
     String USE_COMMON_SETTINGS = "use_common_settings";

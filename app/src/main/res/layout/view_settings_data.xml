@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -259,11 +259,38 @@
         android:background="@color/black_shadow_light"
         app:layout_constraintTop_toBottomOf="@id/vsd_watering_group" />
 
-    <com.indoor.flowers.view.MonthPeriodChooser
-        android:id="@+id/vsd_month_chooser"
+    <LinearLayout
+        android:id="@+id/vsd_preferred_time"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="@dimen/padding_big"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_normal"
+        app:layout_constraintTop_toBottomOf="@id/vsd_watering_group">
 
-</merge>
+        <TextView
+            android:id="@+id/vsd_preferred_time_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/faf_preferred_time"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_medium" />
+
+        <TextView
+            android:id="@+id/vsd_preferred_time_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_small"
+            tools:text="Январь-Март" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vsd_preferred_time_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/black_shadow_light"
+        app:layout_constraintTop_toBottomOf="@id/vsd_preferred_time" />
+
+</android.support.constraint.ConstraintLayout>

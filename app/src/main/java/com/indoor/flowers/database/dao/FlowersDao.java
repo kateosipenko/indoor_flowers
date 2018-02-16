@@ -1,6 +1,7 @@
 package com.indoor.flowers.database.dao;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -20,6 +21,9 @@ public interface FlowersDao {
     @Update
     void update(Flower flower);
 
+    @Delete
+    void delete(Flower flower);
+
     @Query("select * from " + Flower.TABLE_NAME)
     List<Flower> getAllFlowers();
 
@@ -35,4 +39,7 @@ public interface FlowersDao {
             + " where " + Columns.GROUP_ID + " is null or "
             + Columns.GROUP_ID + "=-1")
     List<Flower> getFlowersWithoutGroup();
+
+    @Query("update FlowerTable set stg_last_watering_date=:timeInMillis where _id=:flowerId")
+    void setFlowerLastTimeWatering(long flowerId, long timeInMillis);
 }

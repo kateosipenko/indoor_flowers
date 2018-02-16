@@ -22,6 +22,7 @@ public class CalendarUtils {
     public static int getDaysDiff(Calendar start, Calendar end) {
         long startDays = TimeUnit.MILLISECONDS.toDays(start.getTimeInMillis());
         long endDays = TimeUnit.MILLISECONDS.toDays(end.getTimeInMillis());
-        return (int) (endDays - startDays);
+        long diff = endDays - startDays;
+        return (int) diff;
     }
 }

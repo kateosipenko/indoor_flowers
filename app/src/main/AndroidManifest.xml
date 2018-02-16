@@ -36,8 +36,16 @@
                 android:resource="@xml/temp_file_paths" />
         </provider>
 
+        <receiver
+            android:name=".receiver.AlarmBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name=".receiver.AlarmBroadcastReceiver.ACTION_SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
         <service
-            android:name=".service.FlowersNotificationsService"
+            android:name=".service.FlowersAlarmsService"
             android:exported="false" />
 
     </application>
