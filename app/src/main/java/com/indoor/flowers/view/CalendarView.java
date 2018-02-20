@@ -11,10 +11,11 @@ import android.widget.TextView;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter;
+import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
 import com.indoor.flowers.model.Event;
-import com.indoor.flowers.util.OnItemClickListener;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,6 +51,14 @@ public class CalendarView extends LinearLayout {
         initialize();
     }
 
+    public Calendar getStartDate() {
+        return daysAdapter.getStartDate();
+    }
+
+    public Calendar getEndDate() {
+        return daysAdapter.getEndDate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -77,11 +86,11 @@ public class CalendarView extends LinearLayout {
         }
     }
 
-    public void setDayClickListener(OnItemClickListener<Calendar> listener) {
+    public void setDayClickListener(OnDayClickedListener listener) {
         this.daysAdapter.setDayClickListener(listener);
     }
 
-    public void setEventsForMonth(List<Event> events) {
+    public void setEventsForMonth(HashMap<Integer, List<Event>> events) {
         daysAdapter.setEvents(events);
     }
 

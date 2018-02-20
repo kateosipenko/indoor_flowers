@@ -1,17 +1,26 @@
 package com.indoor.flowers.database.provider;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
+import com.indoor.flowers.database.Columns;
+import com.indoor.flowers.database.dao.EventDao;
+import com.indoor.flowers.model.CalendarFilter;
+import com.indoor.flowers.model.CalendarFilter.FilterElements;
 import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.EventType;
+import com.indoor.flowers.model.EventWithTarget;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.SettingData;
+import com.indoor.flowers.util.EventsUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class FlowersProvider extends DatabaseProvider {
@@ -61,7 +70,11 @@ public class FlowersProvider extends DatabaseProvider {
         createEventsForSetting(data, flower.getName(), id, Flower.TABLE_NAME);
     }
 
-    public List<FlowerWithSetting> getAllFlowers() {
+    public List<FlowerWithSetting> getAllFlowersWithSetting() {
+        return database.getFlowersDao().getAllFlowersWithSetting();
+    }
+
+    public List<Flower> getAllFlowers() {
         return database.getFlowersDao().getAllFlowers();
     }
 
@@ -102,8 +115,44 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region EVENTS
 
-    public List<Event> getEventsForPeriod(Calendar startDate, Calendar endDate) {
-        return database.getEventDao().getEventsForPeriod(startDate.getTimeInMillis(), endDate.getTimeInMillis());
+    public HashMap<Integer, List<Event>> getEventsForPeriod(Calendar startDate, Calendar endDate,
+                                                            CalendarFilter filter) {
+        String selection = "";
+        switch (filter.getElementsFilterType()) {
+            case FilterElements.FLOWERS:
+                selection += Columns.TARGET_TABLE + "='" + Flower.TABLE_NAME + "'";
+                break;
+            case FilterElements.GROUPS:
+                selection += Columns.TARGET_TABLE + "='" + Group.TABLE_NAME + "'";
+                break;
+            case FilterElements.SELECTED:
+                if (filter.getSelectedElements() != null && filter.getSelectedElements().size() > 0) {
+                    selection += Columns.TARGET_ID + " in ("
+                            + TextUtils.join(",", filter.getSelectedElements())
+                            + ") ";
+                }
+
+                break;
+        }
+
+        if (filter.getSelectedEventTypes() != null && filter.getSelectedEventTypes().size() > 0) {
+            if (!TextUtils.isEmpty(selection)) {
+                selection += " and ";
+            }
+
+            selection += Columns.EVENT_TYPE + " in ("
+                    + TextUtils.join(",", filter.getSelectedEventTypes())
+                    + ") ";
+        }
+
+        String query = String.format(EventDao.QUERY_EVENTS_FILTER, startDate.getTimeInMillis(),
+                endDate.getTimeInMillis());
+        if (!TextUtils.isEmpty(selection)) {
+            query += " and " + selection;
+        }
+
+        List<Event> events = database.getEventDao().getEventForSelection(query);
+        return EventsUtils.groupEventsByDays(events, startDate, endDate);
     }
 
     private void createEventsForSetting(SettingData setting, String targetTitle,
@@ -155,6 +204,27 @@ public class FlowersProvider extends DatabaseProvider {
             event.setEndDate(Calendar.getInstance());
             database.getEventDao().update(event);
         }
+    }
+
+    public List<EventWithTarget> getEventsTarget(List<Event> eventsPerDay) {
+        List<EventWithTarget> result = new ArrayList<>();
+        if (eventsPerDay != null) {
+            for (Event event : eventsPerDay) {
+                EventWithTarget eventWithTarget = new EventWithTarget();
+                eventWithTarget.setEvent(event);
+                if (Flower.TABLE_NAME.equalsIgnoreCase(event.getTargetTable())) {
+                    Flower flower = database.getFlowersDao().getFlowerById(event.getTargetId());
+                    eventWithTarget.setTarget(flower);
+                } else if (Group.TABLE_NAME.equalsIgnoreCase(event.getTargetTable())) {
+                    Group group = database.getGroupDao().getGroupById(event.getTargetId());
+                    eventWithTarget.setTarget(group);
+                }
+
+                result.add(eventWithTarget);
+            }
+        }
+
+        return result;
     }
 
     // endregion EVENTS

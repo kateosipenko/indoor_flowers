@@ -6,6 +6,8 @@ import android.arch.persistence.room.PrimaryKey;
 
 import com.indoor.flowers.database.Columns;
 
+import java.util.Objects;
+
 @Entity(tableName = Group.TABLE_NAME)
 public class Group {
 
@@ -51,5 +53,20 @@ public class Group {
 
     public void setSettingDataId(long settingDataId) {
         this.settingDataId = settingDataId;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Group)) {
+            return false;
+        }
+
+        return Objects.equals(this.id, ((Group) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name);
     }
 }

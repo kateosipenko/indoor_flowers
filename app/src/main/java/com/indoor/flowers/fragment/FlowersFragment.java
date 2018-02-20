@@ -116,7 +116,7 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
     private void reloadItems() {
         List<FlowerWithSetting> flowers = null;
         if (showAllFlowers) {
-            flowers = provider.getAllFlowers();
+            flowers = provider.getAllFlowersWithSetting();
         } else {
             flowers = provider.getFlowersWithoutGroup();
         }

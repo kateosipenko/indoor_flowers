@@ -18,6 +18,7 @@
         android:layout_weight="1"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:overScrollMode="never"
         android:padding="@dimen/margin_default" />
 
 </LinearLayout>

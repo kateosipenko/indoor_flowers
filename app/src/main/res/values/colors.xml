@@ -48,4 +48,10 @@
     <color name="black_shadow">#82000000</color>
     <color name="black_shadow_light">#1A000000</color>
 
+    <!--Events-->
+    <color name="event_created">@color/material_deep_orange_primary200</color>
+    <color name="event_watering">@color/material_blue_primary200</color>
+    <color name="event_nutrition">@color/material_green_accent200</color>
+    <color name="event_transplantation">@color/material_brown_primary300</color>
+
 </resources>

@@ -25,7 +25,7 @@ public interface FlowersDao {
     void delete(Flower flower);
 
     @Query("select * from FlowerTable inner join SettingDataTable on FlowerTable.setting_data_id=SettingDataTable.setting_id")
-    List<FlowerWithSetting> getAllFlowers();
+    List<FlowerWithSetting> getAllFlowersWithSetting();
 
     @Query("select * from FlowerTable where _id=:flowerId")
     Flower getFlowerById(long flowerId);
@@ -41,4 +41,7 @@ public interface FlowersDao {
     @Query("update SettingDataTable set last_watering_date=:timeInMillis " +
             "where setting_id=(select setting_data_id from FlowerTable where _id=:flowerId)")
     void setFlowerLastTimeWatering(long flowerId, long timeInMillis);
+
+    @Query("select * from FlowerTable")
+    List<Flower> getAllFlowers();
 }

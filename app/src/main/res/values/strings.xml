@@ -23,6 +23,7 @@
     <string name="action_done">Готово</string>
     <string name="action_postpone">Отложить</string>
     <string name="action_open">Открыть</string>
+    <string name="action_filter">Фильтровать</string>
 
     <string name="sdv_data_empty">Задайте частоту полива и дату последнего полива</string>
 
@@ -37,7 +38,6 @@
     <string name="and_drawer_close">Закрыть</string>
 
     <!--Flowers-->
-    <string name="mf_filter">Фильтровать</string>
     <string name="mf_filter_all_flowers">Все цветы</string>
     <string name="mf_filter_without_group">Только без группы</string>
 
@@ -52,9 +52,14 @@
     <string name="fm_add_group">Создать группу</string>
 
     <!--Events-->
-    <string name="event_watering_format">Полив %1$s</string>
-    <string name="event_nutrition_format">Подкормка %1$s</string>
-    <string name="event_transplanting_format">Пересадка %1$s</string>
+    <string name="event_watering_format">Полить %1$s</string>
+    <string name="event_nutrition_format">Подкормить %1$s</string>
+    <string name="event_transplanting_format">Пересадить %1$s</string>
+    <string name="event_created_flower">Добавлен цветок</string>
+    <string name="event_created_group">Добавлена группа</string>
+    <string name="event_watering">Полить</string>
+    <string name="event_nutrition">Подкормить</string>
+    <string name="event_transplanting">Пересадить</string>
 
     <!--Settings-->
     <string name="vsd_last_watering">Дата последнего полива</string>
@@ -89,6 +94,17 @@
     <string name="fcr_save_group">Сохранить группу</string>
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
 
-    <string name="rr_data_format">Температура: %1$s°C;Освещенность: %2$s;Влажность %3$s%%</string>
+
+    <!--Event-->
+    <string name="fef_by_type">По типу события</string>
+    <string name="fef_by_elements">По привязкам</string>
+    <string name="fef_show_all">Все</string>
+    <string name="fef_flowers_only">Только цветы</string>
+    <string name="fef_groups_only">Только группы</string>
+    <string name="fef_selected_only">Только выбранные</string>
+    <string name="fef_events_created">Создание</string>
+    <string name="fef_events_watering">Полив</string>
+    <string name="fef_events_nutrition">Подкормка</string>
+    <string name="fef_events_transplantation">Пересадка</string>
 
 </resources>

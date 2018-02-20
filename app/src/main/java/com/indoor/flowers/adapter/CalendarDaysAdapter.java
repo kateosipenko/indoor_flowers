@@ -10,9 +10,7 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.EventType;
 import com.indoor.flowers.util.CalendarUtils;
-import com.indoor.flowers.util.OnItemClickListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -29,18 +27,20 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
 
     private Calendar monthDate;
     private Calendar startDate;
-    private OnItemClickListener<Calendar> dayClickListener;
+    private OnDayClickedListener dayClickListener;
     private int itemHeight;
 
     private HashMap<Integer, List<Event>> eventsByDays = new HashMap<>();
 
-    public void setDayClickListener(OnItemClickListener<Calendar> listener) {
+    public void setDayClickListener(OnDayClickedListener listener) {
         this.dayClickListener = listener;
     }
 
     public void setMonthDate(Calendar monthDate) {
+        this.selectedPosition = -1;
         this.monthDate = monthDate;
         this.monthDate.set(Calendar.DAY_OF_MONTH, 1);
+        this.eventsByDays.clear();
 
         startDate = (Calendar) monthDate.clone();
         startDate.add(Calendar.DAY_OF_MONTH, -1 * startDate.get(Calendar.DAY_OF_WEEK));
@@ -57,40 +57,12 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
 
     public void setItemHeight(int itemHeight) {
         this.itemHeight = itemHeight;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount(), "ItemHeight");
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(HashMap<Integer, List<Event>> events) {
         eventsByDays.clear();
-        for (int i = 0; i < getItemCount(); i++) {
-            eventsByDays.put(getItemByPosition(i).get(Calendar.DAY_OF_YEAR), new ArrayList<Event>());
-        }
-
-        for (Event event : events) {
-            if (event.getFrequency() != null) {
-                int startDay = event.getEventDate().get(Calendar.DAY_OF_YEAR);
-                List<Event> eventsPerDay = eventsByDays.get(startDay);
-                if (eventsPerDay == null) {
-                    if (event.getEventDate().get(Calendar.YEAR) == startDate.get(Calendar.YEAR)) {
-                        int daysDiff = startDate.get(Calendar.DAY_OF_YEAR) - event.getEventDate().get(Calendar.DAY_OF_YEAR);
-                        startDay = startDate.get(Calendar.DAY_OF_YEAR) + event.getFrequency() - daysDiff;
-                        eventsPerDay = eventsByDays.get(startDay);
-                    }
-                }
-
-                if (eventsPerDay != null) {
-                    do {
-                        eventsPerDay.add(event);
-                        startDay += event.getFrequency();
-                        eventsPerDay = eventsByDays.get(startDay);
-                    } while (eventsPerDay != null);
-                }
-            } else {
-                List<Event> eventsPerDay = eventsByDays.get(event.getEventDate().get(Calendar.DAY_OF_YEAR));
-                eventsPerDay.add(event);
-            }
-        }
-
+        eventsByDays.putAll(events);
         notifyItemRangeChanged(0, getItemCount(), eventsByDays);
     }
 
@@ -109,6 +81,10 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
     public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
         if (payloads == null || payloads.size() == 0) {
             super.onBindViewHolder(holder, position, payloads);
+        } else if (payloads.get(0) instanceof Integer) {
+            holder.updateSelection();
+        } else if (payloads.get(0) instanceof String) {
+            holder.updateHeight();
         } else {
             holder.updateNotifications(getItemByPosition(position));
         }
@@ -123,6 +99,13 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         Calendar result = (Calendar) startDate.clone();
         result.add(Calendar.DAY_OF_YEAR, position);
         return result;
+    }
+
+    private void setSelectedPosition(int position) {
+        int old = selectedPosition;
+        selectedPosition = position;
+        notifyItemChanged(old, selectedPosition);
+        notifyItemChanged(selectedPosition, selectedPosition);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -152,21 +135,32 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
 
         @OnClick({R.id.rcd_background, R.id.rcd_day_text})
         void onDayClicked() {
+            adapter.setSelectedPosition(getAdapterPosition());
             if (adapter.dayClickListener != null) {
-                adapter.dayClickListener.onItemClicked(adapter.getItemByPosition(getAdapterPosition()));
+                Calendar calendar = adapter.getItemByPosition(getAdapterPosition());
+                List<Event> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
+                adapter.dayClickListener.onDayClicked(calendar, eventsForDay);
             }
         }
 
         private void update(Calendar calendar) {
-            ViewGroup.LayoutParams params = itemView.getLayoutParams();
-            params.height = adapter.itemHeight;
-            itemView.setLayoutParams(params);
-            backgroundView.setSelected(getAdapterPosition() == adapter.selectedPosition);
+            updateHeight();
+            updateSelection();
             backgroundView.setEnabled(calendar.get(Calendar.MONTH) == adapter.monthDate.get(Calendar.MONTH));
             rootView.setAlpha(backgroundView.isEnabled() ? 1f : 0.5f);
             daysTextView.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             daysTextView.setSelected(CalendarUtils.isToday(calendar));
             updateNotifications(calendar);
+        }
+
+        private void updateHeight() {
+            ViewGroup.LayoutParams params = itemView.getLayoutParams();
+            params.height = adapter.itemHeight;
+            itemView.setLayoutParams(params);
+        }
+
+        private void updateSelection() {
+            backgroundView.setSelected(getAdapterPosition() == adapter.selectedPosition);
         }
 
         private void updateNotifications(Calendar calendar) {
@@ -203,5 +197,9 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         private void refreshEventView(int eventsCount, View targetView) {
             targetView.setVisibility(eventsCount > 0 ? View.VISIBLE : View.GONE);
         }
+    }
+
+    public interface OnDayClickedListener {
+        void onDayClicked(Calendar day, List<Event> events);
     }
 }

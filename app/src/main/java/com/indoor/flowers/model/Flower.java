@@ -8,6 +8,8 @@ import android.arch.persistence.room.TypeConverters;
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.DbTypesConverter;
 
+import java.util.Objects;
+
 @Entity(tableName = Flower.TABLE_NAME)
 @TypeConverters({DbTypesConverter.class})
 public class Flower {
@@ -54,5 +56,19 @@ public class Flower {
 
     public void setSettingDataId(long settingDataId) {
         this.settingDataId = settingDataId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Flower)) {
+            return false;
+        }
+
+        return Objects.equals(this.id, ((Flower) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name);
     }
 }
