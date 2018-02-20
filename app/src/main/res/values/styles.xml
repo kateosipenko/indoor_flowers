@@ -37,6 +37,7 @@
 
     <style name="Dialog.ProgressDialog" parent="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:gravity">center</item>
         <item name="android:textColorPrimary">@color/accent</item>
     </style>
 

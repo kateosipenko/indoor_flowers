@@ -26,6 +26,8 @@ public class Event {
     private long targetId;
     @ColumnInfo(name = Columns.TITLE)
     private String title;
+    @ColumnInfo(name = Columns.COMMENT)
+    private String comment;
     @ColumnInfo(name = Columns.TARGET_TABLE)
     private String targetTable;
     @ColumnInfo(name = Columns.CREATION_DATE)
@@ -108,5 +110,13 @@ public class Event {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

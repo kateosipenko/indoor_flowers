@@ -18,10 +18,6 @@ public class Group {
     private long id;
     @ColumnInfo(name = Columns.NAME)
     private String name;
-    @ColumnInfo(name = Columns.USE_COMMON_SETTINGS)
-    private boolean useCommonSettings;
-    @ColumnInfo(name = Columns.SETTING_DATA_ID)
-    private long settingDataId;
 
     public long getId() {
         return id;
@@ -38,23 +34,6 @@ public class Group {
     public void setName(String name) {
         this.name = name;
     }
-
-    public boolean useCommonSettings() {
-        return useCommonSettings;
-    }
-
-    public void setUseCommonSettings(boolean useCommonSettings) {
-        this.useCommonSettings = useCommonSettings;
-    }
-
-    public long getSettingDataId() {
-        return settingDataId;
-    }
-
-    public void setSettingDataId(long settingDataId) {
-        this.settingDataId = settingDataId;
-    }
-
 
     @Override
     public boolean equals(Object obj) {

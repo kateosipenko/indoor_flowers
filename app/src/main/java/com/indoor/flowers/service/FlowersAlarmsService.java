@@ -8,8 +8,7 @@ import android.text.TextUtils;
 
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Flower;
-import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.Event;
 
 import java.util.Calendar;
 
@@ -19,20 +18,12 @@ public class FlowersAlarmsService extends IntentService {
 
     public static final String ACTION_SET_WATERING_DONE = "action_set_watering_done";
 
-    private static final String EXTRA_FLOWER_ID = "extra_flower_id";
-    private static final String EXTRA_GROUP_ID = "extra_flower_id";
+    private static final String EXTRA_EVENT_ID = "extra_flower_id";
 
-    public static Intent createWateringDoneIntent(Context context, Flower flower) {
+    public static Intent createDoneIntent(Context context, Event event) {
         Intent intent = new Intent(context, FlowersAlarmsService.class);
         intent.setAction(ACTION_SET_WATERING_DONE);
-        intent.putExtra(EXTRA_FLOWER_ID, flower.getId());
-        return intent;
-    }
-
-    public static Intent createWateringDoneIntent(Context context, Group group) {
-        Intent intent = new Intent(context, FlowersAlarmsService.class);
-        intent.setAction(ACTION_SET_WATERING_DONE);
-        intent.putExtra(EXTRA_GROUP_ID, group.getId());
+        intent.putExtra(EXTRA_EVENT_ID, event.getId());
         return intent;
     }
 
@@ -54,13 +45,18 @@ public class FlowersAlarmsService extends IntentService {
     }
 
     private void onSetWateringDoneIntentGot(Intent intent) {
+        if (!intent.hasExtra(EXTRA_EVENT_ID)) {
+            return;
+        }
+        
         FlowersProvider provider = new FlowersProvider(this);
-        if (intent.hasExtra(EXTRA_FLOWER_ID)) {
-            long flowerId = intent.getLongExtra(EXTRA_FLOWER_ID, DatabaseProvider.DEFAULT_ID);
-            provider.setFlowerLastTimeWatering(flowerId, Calendar.getInstance().getTimeInMillis());
-        } else if (intent.hasExtra(EXTRA_GROUP_ID)) {
-            long groupId = intent.getLongExtra(EXTRA_GROUP_ID, DatabaseProvider.DEFAULT_ID);
-            provider.setGroupLastTimeWatering(groupId, Calendar.getInstance().getTimeInMillis());
+        long eventId = intent.getLongExtra(EXTRA_EVENT_ID, DatabaseProvider.DEFAULT_ID);
+        Event event = provider.getEventById(eventId);
+        if (event.getFrequency() != null) {
+            Calendar eventDate = Calendar.getInstance();
+            eventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
+            event.setEventDate(eventDate);
+            provider.createOrUpdateEvent(event);
         }
 
         provider.unbind();

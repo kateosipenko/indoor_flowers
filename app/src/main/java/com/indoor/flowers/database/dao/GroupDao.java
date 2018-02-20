@@ -1,31 +1,55 @@
 package com.indoor.flowers.database.dao;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.GroupFlower;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
-public interface GroupDao {
+public abstract class GroupDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(Group group);
+    public abstract long insert(Group group);
 
     @Query("select * from GroupTable")
-    List<Group> getAllGroups();
+    public abstract List<Group> getAllGroups();
 
     @Query("select * from GroupTable where _id=:groupId")
-    Group getGroupById(long groupId);
+    public abstract Group getGroupById(long groupId);
 
     @Update
-    void update(Group group);
+    public abstract void update(Group group);
 
-    @Query("update SettingDataTable set last_watering_date=:timeInMillis "
-            + " where setting_id=(select setting_data_id from GroupTable where _id=:groupId)")
-    void setGroupLastTimeWatering(long groupId, long timeInMillis);
+    @Query("select count(*)>0 from GroupTable where _id=:groupId")
+    public abstract boolean hasGroup(long groupId);
+
+    @Query("delete from GroupFlowerTable where group_id=:groupId")
+    public abstract void deleteFlowersForGroup(long groupId);
+
+    @Insert
+    public abstract void insertGroupFlowers(List<GroupFlower> items);
+
+    @Delete
+    public abstract void deleteGroup(Group group);
+
+    public void updateGroupFlowers(long groupId, List<Flower> flowers) {
+        deleteFlowersForGroup(groupId);
+        if (flowers != null) {
+            List<GroupFlower> groupFlowers = new ArrayList<>();
+            for (Flower flower : flowers) {
+                groupFlowers.add(new GroupFlower(groupId, flower.getId()));
+            }
+
+            insertGroupFlowers(groupFlowers);
+        }
+    }
 }

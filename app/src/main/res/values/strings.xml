@@ -24,6 +24,7 @@
     <string name="action_postpone">Отложить</string>
     <string name="action_open">Открыть</string>
     <string name="action_filter">Фильтровать</string>
+    <string name="action_repeat">Повторять</string>
 
     <string name="sdv_data_empty">Задайте частоту полива и дату последнего полива</string>
 
@@ -78,6 +79,7 @@
     <string name="faf_active_period">Период активного роста</string>
     <string name="faf_passive_period">Период покоя</string>
     <string name="faf_not_set">Не задан</string>
+    <string name="faf_add_event">Добавить уведомление</string>
 
     <string name="faf_watering">Периодичность полива в днях</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
@@ -93,6 +95,8 @@
     <string name="fcr_brightness">Освещенность</string>
     <string name="fcr_save_group">Сохранить группу</string>
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
+    <string name="fg_group_flowers">Цветы в группе</string>
+    <string name="fg_events">Уведомления</string>
 
 
     <!--Event-->
@@ -106,5 +110,9 @@
     <string name="fef_events_watering">Полив</string>
     <string name="fef_events_nutrition">Подкормка</string>
     <string name="fef_events_transplantation">Пересадка</string>
+    <string name="fe_comment_hint">Коментарий</string>
+    <string name="fe_frequency_hint">Переодичность в днях</string>
+    <string name="fe_event_date">Дата события</string>
+    <string name="fe_event_time">Время уведомлений</string>
 
 </resources>

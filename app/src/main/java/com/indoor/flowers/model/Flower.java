@@ -23,8 +23,6 @@ public class Flower {
     private String name;
     @ColumnInfo(name = Columns.IMAGE_PATH)
     private String imagePath;
-    @ColumnInfo(name = Columns.SETTING_DATA_ID)
-    private long settingDataId;
 
     public long getId() {
         return id;
@@ -48,14 +46,6 @@ public class Flower {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public long getSettingDataId() {
-        return settingDataId;
-    }
-
-    public void setSettingDataId(long settingDataId) {
-        this.settingDataId = settingDataId;
     }
 
     @Override

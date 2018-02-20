@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_white"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/fe_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_default"
+        android:imeOptions="actionDone"
+        android:inputType="textCapWords"
+        android:textColor="@color/black_primary_text"
+        android:textSize="@dimen/text_body_medium"
+        tools:text="Watering Flower" />
+
+    <Spinner
+        android:id="@+id/fe_event_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:elevation="10dp"
+        android:popupTheme="@style/PopupTheme" />
+
+    <EditText
+        android:id="@+id/fe_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_default"
+        android:gravity="top|start"
+        android:hint="@string/fe_comment_hint"
+        android:lines="3"
+        android:textColor="@color/black_primary_text"
+        android:textColorHint="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:layout_marginTop="@dimen/margin_default"
+        android:background="@color/gray_light" />
+
+    <LinearLayout
+        android:id="@+id/fe_event_date_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fe_event_date"
+            android:textSize="@dimen/text_body_small" />
+
+        <TextView
+            android:id="@+id/fe_event_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium"
+            tools:text="15/08/2018" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:background="@color/gray_light" />
+
+    <LinearLayout
+        android:id="@+id/fe_event_time_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:background="@drawable/sel_image_btn_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fe_event_time"
+            android:textSize="@dimen/text_body_small" />
+
+        <TextView
+            android:id="@+id/fe_event_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium"
+            tools:text="14:30" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/gray_light" />
+
+    <CheckBox
+        android:id="@+id/fe_check_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_default"
+        android:text="@string/action_repeat"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_medium" />
+
+    <EditText
+        android:id="@+id/fe_frequency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:enabled="false"
+        android:hint="@string/fe_frequency_hint"
+        android:inputType="number"
+        android:textColor="@color/black_primary_text"
+        android:textColorHint="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fe_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            android:layout_weight="1"
+            android:background="@color/primary200"
+            android:text="@string/action_save"
+            android:textColor="@color/black_secondary_text" />
+
+        <Button
+            android:id="@+id/fe_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            android:layout_weight="1"
+            android:background="@color/accent100"
+            android:text="@string/action_delete"
+            android:textColor="@color/black_secondary_text"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

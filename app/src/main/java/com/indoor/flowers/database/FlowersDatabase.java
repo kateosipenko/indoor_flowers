@@ -8,12 +8,10 @@ import android.support.annotation.IntDef;
 import com.indoor.flowers.database.dao.EventDao;
 import com.indoor.flowers.database.dao.FlowersDao;
 import com.indoor.flowers.database.dao.GroupDao;
-import com.indoor.flowers.database.dao.SettingDao;
 import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.GroupFlower;
-import com.indoor.flowers.model.SettingData;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,7 +20,6 @@ import java.lang.annotation.RetentionPolicy;
         entities = {
                 Group.class,
                 Flower.class,
-                SettingData.class,
                 GroupFlower.class,
                 Event.class
         })
@@ -39,8 +36,6 @@ public abstract class FlowersDatabase extends RoomDatabase {
     public abstract FlowersDao getFlowersDao();
 
     public abstract GroupDao getGroupDao();
-
-    public abstract SettingDao getSettingDao();
 
     public abstract EventDao getEventDao();
 

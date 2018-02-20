@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/re_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sel_image_btn_bg"
+    android:clickable="true"
+    android:focusable="true">
+
+    <View
+        android:id="@+id/re_icon"
+        android:layout_width="@dimen/margin_default"
+        android:layout_height="@dimen/margin_default"
+        android:background="@drawable/shape_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:backgroundTint="@color/event_watering" />
+
+    <TextView
+        android:id="@+id/re_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_default"
+        android:textColor="@color/black_primary_text"
+        android:textSize="@dimen/text_body_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/re_icon"
+        tools:text="Watering Flower" />
+
+    <TextView
+        android:id="@+id/re_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/re_title"
+        app:layout_constraintTop_toBottomOf="@id/re_title"
+        tools:text="Asd; kas;dk as;ldk" />
+
+</android.support.constraint.ConstraintLayout>

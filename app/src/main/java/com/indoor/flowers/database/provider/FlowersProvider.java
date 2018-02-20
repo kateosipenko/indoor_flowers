@@ -3,8 +3,6 @@ package com.indoor.flowers.database.provider;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.evgeniysharafan.utils.Res;
-import com.indoor.flowers.R;
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.dao.EventDao;
 import com.indoor.flowers.model.CalendarFilter;
@@ -13,9 +11,7 @@ import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.EventType;
 import com.indoor.flowers.model.EventWithTarget;
 import com.indoor.flowers.model.Flower;
-import com.indoor.flowers.model.FlowerWithSetting;
 import com.indoor.flowers.model.Group;
-import com.indoor.flowers.model.SettingData;
 import com.indoor.flowers.util.EventsUtils;
 
 import java.util.ArrayList;
@@ -31,15 +27,23 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region GROUP
 
-    public void createGroup(Group group, SettingData data) {
-        createSettingData(data);
-        group.setSettingDataId(data.getId());
-        group.setId(invalidateIdForInsert(group.getId()));
-        long id = database.getGroupDao().insert(group);
-        group.setId(id);
+    public void deleteGroup(Group group) {
+        database.getEventDao().deleteForTarget(group.getId(), Group.TABLE_NAME);
+        database.getGroupDao().deleteFlowersForGroup(group.getId());
+        database.getGroupDao().deleteGroup(group);
+    }
 
-        createEventForCreation(group.getId(), Group.TABLE_NAME, group.getName());
-        createEventsForSetting(data, group.getName(), group.getId(), Group.TABLE_NAME);
+    public void createOrUpdateGroup(Group group, List<Flower> flowers) {
+        if (database.getGroupDao().hasGroup(group.getId())) {
+            database.getGroupDao().update(group);
+        } else {
+            group.setId(invalidateIdForInsert(group.getId()));
+            long id = database.getGroupDao().insert(group);
+            group.setId(id);
+            createEventForCreation(group.getId(), Group.TABLE_NAME, group.getName());
+        }
+
+        database.getGroupDao().updateGroupFlowers(group.getId(), flowers);
     }
 
     public List<Group> getAllGroups() {
@@ -50,28 +54,20 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getGroupDao().getGroupById(groupId);
     }
 
-    public void setGroupLastTimeWatering(long groupId, long timeInMillis) {
-        database.getGroupDao().setGroupLastTimeWatering(groupId, timeInMillis);
-    }
-
     // endregion GROUP
 
     // region FLOWER
 
-    public void createFlower(Flower flower, SettingData data) {
-        createSettingData(data);
-        flower.setSettingDataId(data.getId());
+    public void createOrUpdateFlower(Flower flower) {
+        if (database.getFlowersDao().hasFlower(flower.getId())) {
+            database.getFlowersDao().update(flower);
+        } else {
+            flower.setId(invalidateIdForInsert(flower.getId()));
+            long id = database.getFlowersDao().insert(flower);
+            flower.setId(id);
 
-        flower.setId(invalidateIdForInsert(flower.getId()));
-        long id = database.getFlowersDao().insert(flower);
-        flower.setId(id);
-
-        createEventForCreation(id, Flower.TABLE_NAME, flower.getName());
-        createEventsForSetting(data, flower.getName(), id, Flower.TABLE_NAME);
-    }
-
-    public List<FlowerWithSetting> getAllFlowersWithSetting() {
-        return database.getFlowersDao().getAllFlowersWithSetting();
+            createEventForCreation(id, Flower.TABLE_NAME, flower.getName());
+        }
     }
 
     public List<Flower> getAllFlowers() {
@@ -82,11 +78,11 @@ public class FlowersProvider extends DatabaseProvider {
         return database.getFlowersDao().getFlowerById(flowerId);
     }
 
-    public List<FlowerWithSetting> getFlowersForGroup(long groupId) {
+    public List<Flower> getFlowersForGroup(long groupId) {
         return database.getFlowersDao().getFlowersForGroup(groupId);
     }
 
-    public List<FlowerWithSetting> getFlowersWithoutGroup() {
+    public List<Flower> getFlowersWithoutGroup() {
         return database.getFlowersDao().getFlowersWithoutGroup();
     }
 
@@ -97,23 +93,13 @@ public class FlowersProvider extends DatabaseProvider {
         }
     }
 
-    public void setFlowerLastTimeWatering(long flowerId, long timeInMillis) {
-        database.getFlowersDao().setFlowerLastTimeWatering(flowerId, timeInMillis);
-    }
-
     // endregion FLOWER
 
-    // region SETTING_DATA
-
-    private void createSettingData(SettingData data) {
-        data.setId(invalidateIdForInsert(data.getId()));
-        long id = database.getSettingDao().insert(data);
-        data.setId(id);
-    }
-
-    // endregion SETTING_DATA
-
     // region EVENTS
+
+    public List<Event> getEventsForTarget(long targetId, String targetTable) {
+        return database.getEventDao().getEventsForTarget(targetId, targetTable);
+    }
 
     public HashMap<Integer, List<Event>> getEventsForPeriod(Calendar startDate, Calendar endDate,
                                                             CalendarFilter filter) {
@@ -155,18 +141,6 @@ public class FlowersProvider extends DatabaseProvider {
         return EventsUtils.groupEventsByDays(events, startDate, endDate);
     }
 
-    private void createEventsForSetting(SettingData setting, String targetTitle,
-                                        long targetId, String targetTable) {
-        refreshEvent(targetId, targetTable, EventType.WATERING, setting.getLastWateringDate(),
-                setting.getWateringFrequency(), Res.getString(R.string.event_watering_format, targetTitle));
-        refreshEvent(targetId, targetTable, EventType.NUTRITION, setting.getLastNutritionDate(),
-                setting.getNutritionFreq(), Res.getString(R.string.event_nutrition_format, targetTitle));
-        refreshEvent(targetId, targetTable, EventType.TRANSPLANTING, setting.getLastTransplanting(),
-                null, Res.getString(R.string.event_transplanting_format, targetTitle));
-        refreshEvent(targetId, targetTable, EventType.TRANSPLANTING, setting.getNextTransplanting(),
-                null, Res.getString(R.string.event_transplanting_format, targetTitle));
-    }
-
     private void createEventForCreation(long targetId, String tableName, String title) {
         Event event = new Event();
         event.setTargetId(targetId);
@@ -178,32 +152,6 @@ public class FlowersProvider extends DatabaseProvider {
         event.setEventType(EventType.CREATED);
         event.setTitle(title);
         database.getEventDao().insert(event);
-    }
-
-    private void refreshEvent(long targetId, String targetTable, @EventType int eventType,
-                              Calendar eventDate, Integer frequency, String title) {
-        Event event = database.getEventDao().getForTarget(targetId, targetTable, eventType);
-        if (eventDate != null) {
-            if (event == null) {
-                event = new Event();
-                event.setTargetId(targetId);
-                event.setTargetTable(targetTable);
-                event.setEventType(eventType);
-                event.setCreationDate(Calendar.getInstance());
-                event.setId(invalidateIdForInsert(event.getId()));
-                long id = database.getEventDao().insert(event);
-                event.setId(id);
-            }
-
-            event.setTitle(title);
-            event.setEventDate(eventDate);
-            event.setFrequency(frequency);
-            event.setEndDate(null);
-            database.getEventDao().update(event);
-        } else if (event != null && event.getEndDate() == null) {
-            event.setEndDate(Calendar.getInstance());
-            database.getEventDao().update(event);
-        }
     }
 
     public List<EventWithTarget> getEventsTarget(List<Event> eventsPerDay) {
@@ -225,6 +173,24 @@ public class FlowersProvider extends DatabaseProvider {
         }
 
         return result;
+    }
+
+    public Event getEventById(long eventId) {
+        return database.getEventDao().getEventById(eventId);
+    }
+
+    public void createOrUpdateEvent(Event event) {
+        if (event.getId() == DEFAULT_ID) {
+            event.setId(invalidateIdForInsert(event.getId()));
+            long id = database.getEventDao().insert(event);
+            event.setId(id);
+        } else {
+            database.getEventDao().update(event);
+        }
+    }
+
+    public void deleteEvent(Event event) {
+        database.getEventDao().delete(event);
     }
 
     // endregion EVENTS

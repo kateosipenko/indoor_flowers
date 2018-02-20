@@ -9,12 +9,21 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <CheckBox
+        android:id="@+id/rf_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/rf_icon"
         android:layout_width="@dimen/fm_rooms_width"
         android:layout_height="@dimen/fm_rooms_width"
         android:background="@drawable/ic_flower"
         android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/rf_check_box"
         tools:ignore="ContentDescription" />
 
     <TextView

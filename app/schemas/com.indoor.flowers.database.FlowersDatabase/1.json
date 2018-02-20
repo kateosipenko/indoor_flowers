@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ec2a4c6a33f0cd61ac8d977b1de8d7ed",
+    "identityHash": "1df12d42454f64b10a585821ae6a79c6",
     "entities": [
       {
         "tableName": "GroupTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `use_common_settings` INTEGER NOT NULL, `setting_data_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -19,18 +19,6 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "useCommonSettings",
-            "columnName": "use_common_settings",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "settingDataId",
-            "columnName": "setting_data_id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -44,7 +32,7 @@
       },
       {
         "tableName": "FlowerTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `image_path` TEXT, `setting_data_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `image_path` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -63,79 +51,11 @@
             "columnName": "image_path",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "settingDataId",
-            "columnName": "setting_data_id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "SettingDataTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`setting_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `last_watering_date` INTEGER, `watering_period` INTEGER NOT NULL, `last_nutrition_date` INTEGER, `nutrition_freq` INTEGER NOT NULL, `last_transplanting_date` INTEGER, `next_transplanting_date` INTEGER, `preferred_time` INTEGER)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "setting_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastWateringDate",
-            "columnName": "last_watering_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "wateringFrequency",
-            "columnName": "watering_period",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastNutritionDate",
-            "columnName": "last_nutrition_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "nutritionFreq",
-            "columnName": "nutrition_freq",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastTransplanting",
-            "columnName": "last_transplanting_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "nextTransplanting",
-            "columnName": "next_transplanting_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "preferredTime",
-            "columnName": "preferred_time",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "setting_id"
           ],
           "autoGenerate": true
         },
@@ -194,7 +114,7 @@
       },
       {
         "tableName": "EventTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_type` INTEGER NOT NULL, `target_id` INTEGER NOT NULL, `title` TEXT, `target_table` TEXT, `creation_date` INTEGER, `event_date` INTEGER, `end_date` INTEGER, `frequency` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_type` INTEGER NOT NULL, `target_id` INTEGER NOT NULL, `title` TEXT, `comment` TEXT, `target_table` TEXT, `creation_date` INTEGER, `event_date` INTEGER, `end_date` INTEGER, `frequency` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -217,6 +137,12 @@
           {
             "fieldPath": "title",
             "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "comment",
+            "columnName": "comment",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -263,7 +189,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ec2a4c6a33f0cd61ac8d977b1de8d7ed\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1df12d42454f64b10a585821ae6a79c6\")"
     ]
   }
 }

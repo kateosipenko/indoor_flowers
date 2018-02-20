@@ -44,8 +44,10 @@
     <dimen name="fcr_default_icon_size">40dp</dimen>
 
     <!--Add flower-->
-    <dimen name="faf_image_size">300dp</dimen>
+    <dimen name="faf_image_size">70dp</dimen>
+    <dimen name="faf_edit_image_size">16dp</dimen>
     <dimen name="faf_title_margin">60dp</dimen>
+    <dimen name="faf_flower_container_margin">36dp</dimen>
 
     <!--Flowers-->
     <dimen name="rf_icon_size">60dp</dimen>

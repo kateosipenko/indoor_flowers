@@ -81,16 +81,14 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
 
     @OnClick(R.id.fr_create_group)
     void onCreateGroupClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content, CreateGroupFragment.newInstance(),
+        Fragments.replace(getFragmentManager(), android.R.id.content, GroupFragment.newInstance(),
                 null, true);
     }
 
     @Override
     public void onGroupClicked(Group group) {
-        if (getTargetFragment() != null) {
-            setActivityResult(group);
-            getActivity().onBackPressed();
-        }
+        Fragments.replace(getFragmentManager(), android.R.id.content,
+                GroupFragment.newInstance(group.getId()), null, true);
     }
 
     private void setupActionBar() {

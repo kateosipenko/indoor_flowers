@@ -1,12 +1,14 @@
 package com.indoor.flowers.database.dao;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
 import com.indoor.flowers.model.Event;
+import com.indoor.flowers.model.EventType;
 
 import java.util.List;
 
@@ -25,6 +27,9 @@ public interface EventDao {
     @Update
     void update(Event event);
 
+    @Delete
+    void delete(Event event);
+
     @Query("delete from EventTable where target_id=:targetId and target_table=:targetTable ")
     void deleteForTarget(long targetId, String targetTable);
 
@@ -34,4 +39,11 @@ public interface EventDao {
 
     @RawQuery
     List<Event> getEventForSelection(String query);
+
+    @Query("select * from EventTable where _id=:eventId")
+    Event getEventById(long eventId);
+
+    @Query("select * from EventTable where target_id=:targetId and target_table=:targetTable "
+            + " and event_type!=" + EventType.CREATED)
+    List<Event> getEventsForTarget(long targetId, String targetTable);
 }

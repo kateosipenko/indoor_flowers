@@ -5,29 +5,35 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Toasts;
 import com.indoor.flowers.R;
+import com.indoor.flowers.adapter.EventsAdapter;
+import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
+import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.Flower;
-import com.indoor.flowers.model.FlowerWithSetting;
-import com.indoor.flowers.model.SettingData;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
+import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
-import com.indoor.flowers.view.SettingsDataView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,19 +41,22 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
-public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener {
+public class FlowerFragment extends Fragment implements OnPhotoTakenListener, OnItemClickListener<Event> {
 
-    private static final String KEY_NAME = "key_name";
-    private static final String KEY_GROUP_ID = "key_group_id";
+    private static final String KEY_FLOWER_ID = "key_flower_id";
 
     @BindView(R.id.faf_flower_image)
     ImageView imageView;
     @BindView(R.id.faf_flower_name)
     EditText nameView;
-    @BindView(R.id.faf_setting_data)
-    SettingsDataView settingsDataView;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
+    @BindView(R.id.faf_events_list)
+    RecyclerView eventsList;
+    @BindView(R.id.faf_add_event)
+    Button addEventButton;
+    @BindView(R.id.faf_delete)
+    Button deleteButton;
 
     private ProgressShowingUtil progressUtil;
     private PermissionHelper permissionHelper;
@@ -55,21 +64,23 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     private Flower flower;
     private FlowersProvider provider;
 
+    private EventsAdapter eventsAdapter;
+
     private Unbinder unbinder;
 
-    public AddFlowerFragment() {
+    public FlowerFragment() {
         permissionHelper = new PermissionHelper(this, 0, PermissionUtil.CAMERA_PERMISSIONS,
                 new int[]{R.string.permissions_camera_required, R.string.permissions_storage_required});
     }
 
-    public static AddFlowerFragment newInstance() {
-        return new AddFlowerFragment();
+    public static FlowerFragment newInstance() {
+        return new FlowerFragment();
     }
 
-    public static AddFlowerFragment newInstance(long groupId) {
+    public static FlowerFragment newInstance(long flowerId) {
         Bundle args = new Bundle();
-        args.putLong(KEY_GROUP_ID, groupId);
-        AddFlowerFragment fragment = new AddFlowerFragment();
+        args.putLong(KEY_FLOWER_ID, flowerId);
+        FlowerFragment fragment = new FlowerFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,25 +90,24 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         super.onCreate(savedInstanceState);
         progressUtil = new ProgressShowingUtil(this);
         provider = new FlowersProvider(getActivity());
+        long flowerId = getFlowerIdFromArgs();
+        if (flowerId != DatabaseProvider.DEFAULT_ID) {
+            flower = provider.getFlowerById(flowerId);
+        } else {
+            flower = new Flower();
+            flower.setId(DatabaseProvider.DEFAULT_ID);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_flower, container, false);
+        View view = inflater.inflate(R.layout.fragment_flower, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         permissionHelper.setSnackbarContainer(snackbarContainer);
-
-        if (savedInstanceState != null) {
-            restoreState(savedInstanceState);
-        }
-
-        if (flower == null) {
-            flower = new Flower();
-        }
-
+        setupEventsList();
         refreshViewWithFlower();
+        reloadEvents();
         return view;
     }
 
@@ -123,25 +133,30 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
         }
     }
 
-    @OnClick(R.id.faf_create)
+    @OnClick(R.id.faf_save)
     void onCreateFlowerClicked() {
         if (TextUtils.isEmpty(flower.getName())) {
             Toasts.showLong(R.string.faf_error_name_empty);
             return;
         }
 
-        SettingData data = settingsDataView.getSettingData();
-        if (data.getLastWateringDate() == null || data.getWateringFrequency() <= 0) {
-            Toasts.showLong(R.string.sdv_data_empty);
-            return;
-        }
+        provider.createOrUpdateFlower(flower);
+        refreshEventsVisibility();
+        refreshDeleteButtonVisibility();
+    }
 
-        provider.createFlower(flower, data);
-        FlowerWithSetting flowerWithSetting = new FlowerWithSetting();
-        flowerWithSetting.setFlower(flower);
-        flowerWithSetting.setSettingData(data);
-        FlowersAlarmsUtils.refreshAlarmsForFlower(getActivity(), flowerWithSetting);
+    @OnClick(R.id.faf_delete)
+    void onDeleteFlowerClicked() {
+        FlowersAlarmsUtils.deleteAlarmsForEvents(getActivity(),
+                provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME));
+        provider.deleteFlower(flower, true);
         getActivity().onBackPressed();
+    }
+
+    @OnClick(R.id.faf_add_event)
+    void onAddEventClicked() {
+        Fragments.replace(getFragmentManager(), android.R.id.content,
+                EventFragment.newInstance(flower.getId(), Flower.TABLE_NAME), null, true);
     }
 
     @OnTextChanged(R.id.faf_flower_name)
@@ -178,11 +193,24 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (nameView != null) {
-            outState.putString(KEY_NAME, nameView.getText().toString());
+    public void onItemClicked(Event item) {
+        Fragments.replace(getFragmentManager(), android.R.id.content,
+                EventFragment.newInstance(item.getId()), null, true);
+    }
+
+    private void reloadEvents() {
+        List<Event> events = provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME);
+        eventsAdapter.setItems(events);
+    }
+
+    private void setupEventsList() {
+        if (eventsAdapter == null) {
+            eventsAdapter = new EventsAdapter();
         }
+
+        eventsAdapter.setListener(this);
+        eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        eventsList.setAdapter(eventsAdapter);
     }
 
     private void refreshViewWithFlower() {
@@ -190,21 +218,41 @@ public class AddFlowerFragment extends Fragment implements OnPhotoTakenListener 
             return;
         }
 
+        refreshEventsVisibility();
         nameView.setText(flower.getName());
         if (!TextUtils.isEmpty(flower.getImagePath())) {
             Picasso.with(getActivity())
                     .load(new File(flower.getImagePath()))
                     .into(imageView);
         }
+
+        refreshDeleteButtonVisibility();
     }
 
-    private void restoreState(Bundle state) {
-        String name = state.getString(KEY_NAME);
-        nameView.setText(name);
+    private void refreshDeleteButtonVisibility() {
+        if (deleteButton == null) {
+            return;
+        }
+
+        deleteButton.setVisibility(flower.getId() == DatabaseProvider.DEFAULT_ID ? View.GONE : View.VISIBLE);
     }
 
-    private long getGroupIdFromArgs() {
-        return getArguments() != null && getArguments().containsKey(KEY_GROUP_ID)
-                ? getArguments().getLong(KEY_GROUP_ID, -1) : -1;
+    private void refreshEventsVisibility() {
+        if (flower == null || eventsList == null) {
+            return;
+        }
+
+        if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
+            eventsList.setVisibility(View.INVISIBLE);
+            addEventButton.setVisibility(View.INVISIBLE);
+        } else {
+            eventsList.setVisibility(View.VISIBLE);
+            addEventButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private long getFlowerIdFromArgs() {
+        return getArguments() != null && getArguments().containsKey(KEY_FLOWER_ID)
+                ? getArguments().getLong(KEY_FLOWER_ID, -1) : -1;
     }
 }

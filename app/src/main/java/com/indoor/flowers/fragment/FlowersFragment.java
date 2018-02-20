@@ -18,7 +18,7 @@ import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.FlowerWithSetting;
+import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.OnItemClickListener;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class FlowersFragment extends Fragment implements OnItemClickListener<FlowerWithSetting> {
+public class FlowersFragment extends Fragment implements OnItemClickListener<Flower> {
 
     @BindView(R.id.ff_flowers_list)
     RecyclerView flowersList;
@@ -104,24 +104,24 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
     @OnClick(R.id.ff_add_flower)
     public void onAddFlowerClicked() {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                AddFlowerFragment.newInstance(), null, true);
+                FlowerFragment.newInstance(), null, true);
     }
 
     @Override
-    public void onItemClicked(FlowerWithSetting item) {
+    public void onItemClicked(Flower item) {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                FlowerDetailsFragment.newInstance(item.getFlower().getId()), null, true);
+                FlowerFragment.newInstance(item.getId()), null, true);
     }
 
     private void reloadItems() {
-        List<FlowerWithSetting> flowers = null;
+        List<Flower> flowers = null;
         if (showAllFlowers) {
-            flowers = provider.getAllFlowersWithSetting();
+            flowers = provider.getAllFlowers();
         } else {
             flowers = provider.getFlowersWithoutGroup();
         }
 
-        adapter.setFlowers(flowers);
+        adapter.setItems(flowers);
     }
 
     private void initList() {
@@ -129,7 +129,7 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
             adapter = new FlowersAdapter();
         }
 
-        adapter.setFlowerClickListener(this);
+        adapter.setListener(this);
         flowersList.setAdapter(adapter);
         flowersList.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
