@@ -9,27 +9,13 @@
 
     <!--Actions-->
     <string name="action_enable">Включить</string>
-    <string name="action_disable">Отключить</string>
-    <string name="action_ok">OK</string>
-    <string name="action_yes">Да</string>
-    <string name="action_no">Нет</string>
     <string name="action_cancel">Отмена</string>
-    <string name="action_settings">Настройки</string>
     <string name="action_save">Сохранить</string>
-    <string name="action_create">Создать</string>
     <string name="action_choose">Выбрать</string>
-    <string name="action_add">Добавить</string>
     <string name="action_delete">Удалить</string>
     <string name="action_done">Готово</string>
-    <string name="action_postpone">Отложить</string>
-    <string name="action_open">Открыть</string>
     <string name="action_filter">Фильтровать</string>
     <string name="action_repeat">Повторять</string>
-
-    <string name="sdv_data_empty">Задайте частоту полива и дату последнего полива</string>
-
-    <string name="notification_title_watering">Время поливаки</string>
-    <string name="notification_message_watering_format">Пора полить %1$s</string>
 
     <!--NavigationDrawerActivity-->
     <string name="mnd_notifications">События</string>
@@ -46,18 +32,10 @@
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="full_time_format">%1$tH:%1$tM</string>
-    <string name="days_to_watering_format">%1$s дней до полива</string>
     <string name="month_title_format">%1$tB %1$tY</string>
     <string name="day_title_format">%1$td %1$tb</string>
 
-    <string name="rng_title">Без группы</string>
-    <string name="fm_add_flower">Добавить цветок</string>
-    <string name="fm_add_group">Создать группу</string>
-
     <!--Events-->
-    <string name="event_watering_format">Полить %1$s</string>
-    <string name="event_nutrition_format">Подкормить %1$s</string>
-    <string name="event_transplanting_format">Пересадить %1$s</string>
     <string name="event_created_flower">Добавлен цветок</string>
     <string name="event_created_group">Добавлена группа</string>
     <string name="event_watering">Полить</string>
@@ -65,37 +43,14 @@
     <string name="event_transplanting">Пересадить</string>
 
     <!--Settings-->
-    <string name="vsd_last_watering">Дата последнего полива</string>
-    <string name="vsd_preferred_time">Предпочтительное время уведомлений</string>
-    <string name="vsd_last_nutrition_title">Дата последней подкормки</string>
-    <string name="vsd_nutrition_title">Переодичность подкормки</string>
-    <string name="vsd_last_transplanting">Дата последней пересадки</string>
-    <string name="vsd_next_transplanting">Дата следующей пересадки</string>
 
     <!--Add flower-->
-    <string name="faf_flower_title">Добавить новое растение</string>
-    <string name="faf_content_flower_image">Фото фашего растения</string>
-    <string name="faf_content_flower_image_edit">Выберите фото вашего растения</string>
     <string name="faf_flower_name_hint">Имя вашего растения</string>
-    <string name="ff_list_empty">Для начала добавтье растения</string>
-    <string name="faf_active_period">Период активного роста</string>
-    <string name="faf_passive_period">Период покоя</string>
-    <string name="faf_not_set">Не задан</string>
     <string name="faf_add_event">Добавить уведомление</string>
 
-    <string name="faf_watering">Периодичность полива в днях</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
 
     <!--Create group-->
-    <string name="fr_groups">Группы</string>
-    <string name="fcr_use_common_settings">Использовать общие настройки для группы</string>
-    <string name="fcr_use_flower_settings">Использовать настройки каждого цветка в отдельности, подстраивать общую дату полива</string>
-    <string name="fcr_group_name">Имя группы</string>
-    <string name="fcr_title">Добавить группу</string>
-    <string name="fcr_temperature">Температура</string>
-    <string name="fcr_humidity">Влажность</string>
-    <string name="fcr_brightness">Освещенность</string>
-    <string name="fcr_save_group">Сохранить группу</string>
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
     <string name="fg_group_flowers">Цветы в группе</string>
     <string name="fg_events">Уведомления</string>

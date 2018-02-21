@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <item
-        android:id="@+id/mf_filter"
         android:icon="@drawable/ic_filter"
         android:title="@string/action_filter"
         app:showAsAction="ifRoom"

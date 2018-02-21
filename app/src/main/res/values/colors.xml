@@ -5,19 +5,13 @@
 
     <!--primary-->
     <color name="primary50">#EDF9F2</color>
-    <color name="primary100">#ECF8F1</color>
     <color name="primary200">#DBECE2</color>
     <color name="primary300">#CDE0D6</color>
-    <color name="primary400">#A5C4B2</color>
     <color name="primary500">#81AA94</color>
-    <color name="primary600">#81AA94</color>
-    <color name="primary700">#5F8772</color>
     <color name="primary800">#49725C</color>
-    <color name="primary900">#385646</color>
 
     <!--accent-->
     <color name="accent50">#EAD0B2</color>
-    <color name="accentNormal100">#E8C194</color>
     <color name="accent100">#E8C194</color>
     <color name="accent200">#E2943B</color>
     <color name="accent400">#E08421</color>
@@ -35,16 +29,11 @@
     <color name="black_primary_text">#DE000000</color>
     <color name="black_secondary_text">#80000000</color>
     <color name="black_disabled_text">#42000000</color>
-    <color name="black_divider">#1F000000</color>
     <color name="white_primary_text">#FFFFFF</color>
-    <color name="white_secondary_text">#B2FFFFFF</color>
-    <color name="white_disabled_text">#4DFFFFFF</color>
-    <color name="white_divider">#1FFFFFFF</color>
 
     <color name="gray_light">#E0E0E0</color>
 
     <!--shadows-->
-    <color name="white_shadow">#C8FFFFFF</color>
     <color name="black_shadow">#82000000</color>
     <color name="black_shadow_light">#1A000000</color>
 

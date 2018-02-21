@@ -29,27 +29,10 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="Dialog.Transparent" parent="Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="Dialog.CustomView" parent="Dialog.Transparent" />
-
     <style name="Dialog.ProgressDialog" parent="Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:gravity">center</item>
         <item name="android:textColorPrimary">@color/accent</item>
-    </style>
-
-    <style name="EmptyTextStyle">
-        <item name="android:textSize">@dimen/text_body_big</item>
-        <item name="android:textColor">@color/black_secondary_text</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_gravity">top|center_horizontal</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_margin">@dimen/margin_default</item>
     </style>
 
     <style name="MonthViewItem">
@@ -74,14 +57,6 @@
         <item name="android:ellipsize">end</item>
         <item name="android:clickable">true</item>
         <item name="android:padding">@dimen/margin_small</item>
-    </style>
-
-    <style name="FabLabelStyle">
-        <item name="android:textColor">@color/black_secondary_text</item>
-        <item name="android:elevation">@dimen/margin_small</item>
-        <item name="android:textSize">@dimen/text_body_normal</item>
-        <item name="android:padding">@dimen/margin_normal</item>
-        <item name="android:background">@drawable/bg_fab_label</item>
     </style>
 
     <style name="WeekDayStyle">
