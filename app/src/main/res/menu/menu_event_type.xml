@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/met_watering"
+        android:icon="@drawable/ic_event_watering"
+        android:title="@string/event_watering" />
+    <item
+        android:id="@+id/met_fertilizer"
+        android:icon="@drawable/ic_event_fertilizer"
+        android:title="@string/event_fertilizer" />
+    <item
+        android:id="@+id/met_transplant"
+        android:icon="@drawable/ic_event_transplanting"
+        android:title="@string/event_transplanting" />
+</menu>

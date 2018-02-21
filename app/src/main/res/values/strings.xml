@@ -38,8 +38,9 @@
     <!--Events-->
     <string name="event_created_flower">Добавлен цветок</string>
     <string name="event_created_group">Добавлена группа</string>
+    <string name="event_created">Создан</string>
     <string name="event_watering">Полить</string>
-    <string name="event_nutrition">Подкормить</string>
+    <string name="event_fertilizer">Подкормить</string>
     <string name="event_transplanting">Пересадить</string>
 
     <!--Settings-->
@@ -65,11 +66,14 @@
     <string name="fef_selected_only">Только выбранные</string>
     <string name="fef_events_created">Создание</string>
     <string name="fef_events_watering">Полив</string>
-    <string name="fef_events_nutrition">Подкормка</string>
+    <string name="fef_events_fertilizer">Подкормка</string>
     <string name="fef_events_transplantation">Пересадка</string>
     <string name="fe_comment_hint">Коментарий</string>
-    <string name="fe_frequency_hint">Переодичность в днях</string>
-    <string name="fe_event_date">Дата события</string>
+    <string name="fe_screen_title">Уведомление</string>
+    <string name="fe_frequency">Повтор в днях</string>
+    <string name="fe_frequency_hint">Не задан</string>
+    <string name="fe_event_date">Начало</string>
     <string name="fe_event_time">Время уведомлений</string>
+    <string name="fe_event_name_hint">Название уведомления</string>
 
 </resources>

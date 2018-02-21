@@ -5,20 +5,21 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -30,6 +31,7 @@ import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.EventType;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.util.EventsUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.Prefs;
 
@@ -37,11 +39,10 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class EventFragment extends Fragment implements OnItemSelectedListener {
+public class EventFragment extends Fragment implements OnNavigationItemSelectedListener {
 
     private static final String KEY_TARGET_ID = "key_target_id";
     private static final String KEY_TARGET_TABLE = "key_target_table";
@@ -55,16 +56,16 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
     EditText commentView;
     @BindView(R.id.fe_frequency)
     EditText frequencyView;
-    @BindView(R.id.fe_check_period)
-    CheckBox periodicallyCheck;
-    @BindView(R.id.fe_event_type)
-    Spinner eventTypeSpinner;
     @BindView(R.id.fe_event_date)
     TextView eventDateView;
     @BindView(R.id.fe_event_time)
     TextView eventTimeView;
     @BindView(R.id.fe_delete)
     Button deleteButton;
+    @BindView(R.id.fe_event_type_group)
+    BottomNavigationView eventTypeGroup;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private Unbinder unbinder;
     private FlowersProvider provider;
@@ -118,6 +119,8 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
                     ? provider.getGroupById(event.getTargetId())
                     : provider.getFlowerById(event.getTargetId());
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -125,7 +128,8 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupSpinner();
+        setupActionBar();
+        eventTypeGroup.setOnNavigationItemSelectedListener(this);
         if (savedInstanceState == null) {
             setupViewForEvent();
         }
@@ -145,26 +149,9 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String chosenEventTypeName = (String) parent.getItemAtPosition(position);
-        if (Res.getString(R.string.event_watering).equalsIgnoreCase(chosenEventTypeName)) {
-            event.setEventType(EventType.WATERING);
-        } else if (Res.getString(R.string.event_nutrition).equalsIgnoreCase(chosenEventTypeName)) {
-            event.setEventType(EventType.NUTRITION);
-        } else if (Res.getString(R.string.event_transplanting).equalsIgnoreCase(chosenEventTypeName)) {
-            event.setEventType(EventType.TRANSPLANTING);
-        }
-
-        refreshTitle();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
-
-    @OnCheckedChanged(R.id.fe_check_period)
-    void onPeriodCheckChanged(CompoundButton button, boolean isChecked) {
-        frequencyView.setEnabled(isChecked);
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.clear();
     }
 
     @OnClick(R.id.fe_event_date_group)
@@ -210,7 +197,7 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
         } catch (NumberFormatException ignore) {
         }
 
-        event.setFrequency(periodicallyCheck.isChecked() ? frequency : null);
+        event.setFrequency(frequency);
         provider.createOrUpdateEvent(event);
         FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), event.getId());
         getActivity().onBackPressed();
@@ -223,12 +210,31 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
         getActivity().onBackPressed();
     }
 
-    private void setupViewForEvent() {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        @EventType int eventType = getSelectedEventType(item.getItemId());
+        event.setEventType(eventType);
         refreshTitle();
+        return true;
+    }
+
+    private void setupActionBar() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolbar);
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(R.string.fe_screen_title);
+                actionBar.setHomeButtonEnabled(true);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+    }
+
+    private void setupViewForEvent() {
         refreshDate();
         refreshTime();
-        eventTypeSpinner.setSelection(getPositionForEventType(event.getEventType()));
-        periodicallyCheck.setChecked(event.getFrequency() != null);
+        setSelectedEventType(event.getEventType());
         if (event.getFrequency() != null) {
             frequencyView.setText(String.valueOf(event.getFrequency()));
         } else {
@@ -236,6 +242,7 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
         }
 
         refreshDeleteButton();
+        refreshTitle();
     }
 
     private void refreshDeleteButton() {
@@ -256,10 +263,50 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
                 : (target != null && target instanceof Group
                 ? ((Group) target).getName() : "");
         if (TextUtils.isEmpty(event.getTitle())) {
-            titleView.setText(String.format(FORMAT_TITLE, eventTypeSpinner.getSelectedItem(),
+            titleView.setText(String.format(FORMAT_TITLE,
+                    EventsUtils.getTitleForEvent(event.getEventType()),
                     targetName));
         } else {
             titleView.setText(event.getTitle());
+        }
+    }
+
+    @EventType
+    private int getSelectedEventType(int itemId) {
+        @EventType int result = EventType.WATERING;
+        if (eventTypeGroup != null) {
+            switch (itemId) {
+                case R.id.met_watering:
+                    result = EventType.WATERING;
+                    break;
+                case R.id.met_fertilizer:
+                    result = EventType.FERTILIZER;
+                    break;
+                case R.id.met_transplant:
+                    result = EventType.TRANSPLANTING;
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    private void setSelectedEventType(@EventType int eventType) {
+        if (eventTypeGroup == null) {
+            return;
+        }
+
+        switch (eventType) {
+            case EventType.FERTILIZER:
+                eventTypeGroup.setSelectedItemId(R.id.met_fertilizer);
+                break;
+            case EventType.TRANSPLANTING:
+                eventTypeGroup.setSelectedItemId(R.id.met_transplant);
+                break;
+            case EventType.WATERING:
+            case EventType.CREATED:
+                eventTypeGroup.setSelectedItemId(R.id.met_watering);
+                break;
         }
     }
 
@@ -277,35 +324,6 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
         }
 
         eventTimeView.setText(Res.getString(R.string.full_time_format, event.getEventDate()));
-    }
-
-    private int getPositionForEventType(@EventType int type) {
-        int result = 0;
-        switch (type) {
-            case EventType.NUTRITION:
-                result = 1;
-                break;
-            case EventType.TRANSPLANTING:
-                result = 2;
-                break;
-            case EventType.WATERING:
-                result = 0;
-                break;
-        }
-        return result;
-    }
-
-    private void setupSpinner() {
-        String[] eventsTypesText = new String[]{
-                Res.getString(R.string.event_watering),
-                Res.getString(R.string.event_nutrition),
-                Res.getString(R.string.event_transplanting)
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, eventsTypesText);
-        eventTypeSpinner.setAdapter(adapter);
-        eventTypeSpinner.setOnItemSelectedListener(this);
     }
 
     // region ARGUMENTS

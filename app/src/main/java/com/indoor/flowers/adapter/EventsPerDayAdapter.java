@@ -90,8 +90,8 @@ public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, Ev
                     result = event.getTarget() instanceof Group ? Res.getString(R.string.event_created_group)
                             : Res.getString(R.string.event_created_flower);
                     break;
-                case EventType.NUTRITION:
-                    result = Res.getString(R.string.event_nutrition);
+                case EventType.FERTILIZER:
+                    result = Res.getString(R.string.event_fertilizer);
                     break;
                 case EventType.TRANSPLANTING:
                     result = Res.getString(R.string.event_transplanting);
@@ -124,8 +124,8 @@ public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, Ev
                 case EventType.CREATED:
                     color = Res.getColor(R.color.event_created);
                     break;
-                case EventType.NUTRITION:
-                    color = Res.getColor(R.color.event_nutrition);
+                case EventType.FERTILIZER:
+                    color = Res.getColor(R.color.event_fertilizer);
                     break;
                 case EventType.TRANSPLANTING:
                     color = Res.getColor(R.color.event_transplantation);

@@ -1,66 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_white"
+    android:background="@color/window_bg"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/fe_title"
+    <include layout="@layout/toolbar_main" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/fe_event_type_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_white"
+        android:theme="@style/PopupTheme"
+        app:menu="@menu/menu_event_type" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default"
-        android:imeOptions="actionDone"
-        android:inputType="textCapWords"
-        android:textColor="@color/black_primary_text"
-        android:textSize="@dimen/text_body_medium"
-        tools:text="Watering Flower" />
+        android:background="@color/material_white"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_normal">
 
-    <Spinner
-        android:id="@+id/fe_event_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:elevation="10dp"
-        android:popupTheme="@style/PopupTheme" />
+        <EditText
+            android:id="@+id/fe_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fe_event_name_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textCapWords"
+            android:textColor="@color/black_primary_text"
+            android:textColorHint="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_medium"
+            tools:ignore="LabelFor" />
 
-    <EditText
-        android:id="@+id/fe_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_default"
-        android:gravity="top|start"
-        android:hint="@string/fe_comment_hint"
-        android:lines="3"
-        android:textColor="@color/black_primary_text"
-        android:textColorHint="@color/black_secondary_text"
-        android:textSize="@dimen/text_body_normal" />
+        <EditText
+            android:id="@+id/fe_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:hint="@string/fe_comment_hint"
+            android:maxLines="3"
+            android:textColor="@color/black_primary_text"
+            android:textColorHint="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_normal" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:layout_marginTop="@dimen/margin_default"
-        android:background="@color/gray_light" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fe_event_date_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:background="@drawable/sel_image_btn_bg"
-        android:orientation="vertical">
+        style="@style/FieldContainerStyle">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fe_event_date"
-            android:textSize="@dimen/text_body_small" />
+            style="@style/FieldHeaderStyle"
+            android:text="@string/fe_event_date" />
 
         <TextView
             android:id="@+id/fe_event_date"
@@ -72,67 +68,45 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:background="@color/gray_light" />
-
     <LinearLayout
         android:id="@+id/fe_event_time_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:background="@drawable/sel_image_btn_bg"
-        android:orientation="vertical">
+        style="@style/FieldContainerStyle"
+        android:layout_marginTop="@dimen/margin_small">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fe_event_time"
-            android:textSize="@dimen/text_body_small" />
+            style="@style/FieldHeaderStyle"
+            android:text="@string/fe_event_time" />
 
         <TextView
             android:id="@+id/fe_event_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_normal"
             android:textColor="@color/black_primary_text"
             android:textSize="@dimen/text_body_medium"
             tools:text="14:30" />
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_size"
-        android:background="@color/gray_light" />
+    <LinearLayout
+        style="@style/FieldContainerStyle"
+        android:layout_marginTop="@dimen/margin_small">
 
-    <CheckBox
-        android:id="@+id/fe_check_period"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_default"
-        android:text="@string/action_repeat"
-        android:textColor="@color/black_secondary_text"
-        android:textSize="@dimen/text_body_medium" />
+        <TextView
+            style="@style/FieldHeaderStyle"
+            android:text="@string/fe_frequency" />
 
-    <EditText
-        android:id="@+id/fe_frequency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_default"
-        android:layout_marginStart="@dimen/margin_default"
-        android:enabled="false"
-        android:hint="@string/fe_frequency_hint"
-        android:inputType="number"
-        android:textColor="@color/black_primary_text"
-        android:textColorHint="@color/black_secondary_text"
-        android:textSize="@dimen/text_body_normal" />
+        <EditText
+            android:id="@+id/fe_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fe_frequency_hint"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textColor="@color/black_primary_text"
+            android:textColorHint="@color/black_disabled_text"
+            android:textSize="@dimen/text_body_medium" />
+
+    </LinearLayout>
 
     <android.support.v4.widget.Space
         android:layout_width="0dp"
@@ -142,28 +116,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_default"
+        android:gravity="end"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/fe_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_normal"
-            android:layout_weight="1"
-            android:background="@color/primary200"
-            android:text="@string/action_save"
-            android:textColor="@color/black_secondary_text" />
+            android:id="@+id/fe_delete"
+            style="@style/TextButtonStyle"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:paddingEnd="@dimen/margin_normal"
+            android:paddingStart="@dimen/margin_normal"
+            android:text="@string/action_delete"
+            android:textColor="@color/black_disabled_text"
+            tools:visibility="visible" />
 
         <Button
-            android:id="@+id/fe_delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_normal"
-            android:layout_weight="1"
-            android:background="@color/accent100"
-            android:text="@string/action_delete"
-            android:textColor="@color/black_secondary_text"
-            android:visibility="gone" />
+            android:id="@+id/fe_save"
+            style="@style/TextButtonStyle"
+            android:paddingEnd="@dimen/margin_normal"
+            android:paddingStart="@dimen/margin_normal"
+            android:text="@string/action_save"
+            android:textColor="@color/accent700" />
 
     </LinearLayout>
 

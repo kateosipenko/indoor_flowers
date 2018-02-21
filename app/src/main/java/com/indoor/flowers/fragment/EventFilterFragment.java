@@ -48,8 +48,8 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
     CheckBox createdBox;
     @BindView(R.id.fef_events_watering)
     CheckBox wateringBox;
-    @BindView(R.id.fef_events_nutrition)
-    CheckBox nutritionBox;
+    @BindView(R.id.fef_events_fertilizer)
+    CheckBox fertilizerBox;
     @BindView(R.id.fef_events_transplantation)
     CheckBox transplantationBox;
     @BindView(R.id.fef_events_all)
@@ -104,12 +104,12 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
         if (isChecked) {
             createdBox.setChecked(true);
             wateringBox.setChecked(true);
-            nutritionBox.setChecked(true);
+            fertilizerBox.setChecked(true);
             transplantationBox.setChecked(true);
         }
     }
 
-    @OnCheckedChanged({R.id.fef_events_nutrition, R.id.fef_events_transplantation,
+    @OnCheckedChanged({R.id.fef_events_fertilizer, R.id.fef_events_transplantation,
             R.id.fef_events_watering, R.id.fef_events_created})
     void onEventsCheckChanged(CompoundButton button, boolean isChecked) {
         if (!isChecked) {
@@ -149,8 +149,8 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
                     case EventType.WATERING:
                         wateringBox.setChecked(true);
                         break;
-                    case EventType.NUTRITION:
-                        nutritionBox.setChecked(true);
+                    case EventType.FERTILIZER:
+                        fertilizerBox.setChecked(true);
                         break;
                     case EventType.TRANSPLANTING:
                         transplantationBox.setChecked(true);
@@ -216,8 +216,8 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
             if (createdBox.isChecked()) {
                 filteredTypes.add(EventType.CREATED);
             }
-            if (nutritionBox.isChecked()) {
-                filteredTypes.add(EventType.NUTRITION);
+            if (fertilizerBox.isChecked()) {
+                filteredTypes.add(EventType.FERTILIZER);
             }
             if (transplantationBox.isChecked()) {
                 filteredTypes.add(EventType.TRANSPLANTING);

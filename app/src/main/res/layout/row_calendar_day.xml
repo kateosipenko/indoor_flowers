@@ -55,12 +55,12 @@
             tools:visibility="visible" />
 
         <View
-            android:id="@+id/rcd_notification_nutrition"
+            android:id="@+id/rcd_notification_fertilizer"
             android:layout_width="@dimen/rcd_notification_size"
             android:layout_height="@dimen/rcd_notification_size"
             android:layout_margin="@dimen/margin_small"
             android:background="@drawable/bg_day_notification"
-            android:backgroundTint="@color/event_nutrition"
+            android:backgroundTint="@color/event_fertilizer"
             android:gravity="center"
             android:visibility="gone"
             tools:visibility="gone" />

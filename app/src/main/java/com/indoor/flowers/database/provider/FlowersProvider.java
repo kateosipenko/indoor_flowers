@@ -110,15 +110,21 @@ public class FlowersProvider extends DatabaseProvider {
         database.getEventDao().update(event);
     }
 
-    public List<Event> getNearbyEvents(Calendar startDate, int daysCount, boolean includeOldEvents) {
+    public List<Event> getNearbyEvents(Calendar start, int daysCount,
+                                       int minItemsCount, boolean includeOldEvents) {
+        Calendar startDate = (Calendar) start.clone();
         Calendar endDate = (Calendar) startDate.clone();
         endDate.add(Calendar.DAY_OF_YEAR, daysCount);
-        String query = String.format(EventDao.QUERY_EVENTS_NEARBY, startDate.getTimeInMillis(),
-                endDate.getTimeInMillis());
-        List<Event> events = database.getEventDao().getEventForSelection(query);
+        List<Event> events = database.getEventDao().getEventForSelection(
+                String.format(EventDao.QUERY_EVENTS_NEARBY, startDate.getTimeInMillis(),
+                        endDate.getTimeInMillis()));
         if (events != null) {
             events = EventsUtils.createOrderedEventsWithPeriodically(events, startDate, endDate, includeOldEvents);
+            if (events.size() < minItemsCount) {
+                events = getNearbyEvents(start, daysCount * 2, minItemsCount, includeOldEvents);
+            }
         }
+
         return events;
     }
 

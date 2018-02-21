@@ -120,8 +120,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         View createView;
         @BindView(R.id.rcd_notification_watering)
         View wateringView;
-        @BindView(R.id.rcd_notification_nutrition)
-        View nutritionView;
+        @BindView(R.id.rcd_notification_fertilizer)
+        View fertilizerView;
         @BindView(R.id.rcd_notification_transplantation)
         View transplantationView;
 
@@ -167,7 +167,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
             List<Event> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
             int wateringCount = 0;
             int createdCount = 0;
-            int nutritionCount = 0;
+            int fertilizerCount = 0;
             int transplantationCount = 0;
             if (eventsForDay != null) {
                 for (Event event : eventsForDay) {
@@ -175,8 +175,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
                         case EventType.CREATED:
                             ++createdCount;
                             break;
-                        case EventType.NUTRITION:
-                            ++nutritionCount;
+                        case EventType.FERTILIZER:
+                            ++fertilizerCount;
                             break;
                         case EventType.TRANSPLANTING:
                             ++transplantationCount;
@@ -189,7 +189,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
             }
 
             refreshEventView(createdCount, createView);
-            refreshEventView(nutritionCount, nutritionView);
+            refreshEventView(fertilizerCount, fertilizerView);
             refreshEventView(transplantationCount, transplantationView);
             refreshEventView(wateringCount, wateringView);
         }

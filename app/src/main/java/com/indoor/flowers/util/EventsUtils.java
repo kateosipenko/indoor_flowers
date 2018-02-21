@@ -15,6 +15,25 @@ import java.util.List;
 
 public class EventsUtils {
 
+    public static String getTitleForEvent(@EventType int eventType) {
+        String result = "";
+        switch (eventType) {
+            case EventType.CREATED:
+                result = Res.getString(R.string.event_created);
+                break;
+            case EventType.FERTILIZER:
+                result = Res.getString(R.string.event_fertilizer);
+                break;
+            case EventType.TRANSPLANTING:
+                result = Res.getString(R.string.event_transplanting);
+                break;
+            case EventType.WATERING:
+                result = Res.getString(R.string.event_watering);
+                break;
+        }
+        return result;
+    }
+
     @ColorInt
     public static int getColorForEventType(@EventType int eventType) {
         @ColorInt int result = Res.getColor(R.color.material_white);
@@ -22,8 +41,8 @@ public class EventsUtils {
             case EventType.CREATED:
                 result = Res.getColor(R.color.event_created);
                 break;
-            case EventType.NUTRITION:
-                result = Res.getColor(R.color.event_nutrition);
+            case EventType.FERTILIZER:
+                result = Res.getColor(R.color.event_fertilizer);
                 break;
             case EventType.TRANSPLANTING:
                 result = Res.getColor(R.color.event_transplantation);

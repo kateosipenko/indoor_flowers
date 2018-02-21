@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.fragment.MainFragment;
@@ -27,6 +28,15 @@ public class MainActivity extends AppCompatActivity {
         if (canGoBack()) {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean canGoBack() {

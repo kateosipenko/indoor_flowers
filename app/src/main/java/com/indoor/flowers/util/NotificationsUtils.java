@@ -71,8 +71,8 @@ public class NotificationsUtils {
         builder.setContentTitle(event.getTitle());
         builder.setContentText(event.getComment());
         switch (event.getEventType()) {
-            case EventType.NUTRITION:
-                builder.setSubText(Res.getString(R.string.event_nutrition));
+            case EventType.FERTILIZER:
+                builder.setSubText(Res.getString(R.string.event_fertilizer));
                 break;
             case EventType.TRANSPLANTING:
                 builder.setSubText(Res.getString(R.string.event_transplanting));
