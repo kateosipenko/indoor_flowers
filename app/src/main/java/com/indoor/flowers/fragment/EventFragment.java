@@ -31,6 +31,7 @@ import com.indoor.flowers.model.EventType;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
+import com.indoor.flowers.util.Prefs;
 
 import java.util.Calendar;
 
@@ -105,7 +106,11 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
             event.setTargetTable(getTargetTableFromArgs());
             event.setTargetId(getTargetIdFromArgs());
             event.setCreationDate(Calendar.getInstance());
-            event.setEventDate(Calendar.getInstance());
+            Calendar eventDate = Calendar.getInstance();
+            Calendar preferredTime = Prefs.getPreferredNotificationTime();
+            eventDate.set(Calendar.HOUR_OF_DAY, preferredTime.get(Calendar.HOUR_OF_DAY));
+            eventDate.set(Calendar.MINUTE, preferredTime.get(Calendar.MINUTE));
+            event.setEventDate(eventDate);
         }
 
         if (!TextUtils.isEmpty(event.getTargetTable())) {
@@ -181,16 +186,18 @@ public class EventFragment extends Fragment implements OnItemSelectedListener {
 
     @OnClick(R.id.fe_event_time_group)
     void onTimeClicked() {
+        Calendar preferredTime = Prefs.getPreferredNotificationTime();
         new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar eventDate = event.getEventDate();
                 eventDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 eventDate.set(Calendar.MINUTE, minute);
+                Prefs.setPreferredNotificationTime(eventDate);
                 refreshTime();
             }
-        }, event.getEventDate().get(Calendar.HOUR_OF_DAY),
-                event.getEventDate().get(Calendar.MINUTE), true).show();
+        }, preferredTime.get(Calendar.HOUR_OF_DAY),
+                preferredTime.get(Calendar.MINUTE), true).show();
     }
 
     @OnClick(R.id.fe_save)

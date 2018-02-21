@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:orientation="vertical"
+    tools:background="@color/gray_light">
+
+    <TextView
+        android:id="@+id/rn_day_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_normal"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal"
+        android:visibility="gone"
+        tools:text="21 March"
+        tools:visibility="visible" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/rn_event_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_white"
+        android:elevation="@dimen/margin_normal">
+
+        <View
+            android:id="@+id/rn_notification_color"
+            android:layout_width="@dimen/margin_small"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@color/event_watering" />
+
+        <TextView
+            android:id="@+id/rn_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/rn_notification_color"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Watering FLower" />
+
+        <TextView
+            android:id="@+id/rn_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="@dimen/text_body_normal"
+            app:layout_constraintBottom_toTopOf="@+id/rn_done"
+            app:layout_constraintEnd_toEndOf="@id/rn_title"
+            app:layout_constraintStart_toStartOf="@id/rn_title"
+            app:layout_constraintTop_toBottomOf="@id/rn_title"
+            app:layout_goneMarginBottom="@dimen/margin_default"
+            tools:text="ASd asd as;dk as;dka;sldk as;dlk ;lkadk ;askd;askd asldj askdj aslkd" />
+
+        <Button
+            android:id="@+id/rn_done"
+            style="@style/TextButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/action_done"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rn_comment"
+            tools:visibility="visible" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

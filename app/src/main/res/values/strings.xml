@@ -32,6 +32,7 @@
     <string name="notification_message_watering_format">Пора полить %1$s</string>
 
     <!--NavigationDrawerActivity-->
+    <string name="mnd_notifications">События</string>
     <string name="mnd_flowers">Цветы</string>
     <string name="mnd_groups">Группы</string>
     <string name="mnd_calendar">Календарь</string>
@@ -47,6 +48,7 @@
     <string name="full_time_format">%1$tH:%1$tM</string>
     <string name="days_to_watering_format">%1$s дней до полива</string>
     <string name="month_title_format">%1$tB %1$tY</string>
+    <string name="day_title_format">%1$td %1$tb</string>
 
     <string name="rng_title">Без группы</string>
     <string name="fm_add_flower">Добавить цветок</string>

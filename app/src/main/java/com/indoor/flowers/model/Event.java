@@ -39,6 +39,21 @@ public class Event {
     @ColumnInfo(name = Columns.FREQUENCY)
     private Integer frequency;
 
+    public Event clone() {
+        Event result = new Event();
+        result.setId(id);
+        result.setEventType(eventType);
+        result.setTargetId(targetId);
+        result.setTargetTable(targetTable);
+        result.setTitle(title);
+        result.setComment(comment);
+        result.setCreationDate(creationDate);
+        result.setEventDate(eventDate);
+        result.setEndDate(endDate);
+        result.setFrequency(frequency);
+        return result;
+    }
+
     public long getId() {
         return id;
     }

@@ -1,12 +1,8 @@
 package com.indoor.flowers.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,7 +57,6 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupActionBar();
         initList();
         reloadGroups();
         return view;
@@ -91,29 +86,9 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
                 GroupFragment.newInstance(group.getId()), null, true);
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar == null) {
-            return;
-        }
-
-        actionBar.setTitle(R.string.mnd_groups);
-    }
-
     private void reloadGroups() {
         List<Group> allGroups = provider.getAllGroups();
         adapter.setGroups(allGroups);
-    }
-
-    private void setActivityResult(Group group) {
-        Fragment targetFragment = getTargetFragment();
-        if (targetFragment == null) {
-            return;
-        }
-
-        Intent data = new Intent();
-        data.putExtra(KEY_SELECTED_GROUP, group.getId());
-        targetFragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
     }
 
     private void initList() {

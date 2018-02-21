@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -14,10 +15,10 @@ import android.support.v4.app.NotificationCompat;
 import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
+import com.indoor.flowers.activity.MainActivity;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Event;
 import com.indoor.flowers.model.EventType;
-import com.indoor.flowers.service.FlowersAlarmsService;
 
 import java.util.List;
 import java.util.Objects;
@@ -82,12 +83,14 @@ public class NotificationsUtils {
         }
 
         builder.setSmallIcon(R.drawable.ic_notification_watering);
+        builder.setColor(EventsUtils.getColorForEventType(event.getEventType()));
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
-        builder.addAction(R.drawable.ic_notification_watering, Res.getString(R.string.action_done),
-                PendingIntent.getService(context, FlowersAlarmsService.REQUEST_CODE_SET_WATERING_DONE,
-                        FlowersAlarmsService.createDoneIntent(context, event), 0));
+
+        PendingIntent contentIntent = PendingIntent.getActivity(context,
+                MainActivity.REQUEST_CODE_NOTIFICATION, new Intent(context, MainActivity.class), 0);
+        builder.setContentIntent(contentIntent);
 
         manager.notify(getNotificationId(event), builder.build());
     }

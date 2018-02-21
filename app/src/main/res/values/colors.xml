@@ -4,28 +4,28 @@
     <color name="window_bg">@android:color/white</color>
 
     <!--primary-->
-    <color name="primary50">@color/material_green_primary50</color>
-    <color name="primary100">@color/material_green_primary100</color>
-    <color name="primary200">@color/material_green_primary200</color>
-    <color name="primary300">@color/material_green_primary300</color>
-    <color name="primary400">@color/material_green_primary400</color>
-    <color name="primary500">@color/material_green_primary500</color>
-    <color name="primary600">@color/material_green_primary600</color>
-    <color name="primary700">@color/material_green_primary700</color>
-    <color name="primary800">@color/material_green_primary800</color>
-    <color name="primary900">@color/material_green_primary900</color>
+    <color name="primary50">#EDF9F2</color>
+    <color name="primary100">#ECF8F1</color>
+    <color name="primary200">#DBECE2</color>
+    <color name="primary300">#CDE0D6</color>
+    <color name="primary400">#A5C4B2</color>
+    <color name="primary500">#81AA94</color>
+    <color name="primary600">#81AA94</color>
+    <color name="primary700">#5F8772</color>
+    <color name="primary800">#49725C</color>
+    <color name="primary900">#385646</color>
 
     <!--accent-->
-    <color name="accent50">@color/material_deep_orange_primary50</color>
-    <color name="accentNormal100">@color/material_deep_orange_primary100</color>
-    <color name="accent100">@color/material_deep_orange_accent100</color>
-    <color name="accent200">@color/material_deep_orange_accent200</color>
-    <color name="accent400">@color/material_deep_orange_accent400</color>
-    <color name="accent700">@color/material_deep_orange_accent700</color>
+    <color name="accent50">#EAD0B2</color>
+    <color name="accentNormal100">#E8C194</color>
+    <color name="accent100">#E8C194</color>
+    <color name="accent200">#E2943B</color>
+    <color name="accent400">#E08421</color>
+    <color name="accent700">#DD7200</color>
 
     <color name="primary">@color/primary500</color>
     <color name="primary_dark">@color/primary800</color>
-    <color name="accent">@color/material_deep_orange_primary400</color>
+    <color name="accent">#E2943B</color>
     <color name="control_highlight">@color/primary50</color>
     <color name="control_highlight_selected">@color/primary200</color>
     <color name="toolbar_control_normal">@color/white_primary_text</color>

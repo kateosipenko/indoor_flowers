@@ -9,6 +9,7 @@ import com.indoor.flowers.model.EventType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +33,38 @@ public class EventsUtils {
                 break;
         }
 
+        return result;
+    }
+
+    public static List<Event> createOrderedEventsWithPeriodically(List<Event> events, Calendar minDate,
+                                                                  Calendar maxDate, boolean includeOldEvents) {
+        List<Event> result = new ArrayList<>();
+        for (Event event : events) {
+            if (event.getFrequency() != null) {
+                if (event.getEventDate().after(maxDate)) {
+                    continue;
+                }
+
+                Calendar eventDate = (Calendar) event.getEventDate().clone();
+                if (eventDate.before(minDate) && !includeOldEvents) {
+                    long daysDiff = CalendarUtils.getDaysDiff(event.getEventDate(), minDate);
+                    eventDate = (Calendar) minDate.clone();
+                    eventDate.add(Calendar.DAY_OF_YEAR, (int) (daysDiff % event.getFrequency()));
+                }
+
+                do {
+                    Event periodically = event.clone();
+                    periodically.setEventDate(eventDate);
+                    result.add(periodically);
+                    eventDate = (Calendar) eventDate.clone();
+                    eventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
+                } while (eventDate.before(maxDate));
+            } else {
+                result.add(event);
+            }
+        }
+
+        Collections.sort(result, new EventDatesComparator());
         return result;
     }
 

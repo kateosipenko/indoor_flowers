@@ -1,84 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fm_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_light">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fm_groups_list"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/fm_tabs_height"
-        android:background="@color/material_white"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:elevation="@dimen/margin_normal"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/margin_small"
-        android:paddingEnd="@dimen/margin_default"
-        android:paddingStart="@dimen/margin_default"
-        android:paddingTop="@dimen/margin_small"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/row_no_group" />
+    <include layout="@layout/toolbar_main" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="@dimen/divider_size"
-        android:background="@color/primary_dark"
-        android:elevation="@dimen/margin_normal"
-        app:layout_constraintBottom_toBottomOf="@id/fm_groups_list"
-        app:layout_constraintEnd_toEndOf="@id/fm_groups_list"
-        app:layout_constraintStart_toStartOf="@id/fm_groups_list" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fm_flowers_list"
+    <FrameLayout
+        android:id="@+id/fm_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:padding="@dimen/margin_default"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/fm_bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fm_groups_list"
-        tools:itemCount="25"
-        tools:listitem="@layout/row_flower" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/fm_fab_menu"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/fm_bottom_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_fab"
-        android:src="@drawable/ic_add"
-        app:fab_addButtonColorNormal="@color/accent400"
-        app:fab_addButtonColorPressed="@color/accent700"
-        app:fab_labelStyle="@style/FabLabelStyle"
-        app:fab_labelsPosition="left"
+        android:background="@color/material_white"
+        android:elevation="@dimen/margin_default"
+        android:orientation="horizontal"
+        android:theme="@style/PopupTheme"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fm_add_flower"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/accent100"
-            app:fab_colorPressed="@color/accent200"
-            app:fab_icon="@drawable/ic_flower_flat"
-            app:fab_size="mini"
-            app:fab_title="@string/fm_add_flower" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fm_add_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/accent200"
-            app:fab_colorPressed="@color/accent400"
-            app:fab_icon="@drawable/ic_grouping"
-            app:fab_size="mini"
-            app:fab_title="@string/fm_add_group" />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        app:menu="@menu/menu_navigation_drawer" />
 
 </android.support.constraint.ConstraintLayout>

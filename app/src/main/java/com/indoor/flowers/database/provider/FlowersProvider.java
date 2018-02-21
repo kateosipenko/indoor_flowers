@@ -12,6 +12,7 @@ import com.indoor.flowers.model.EventType;
 import com.indoor.flowers.model.EventWithTarget;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EventsUtils;
 
 import java.util.ArrayList;
@@ -96,6 +97,30 @@ public class FlowersProvider extends DatabaseProvider {
     // endregion FLOWER
 
     // region EVENTS
+
+    public void markEventDone(Event event, Calendar eventDoneDate) {
+        Calendar nextEventDate = event.getEventDate();
+        nextEventDate.add(Calendar.DAY_OF_YEAR, CalendarUtils.getDaysDiff(nextEventDate, eventDoneDate));
+        if (event.getFrequency() != null) {
+            nextEventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
+        } else {
+            event.setEndDate(eventDoneDate);
+        }
+
+        database.getEventDao().update(event);
+    }
+
+    public List<Event> getNearbyEvents(Calendar startDate, int daysCount, boolean includeOldEvents) {
+        Calendar endDate = (Calendar) startDate.clone();
+        endDate.add(Calendar.DAY_OF_YEAR, daysCount);
+        String query = String.format(EventDao.QUERY_EVENTS_NEARBY, startDate.getTimeInMillis(),
+                endDate.getTimeInMillis());
+        List<Event> events = database.getEventDao().getEventForSelection(query);
+        if (events != null) {
+            events = EventsUtils.createOrderedEventsWithPeriodically(events, startDate, endDate, includeOldEvents);
+        }
+        return events;
+    }
 
     public List<Event> getEventsForTarget(long targetId, String targetTable) {
         return database.getEventDao().getEventsForTarget(targetId, targetTable);

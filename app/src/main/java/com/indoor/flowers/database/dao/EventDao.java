@@ -21,6 +21,13 @@ public interface EventDao {
             + " and (creation_date<%1$s and creation_date<%2$s or creation_date between %1$s and %2$s) "
             + " or frequency is null and event_date between %1$s and %2$s) ";
 
+    String QUERY_EVENTS_NEARBY = "select * from EventTable where "
+            + " (event_date<%1$s or "
+            + " (frequency not null and frequency > 0 "
+            + " and (end_date==0 or end_date between %1$s and %2$s) "
+            + " and (creation_date<%1$s and creation_date<%2$s or creation_date between %1$s and %2$s) "
+            + " or frequency is null and event_date between %1$s and %2$s)) and event_type!=" + EventType.CREATED;
+
     @Insert
     long insert(Event event);
 
