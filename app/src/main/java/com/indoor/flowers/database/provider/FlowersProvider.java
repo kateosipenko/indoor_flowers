@@ -59,6 +59,10 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region FLOWER
 
+    public void updateFlower(Flower flower) {
+        database.getFlowersDao().update(flower);
+    }
+
     public void createOrUpdateFlower(Flower flower) {
         if (database.getFlowersDao().hasFlower(flower.getId())) {
             database.getFlowersDao().update(flower);
@@ -110,8 +114,7 @@ public class FlowersProvider extends DatabaseProvider {
         database.getEventDao().update(event);
     }
 
-    public List<Event> getNearbyEvents(Calendar start, int daysCount,
-                                       int minItemsCount, boolean includeOldEvents) {
+    public List<Event> getNearbyEvents(Calendar start, int daysCount, boolean includeOldEvents) {
         Calendar startDate = (Calendar) start.clone();
         Calendar endDate = (Calendar) startDate.clone();
         endDate.add(Calendar.DAY_OF_YEAR, daysCount);
@@ -120,9 +123,6 @@ public class FlowersProvider extends DatabaseProvider {
                         endDate.getTimeInMillis()));
         if (events != null) {
             events = EventsUtils.createOrderedEventsWithPeriodically(events, startDate, endDate, includeOldEvents);
-            if (events.size() < minItemsCount) {
-                events = getNearbyEvents(start, daysCount * 2, minItemsCount, includeOldEvents);
-            }
         }
 
         return events;

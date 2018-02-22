@@ -4,19 +4,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Toasts;
+import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
@@ -27,7 +37,6 @@ import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
-import com.indoor.flowers.util.ProgressShowingUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
 import com.squareup.picasso.Picasso;
@@ -38,7 +47,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
+import butterknife.OnEditorAction;
 import butterknife.Unbinder;
 
 public class FlowerFragment extends Fragment implements OnPhotoTakenListener, OnItemClickListener<Event> {
@@ -54,11 +63,14 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     @BindView(R.id.faf_events_list)
     RecyclerView eventsList;
     @BindView(R.id.faf_add_event)
-    Button addEventButton;
-    @BindView(R.id.faf_delete)
-    Button deleteButton;
+    View addEventButton;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.ff_tabs)
+    TabLayout tabLayout;
+    @BindView(R.id.faf_progress_container)
+    ViewGroup progressContainer;
 
-    private ProgressShowingUtil progressUtil;
     private PermissionHelper permissionHelper;
 
     private Flower flower;
@@ -88,7 +100,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressUtil = new ProgressShowingUtil(this);
+        setHasOptionsMenu(true);
         provider = new FlowersProvider(getActivity());
         long flowerId = getFlowerIdFromArgs();
         if (flowerId != DatabaseProvider.DEFAULT_ID) {
@@ -104,6 +116,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flower, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setupActionBar();
         permissionHelper.setSnackbarContainer(snackbarContainer);
         setupEventsList();
         refreshViewWithFlower();
@@ -113,7 +126,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
 
     @Override
     public void onDestroyView() {
-        progressUtil.hideProgress();
+        hideProgress();
         unbinder.unbind();
         super.onDestroyView();
     }
@@ -124,7 +137,27 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         super.onDestroy();
     }
 
-    @OnClick(R.id.faf_choose_image)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        if (flower != null && flower.getId() != DatabaseProvider.DEFAULT_ID) {
+            inflater.inflate(R.menu.menu_flower, menu);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mf_delete) {
+            FlowersAlarmsUtils.deleteAlarmsForEvents(getActivity(),
+                    provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME));
+            provider.deleteFlower(flower, true);
+            getActivity().onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick({R.id.faf_choose_image, R.id.faf_flower_image})
     void onChooseImageClicked() {
         if (permissionHelper.hasAllPermissions()) {
             TakePhotoUtils.getInstance().showSystemChooser(this);
@@ -133,35 +166,34 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         }
     }
 
-    @OnClick(R.id.faf_save)
-    void onCreateFlowerClicked() {
-        if (TextUtils.isEmpty(flower.getName())) {
-            Toasts.showLong(R.string.faf_error_name_empty);
-            return;
+    @OnEditorAction(R.id.faf_flower_name)
+    boolean onFlowerNameChanged(TextView v, int actionId, KeyEvent event) {
+        String name = nameView.getText().toString().trim();
+        if (actionId == EditorInfo.IME_ACTION_DONE
+                && !TextUtils.isEmpty(name)
+                && !name.equals(flower.getName())) {
+            flower.setName(name);
+            provider.createOrUpdateFlower(flower);
+
+            refreshEventsVisibility();
+            getActivity().invalidateOptionsMenu();
         }
 
-        provider.createOrUpdateFlower(flower);
-        refreshEventsVisibility();
-        refreshDeleteButtonVisibility();
-    }
-
-    @OnClick(R.id.faf_delete)
-    void onDeleteFlowerClicked() {
-        FlowersAlarmsUtils.deleteAlarmsForEvents(getActivity(),
-                provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME));
-        provider.deleteFlower(flower, true);
-        getActivity().onBackPressed();
+        return false;
     }
 
     @OnClick(R.id.faf_add_event)
     void onAddEventClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                EventFragment.newInstance(flower.getId(), Flower.TABLE_NAME), null, true);
-    }
+        Fragment fragment = null;
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            fragment = EventFragment.newInstance(flower.getId(), Flower.TABLE_NAME);
+        } else if (tabLayout.getSelectedTabPosition() == 1) {
+            fragment = GroupFragment.newInstanceForFlower(flower.getId());
+        }
 
-    @OnTextChanged(R.id.faf_flower_name)
-    void onNameTextChanged(CharSequence s, int start, int before, int count) {
-        flower.setName(nameView.getText().toString());
+        if (fragment != null) {
+            Fragments.replace(getFragmentManager(), android.R.id.content, fragment, null, true);
+        }
     }
 
     @Override
@@ -172,7 +204,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
             case TakePhotoUtils.REQUEST_CODE_GALLERY:
             case TakePhotoUtils.REQUEST_CODE_SYSTEM_CHOOSER:
                 if (TakePhotoUtils.getInstance().isPhotoRequestOk(requestCode, resultCode)) {
-                    progressUtil.showProgress();
+                    showProgress();
                     TakePhotoUtils.getInstance().onActivityResult(requestCode, resultCode, data, this);
                 }
                 break;
@@ -182,14 +214,18 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     @Override
     public void onPhotoTaken(File photo) {
         flower.setImagePath(photo.getPath());
-        Picasso.with(getActivity()).load(photo).into(imageView);
-        progressUtil.hideProgress();
+        Picasso.with(getActivity())
+                .load(photo)
+                .transform(new CircleTransformation(0, 0))
+                .into(imageView);
+        hideProgress();
+        provider.updateFlower(flower);
     }
 
     @Override
     public void onPhotoError() {
         Toasts.showLong(R.string.photo_choose_error);
-        progressUtil.hideProgress();
+        hideProgress();
     }
 
     @Override
@@ -223,18 +259,9 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         if (!TextUtils.isEmpty(flower.getImagePath())) {
             Picasso.with(getActivity())
                     .load(new File(flower.getImagePath()))
+                    .transform(new CircleTransformation(0, 0))
                     .into(imageView);
         }
-
-        refreshDeleteButtonVisibility();
-    }
-
-    private void refreshDeleteButtonVisibility() {
-        if (deleteButton == null) {
-            return;
-        }
-
-        deleteButton.setVisibility(flower.getId() == DatabaseProvider.DEFAULT_ID ? View.GONE : View.VISIBLE);
     }
 
     private void refreshEventsVisibility() {
@@ -251,8 +278,36 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         }
     }
 
+    private void setupActionBar() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolbar);
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
+            }
+        }
+    }
+
     private long getFlowerIdFromArgs() {
         return getArguments() != null && getArguments().containsKey(KEY_FLOWER_ID)
                 ? getArguments().getLong(KEY_FLOWER_ID, -1) : -1;
+    }
+
+    private void showProgress() {
+        if (progressContainer == null) {
+            return;
+        }
+
+        progressContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        if (progressContainer == null) {
+            return;
+        }
+
+        progressContainer.setVisibility(View.GONE);
     }
 }

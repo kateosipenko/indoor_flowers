@@ -107,16 +107,18 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
         if (startDate != null) {
             startDate = (Calendar) startDate.clone();
             startDate.add(Calendar.DAY_OF_YEAR, 1);
-            List<Event> events = provider.getNearbyEvents(startDate, LOAD_DAYS_COUNT,
-                    LOAD_ITEMS_COUNT, false);
+            List<Event> events = provider.getNearbyEvents(startDate, LOAD_DAYS_COUNT, false);
             adapter.addEvents(events);
             loadMoreListener.onLoadingCompleted();
         }
     }
 
     private void initialLoadEvents() {
-        List<Event> events = provider.getNearbyEvents(Calendar.getInstance(), LOAD_DAYS_COUNT,
-                LOAD_ITEMS_COUNT, true);
+        List<Event> events = provider.getNearbyEvents(Calendar.getInstance(), LOAD_DAYS_COUNT, true);
+        if (events.size() < LOAD_ITEMS_COUNT && events.size() > 0) {
+            events = provider.getNearbyEvents(Calendar.getInstance(), LOAD_DAYS_COUNT * 2, true);
+        }
+
         adapter.setItems(events);
         loadMoreListener.onLoadingCompleted();
     }

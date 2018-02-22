@@ -48,6 +48,20 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
         return selectedFlowers;
     }
 
+    public void addSelected(long flowerId) {
+        Flower selectedItem = null;
+        for (Flower flower : items) {
+            if (flower.getId() == flowerId) {
+                selectedItem = flower;
+                break;
+            }
+        }
+
+        if (selectedItem != null && !selectedFlowers.contains(selectedItem)) {
+            selectedFlowers.add(selectedItem);
+        }
+    }
+
     @Override
     public int getRowLayoutRes() {
         return R.layout.row_flower;

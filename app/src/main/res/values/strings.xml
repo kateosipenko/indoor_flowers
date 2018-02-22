@@ -48,7 +48,8 @@
     <!--Add flower-->
     <string name="faf_flower_name_hint">Имя вашего растения</string>
     <string name="faf_add_event">Добавить уведомление</string>
-
+    <string name="faf_tab_notifications">Уведомления</string>
+    <string name="faf_tab_groups">Группы</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
 
     <!--Create group-->

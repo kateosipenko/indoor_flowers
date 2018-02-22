@@ -1,140 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gray_light">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar_main" />
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/faf_snackbar"
+        android:background="@color/window_bg">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/faf_flower_container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/faf_flower_container_margin"
-        android:layout_marginStart="@dimen/faf_flower_container_margin"
-        android:layout_marginTop="@dimen/faf_flower_container_margin"
-        android:background="@color/material_white"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/faf_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/faf_flower_image"
-            android:layout_width="@dimen/faf_image_size"
-            android:layout_height="@dimen/faf_image_size"
-            android:background="@drawable/bg_gradient"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/faf_flower_name"
+            <include layout="@layout/toolbar_main" />
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingBottom="?actionBarSize"
+                    android:paddingEnd="@dimen/margin_default"
+                    android:paddingStart="@dimen/margin_default"
+                    android:paddingTop="@dimen/margin_default">
+
+                    <ImageView
+                        android:id="@+id/faf_flower_image"
+                        android:layout_width="@dimen/ff_image_size"
+                        android:layout_height="@dimen/ff_image_size"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/ic_create_flower"
+                        android:elevation="@dimen/margin_default"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/toolbar"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageButton
+                        android:id="@+id/faf_choose_image"
+                        style="@style/ImageButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="@dimen/margin_fab"
+                        android:padding="@dimen/margin_small"
+                        android:src="@drawable/ic_photo_camera"
+                        app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
+                        app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
+                        tools:ignore="ContentDescription" />
+
+                    <EditText
+                        android:id="@+id/faf_flower_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="@dimen/margin_default"
+                        android:backgroundTint="@color/material_white"
+                        android:ellipsize="end"
+                        android:hint="@string/faf_flower_name_hint"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/white_primary_text"
+                        android:textColorHint="@color/white_disabled_text"
+                        android:textSize="@dimen/text_headline_small"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/faf_flower_image"
+                        app:layout_constraintTop_toTopOf="@id/faf_flower_image" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/ff_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                app:layout_constraintTop_toBottomOf="@id/faf_flower_image">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/ff_tab_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/faf_tab_notifications" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/ff_tab_groups"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/faf_tab_groups" />
+
+            </android.support.design.widget.TabLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/faf_events_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_default"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toBottomOf="@id/ff_tabs" />
 
-        <ImageButton
-            android:id="@+id/faf_choose_image"
-            android:layout_width="@dimen/faf_edit_image_size"
-            android:layout_height="@dimen/faf_edit_image_size"
-            android:background="@drawable/shape_circle_accent"
-            android:padding="@dimen/margin_small"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toBottomOf="@id/faf_flower_image"
-            app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
-            tools:ignore="ContentDescription" />
-
-        <EditText
-            android:id="@+id/faf_flower_name"
-            android:layout_width="match_parent"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/faf_add_event"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="@dimen/margin_normal"
-            android:hint="@string/faf_flower_name_hint"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            android:textColor="@color/black_primary_text"
-            android:textColorHint="@color/black_secondary_text"
-            app:layout_constraintBottom_toTopOf="@+id/faf_save_container"
-            app:layout_constraintTop_toBottomOf="@id/faf_flower_image"
-            tools:ignore="LabelFor" />
-
-        <LinearLayout
-            android:id="@+id/faf_save_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/margin_fab"
+            android:src="@drawable/ic_add"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/faf_flower_name">
+            app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
-                android:id="@+id/faf_save"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/primary800"
-                android:text="@string/action_save"
-                android:textColor="@color/material_white" />
-
-            <Button
-                android:id="@+id/faf_delete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_default"
-                android:layout_weight="1"
-                android:background="@color/accent700"
-                android:text="@string/action_delete"
-                android:textColor="@color/material_white"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </android.support.constraint.ConstraintLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/margin_normal"
-        android:layout_marginEnd="@dimen/margin_normal"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_default"
-        android:background="@color/material_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/faf_flower_container" />
-
-    <Button
-        android:id="@+id/faf_add_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_default"
-        android:background="@color/accent200"
-        android:text="@string/faf_add_event"
-        android:textColor="@color/material_white"
-        app:layout_constraintBottom_toTopOf="@+id/faf_snackbar" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/faf_events_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_default"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:padding="@dimen/margin_default"
-        app:layout_constraintBottom_toTopOf="@+id/faf_add_event"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/faf_flower_container" />
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/faf_snackbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:theme="@style/AppThemeDark" />
 
-</android.support.constraint.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/faf_progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_shadow"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:theme="@style/Dialog.ProgressDialog" />
+    </FrameLayout>
+</RelativeLayout>

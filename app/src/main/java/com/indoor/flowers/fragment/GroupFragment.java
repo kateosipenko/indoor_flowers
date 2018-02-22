@@ -36,6 +36,7 @@ import butterknife.Unbinder;
 public class GroupFragment extends Fragment implements OnItemClickListener<Event> {
 
     private static final String KEY_GROUP_ID = "key_group_id";
+    private static final String KEY_FLOWER_ID = "key_flower_id";
 
     @BindView(R.id.fg_title)
     EditText nameView;
@@ -62,6 +63,15 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
     public static GroupFragment newInstance(long groupId) {
         Bundle args = new Bundle();
         args.putLong(KEY_GROUP_ID, groupId);
+
+        GroupFragment fragment = new GroupFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static GroupFragment newInstanceForFlower(long flowerId) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_FLOWER_ID, flowerId);
 
         GroupFragment fragment = new GroupFragment();
         fragment.setArguments(args);
@@ -216,5 +226,12 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
 
         List<Flower> flowers = flowersProvider.getFlowersForGroup(group.getId());
         flowersAdapter.setSelectedFlowers(flowers);
+
+        flowersAdapter.addSelected(getFlowerIdFromArgs());
+    }
+
+    private long getFlowerIdFromArgs() {
+        return getArguments() != null ? getArguments().getLong(KEY_FLOWER_ID, DatabaseProvider.DEFAULT_ID)
+                : DatabaseProvider.DEFAULT_ID;
     }
 }
