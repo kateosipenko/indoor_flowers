@@ -6,14 +6,14 @@ import java.util.Calendar;
 
 public class DbTypesConverter {
     @TypeConverter
-    public static long dateToLong(Calendar calendar) {
-        return calendar != null ? calendar.getTimeInMillis() : 0;
+    public static Long dateToLong(Calendar calendar) {
+        return calendar != null ? calendar.getTimeInMillis() : null;
     }
 
     @TypeConverter
-    public static Calendar longToDate(long value) {
+    public static Calendar longToDate(Long value) {
         Calendar result = null;
-        if (value != 0) {
+        if (value != null && value != 0) {
             result = Calendar.getInstance();
             result.setTimeInMillis(value);
         }

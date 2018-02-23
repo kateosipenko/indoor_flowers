@@ -4,8 +4,8 @@ import android.support.annotation.ColorInt;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.model.Event;
-import com.indoor.flowers.model.EventType;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,19 +15,19 @@ import java.util.List;
 
 public class EventsUtils {
 
-    public static String getTitleForEvent(@EventType int eventType) {
+    public static String getTitleForEvent(@NotificationType int eventType) {
         String result = "";
         switch (eventType) {
-            case EventType.CREATED:
+            case NotificationType.CREATED:
                 result = Res.getString(R.string.event_created);
                 break;
-            case EventType.FERTILIZER:
+            case NotificationType.FERTILIZER:
                 result = Res.getString(R.string.event_fertilizer);
                 break;
-            case EventType.TRANSPLANTING:
+            case NotificationType.TRANSPLANTING:
                 result = Res.getString(R.string.event_transplanting);
                 break;
-            case EventType.WATERING:
+            case NotificationType.WATERING:
                 result = Res.getString(R.string.event_watering);
                 break;
         }
@@ -35,19 +35,19 @@ public class EventsUtils {
     }
 
     @ColorInt
-    public static int getColorForEventType(@EventType int eventType) {
+    public static int getColorForEventType(@NotificationType int eventType) {
         @ColorInt int result = Res.getColor(R.color.material_white);
         switch (eventType) {
-            case EventType.CREATED:
+            case NotificationType.CREATED:
                 result = Res.getColor(R.color.event_created);
                 break;
-            case EventType.FERTILIZER:
+            case NotificationType.FERTILIZER:
                 result = Res.getColor(R.color.event_fertilizer);
                 break;
-            case EventType.TRANSPLANTING:
+            case NotificationType.TRANSPLANTING:
                 result = Res.getColor(R.color.event_transplantation);
                 break;
-            case EventType.WATERING:
+            case NotificationType.WATERING:
                 result = Res.getColor(R.color.event_watering);
                 break;
         }
@@ -55,25 +55,25 @@ public class EventsUtils {
         return result;
     }
 
-    public static List<Event> createOrderedEventsWithPeriodically(List<Event> events, Calendar minDate,
-                                                                  Calendar maxDate, boolean includeOldEvents) {
-        List<Event> result = new ArrayList<>();
-        for (Event event : events) {
+    public static List<Notification> createOrderedEventsWithPeriodically(List<Notification> events, Calendar minDate,
+                                                                         Calendar maxDate, boolean includeOldEvents) {
+        List<Notification> result = new ArrayList<>();
+        for (Notification event : events) {
             if (event.getFrequency() != null) {
-                if (event.getEventDate().after(maxDate)) {
+                if (event.getDate().after(maxDate)) {
                     continue;
                 }
 
-                Calendar eventDate = (Calendar) event.getEventDate().clone();
+                Calendar eventDate = (Calendar) event.getDate().clone();
                 if (eventDate.before(minDate) && !includeOldEvents) {
-                    long daysDiff = CalendarUtils.getDaysDiff(event.getEventDate(), minDate);
+                    long daysDiff = CalendarUtils.getDaysDiff(event.getDate(), minDate);
                     eventDate = (Calendar) minDate.clone();
                     eventDate.add(Calendar.DAY_OF_YEAR, (int) (daysDiff % event.getFrequency()));
                 }
 
                 do {
-                    Event periodically = event.clone();
-                    periodically.setEventDate(eventDate);
+                    Notification periodically = event.clone();
+                    periodically.setDate(eventDate);
                     result.add(periodically);
                     eventDate = (Calendar) eventDate.clone();
                     eventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
@@ -87,39 +87,39 @@ public class EventsUtils {
         return result;
     }
 
-    public static HashMap<Integer, List<Event>> groupEventsByDays(List<Event> events, Calendar minDate,
-                                                                  Calendar maxDate) {
-        HashMap<Integer, List<Event>> eventsByDays = new HashMap<>();
+    public static HashMap<Integer, List<Notification>> groupNotifications(List<Notification> notifications, Calendar minDate,
+                                                                          Calendar maxDate) {
+        HashMap<Integer, List<Notification>> eventsByDays = new HashMap<>();
         int daysCount = CalendarUtils.getDaysDiff(minDate, maxDate);
         int startDayOfYear = minDate.get(Calendar.DAY_OF_YEAR);
         for (int i = 0; i < daysCount; i++) {
-            eventsByDays.put(startDayOfYear, new ArrayList<Event>());
+            eventsByDays.put(startDayOfYear, new ArrayList<Notification>());
             ++startDayOfYear;
         }
 
-        for (Event event : events) {
-            if (event.getFrequency() != null) {
-                if (event.getEventDate().after(maxDate)) {
+        for (Notification notification : notifications) {
+            if (notification.getFrequency() != null) {
+                if (notification.getDate().after(maxDate)) {
                     continue;
                 }
 
-                int firstEventDay = event.getEventDate().get(Calendar.DAY_OF_YEAR);
+                int firstEventDay = notification.getDate().get(Calendar.DAY_OF_YEAR);
                 if (!eventsByDays.containsKey(firstEventDay)) {
-                    long daysDiff = CalendarUtils.getDaysDiff(event.getEventDate(), minDate);
-                    firstEventDay = (int) (daysDiff % event.getFrequency()
+                    long daysDiff = CalendarUtils.getDaysDiff(notification.getDate(), minDate);
+                    firstEventDay = (int) (daysDiff % notification.getFrequency()
                             + minDate.get(Calendar.DAY_OF_YEAR));
                 }
-                List<Event> eventsPerDay = eventsByDays.get(firstEventDay);
-                if (eventsPerDay != null) {
+                List<Notification> itemsPerDay = eventsByDays.get(firstEventDay);
+                if (itemsPerDay != null) {
                     do {
-                        eventsPerDay.add(event);
-                        firstEventDay += event.getFrequency();
-                        eventsPerDay = eventsByDays.get(firstEventDay);
-                    } while (eventsPerDay != null);
+                        itemsPerDay.add(notification);
+                        firstEventDay += notification.getFrequency();
+                        itemsPerDay = eventsByDays.get(firstEventDay);
+                    } while (itemsPerDay != null);
                 }
             } else {
-                List<Event> eventsPerDay = eventsByDays.get(event.getEventDate().get(Calendar.DAY_OF_YEAR));
-                eventsPerDay.add(event);
+                List<Notification> itemsPerDay = eventsByDays.get(notification.getDate().get(Calendar.DAY_OF_YEAR));
+                itemsPerDay.add(notification);
             }
         }
 

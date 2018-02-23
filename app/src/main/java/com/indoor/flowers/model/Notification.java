@@ -10,18 +10,18 @@ import com.indoor.flowers.database.DbTypesConverter;
 
 import java.util.Calendar;
 
-@Entity(tableName = Event.TABLE_NAME)
+@Entity(tableName = Notification.TABLE_NAME)
 @TypeConverters({DbTypesConverter.class})
-public class Event {
+public class Notification {
 
-    public static final String TABLE_NAME = "EventTable";
+    public static final String TABLE_NAME = "NotificationTable";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Columns.ID)
     private long id;
-    @ColumnInfo(name = Columns.EVENT_TYPE)
-    @EventType
-    private int eventType;
+    @ColumnInfo(name = Columns.TYPE)
+    @NotificationType
+    private int type;
     @ColumnInfo(name = Columns.TARGET_ID)
     private long targetId;
     @ColumnInfo(name = Columns.TITLE)
@@ -30,27 +30,27 @@ public class Event {
     private String comment;
     @ColumnInfo(name = Columns.TARGET_TABLE)
     private String targetTable;
-    @ColumnInfo(name = Columns.CREATION_DATE)
-    private Calendar creationDate;
-    @ColumnInfo(name = Columns.EVENT_DATE)
-    private Calendar eventDate;
+    @ColumnInfo(name = Columns.DATE)
+    private Calendar date;
     @ColumnInfo(name = Columns.END_DATE)
     private Calendar endDate;
     @ColumnInfo(name = Columns.FREQUENCY)
     private Integer frequency;
+    @ColumnInfo(name = Columns.ACTIVE)
+    private boolean isActive;
 
-    public Event clone() {
-        Event result = new Event();
+    public Notification clone() {
+        Notification result = new Notification();
         result.setId(id);
-        result.setEventType(eventType);
+        result.setType(type);
         result.setTargetId(targetId);
         result.setTargetTable(targetTable);
         result.setTitle(title);
         result.setComment(comment);
-        result.setCreationDate(creationDate);
-        result.setEventDate(eventDate);
+        result.setDate(date);
         result.setEndDate(endDate);
         result.setFrequency(frequency);
+        result.setActive(isActive);
         return result;
     }
 
@@ -62,13 +62,13 @@ public class Event {
         this.id = id;
     }
 
-    @EventType
-    public int getEventType() {
-        return eventType;
+    @NotificationType
+    public int getType() {
+        return type;
     }
 
-    public void setEventType(@EventType int eventType) {
-        this.eventType = eventType;
+    public void setType(@NotificationType int type) {
+        this.type = type;
     }
 
     public long getTargetId() {
@@ -79,20 +79,12 @@ public class Event {
         this.targetId = targetId;
     }
 
-    public Calendar getCreationDate() {
-        return creationDate;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setCreationDate(Calendar creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Calendar getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(Calendar eventDate) {
-        this.eventDate = eventDate;
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
     public String getTargetTable() {
@@ -133,5 +125,13 @@ public class Event {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

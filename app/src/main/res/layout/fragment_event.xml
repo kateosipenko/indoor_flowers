@@ -68,6 +68,39 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/fe_event_end_date_group"
+        style="@style/FieldContainerStyle"
+        android:layout_marginTop="@dimen/margin_small">
+
+        <TextView
+            android:id="@+id/fe_event_end_date_title"
+            style="@style/FieldHeaderStyle"
+            android:text="@string/fe_event_end_date" />
+
+        <ImageButton
+            android:id="@+id/fe_end_date_clear"
+            style="@style/ImageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/fe_event_end_date_title"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_clear"
+            android:tint="@color/black_disabled_text"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/fe_event_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fe_event_end_date_title"
+            android:textColor="@color/black_primary_text"
+            android:textSize="@dimen/text_body_medium"
+            tools:text="15/08/2018" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/fe_event_time_group"
         style="@style/FieldContainerStyle"

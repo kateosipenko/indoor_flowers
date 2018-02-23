@@ -16,9 +16,9 @@ import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 import com.indoor.flowers.activity.MainActivity;
-import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
-import com.indoor.flowers.model.EventType;
+import com.indoor.flowers.database.provider.NotificationsProvider;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
 
 import java.util.List;
 import java.util.Objects;
@@ -30,18 +30,18 @@ public class NotificationsUtils {
     private static final String NOTIFICATION_CHANEL_ID = "6fc42723-0016-4964-b748-5f78fccb1b1f";
     private static final String NOTIFICATION_CHANEL_NAME = "FlowersWateringChannel";
 
-    public static void cancelEventNotifications(Context context, List<Event> events) {
+    public static void cancelEventNotifications(Context context, List<Notification> events) {
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         if (manager == null) {
             return;
         }
 
-        for (Event event : events) {
+        for (Notification event : events) {
             manager.cancel(getNotificationId(event));
         }
     }
 
-    public static void cancelEventNotifications(Context context, Event event) {
+    public static void cancelEventNotifications(Context context, Notification event) {
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         if (manager == null) {
             return;
@@ -62,28 +62,28 @@ public class NotificationsUtils {
 
         checkNotificationChannel(manager);
 
-        FlowersProvider provider = new FlowersProvider(context);
-        Event event = provider.getEventById(eventId);
+        NotificationsProvider provider = new NotificationsProvider(context);
+        Notification event = provider.getNotificationById(eventId);
         provider.unbind();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANEL_ID);
         builder.setColorized(true);
         builder.setContentTitle(event.getTitle());
         builder.setContentText(event.getComment());
-        switch (event.getEventType()) {
-            case EventType.FERTILIZER:
+        switch (event.getType()) {
+            case NotificationType.FERTILIZER:
                 builder.setSubText(Res.getString(R.string.event_fertilizer));
                 break;
-            case EventType.TRANSPLANTING:
+            case NotificationType.TRANSPLANTING:
                 builder.setSubText(Res.getString(R.string.event_transplanting));
                 break;
-            case EventType.WATERING:
+            case NotificationType.WATERING:
                 builder.setSubText(Res.getString(R.string.event_watering));
                 break;
         }
 
         builder.setSmallIcon(R.drawable.ic_notification_watering);
-        builder.setColor(EventsUtils.getColorForEventType(event.getEventType()));
+        builder.setColor(EventsUtils.getColorForEventType(event.getType()));
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
@@ -111,7 +111,7 @@ public class NotificationsUtils {
         }
     }
 
-    private static int getNotificationId(Event event) {
-        return Objects.hash(event.getId(), event.getEventType());
+    private static int getNotificationId(Notification event) {
+        return Objects.hash(event.getId(), event.getType());
     }
 }

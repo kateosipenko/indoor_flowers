@@ -8,7 +8,7 @@ public @interface Columns {
     String IMAGE_PATH = "image_path";
     String GROUP_ID = "group_id";
     String FLOWER_ID = "flower_id";
-    String EVENT_TYPE = "event_type";
+    String TYPE = "type";
     String TARGET_ID = "target_id";
     String CREATION_DATE = "creation_date";
     String EVENT_DATE = "event_date";
@@ -17,4 +17,7 @@ public @interface Columns {
     String END_DATE = "end_date";
     String TITLE = "title";
     String COMMENT = "comment";
+    String DATE = "date";
+    String NOTIFICATION_ID = "notification_id";
+    String ACTIVE = "active";
 }

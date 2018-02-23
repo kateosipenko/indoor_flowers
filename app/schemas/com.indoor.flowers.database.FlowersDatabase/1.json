@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1df12d42454f64b10a585821ae6a79c6",
+    "identityHash": "e564a712a6d480189852303801edbc12",
     "entities": [
       {
         "tableName": "GroupTable",
@@ -113,8 +113,8 @@
         ]
       },
       {
-        "tableName": "EventTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_type` INTEGER NOT NULL, `target_id` INTEGER NOT NULL, `title` TEXT, `comment` TEXT, `target_table` TEXT, `creation_date` INTEGER, `event_date` INTEGER, `end_date` INTEGER, `frequency` INTEGER)",
+        "tableName": "NotificationTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` INTEGER NOT NULL, `target_id` INTEGER NOT NULL, `title` TEXT, `comment` TEXT, `target_table` TEXT, `date` INTEGER, `end_date` INTEGER, `frequency` INTEGER, `active` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -123,8 +123,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "eventType",
-            "columnName": "event_type",
+            "fieldPath": "type",
+            "columnName": "type",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -153,14 +153,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "creationDate",
-            "columnName": "creation_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "eventDate",
-            "columnName": "event_date",
+            "fieldPath": "date",
+            "columnName": "date",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -175,6 +169,12 @@
             "columnName": "frequency",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -185,11 +185,55 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "EventActionTable",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `notification_id` INTEGER NOT NULL, `date` INTEGER, FOREIGN KEY(`notification_id`) REFERENCES `NotificationTable`(`_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notificationId",
+            "columnName": "notification_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "NotificationTable",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "notification_id"
+            ],
+            "referencedColumns": [
+              "_id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1df12d42454f64b10a585821ae6a79c6\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e564a712a6d480189852303801edbc12\")"
     ]
   }
 }

@@ -8,6 +8,11 @@ import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.FlowersApp;
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.FlowersDatabase;
+import com.indoor.flowers.model.EventAction;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
+
+import java.util.Calendar;
 
 public abstract class DatabaseProvider {
 
@@ -89,5 +94,22 @@ public abstract class DatabaseProvider {
         }
 
         return result;
+    }
+
+
+    void createEventForCreation(long targetId, String tableName, String title) {
+        Notification notification = new Notification();
+        notification.setTargetId(targetId);
+        notification.setTargetTable(tableName);
+        notification.setDate(java.util.Calendar.getInstance());
+        notification.setType(NotificationType.CREATED);
+        notification.setTitle(title);
+        long id = database.getNotificationDao().insert(notification);
+
+        EventAction eventAction = new EventAction();
+        eventAction.setNotificationId(id);
+        eventAction.setDate(Calendar.getInstance());
+        eventAction.setId(invalidateIdForInsert(eventAction.getId()));
+        database.getEventActionDao().insert(eventAction);
     }
 }

@@ -5,10 +5,10 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@IntDef({EventType.CREATED, EventType.WATERING, EventType.FERTILIZER,
-        EventType.TRANSPLANTING})
+@IntDef({NotificationType.CREATED, NotificationType.WATERING, NotificationType.FERTILIZER,
+        NotificationType.TRANSPLANTING})
 @Retention(RetentionPolicy.SOURCE)
-public @interface EventType {
+public @interface NotificationType {
     int CREATED = 0;
     int WATERING = 1;
     int FERTILIZER = 2;

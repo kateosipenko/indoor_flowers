@@ -51,6 +51,7 @@
     <string name="faf_tab_notifications">Уведомления</string>
     <string name="faf_tab_groups">Группы</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
+    <string name="faf_date_not_set">Не задано</string>
 
     <!--Create group-->
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
@@ -74,6 +75,7 @@
     <string name="fe_frequency">Повтор в днях</string>
     <string name="fe_frequency_hint">Не задан</string>
     <string name="fe_event_date">Начало</string>
+    <string name="fe_event_end_date">Конец</string>
     <string name="fe_event_time">Время уведомлений</string>
     <string name="fe_event_name_hint">Название уведомления</string>
 

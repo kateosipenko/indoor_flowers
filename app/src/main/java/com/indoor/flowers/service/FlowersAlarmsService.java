@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.indoor.flowers.database.provider.DatabaseProvider;
-import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.database.provider.NotificationsProvider;
+import com.indoor.flowers.model.Notification;
 
 import java.util.Calendar;
 
@@ -20,7 +20,7 @@ public class FlowersAlarmsService extends IntentService {
 
     private static final String EXTRA_EVENT_ID = "extra_flower_id";
 
-    public static Intent createDoneIntent(Context context, Event event) {
+    public static Intent createDoneIntent(Context context, Notification event) {
         Intent intent = new Intent(context, FlowersAlarmsService.class);
         intent.setAction(ACTION_SET_WATERING_DONE);
         intent.putExtra(EXTRA_EVENT_ID, event.getId());
@@ -48,15 +48,15 @@ public class FlowersAlarmsService extends IntentService {
         if (!intent.hasExtra(EXTRA_EVENT_ID)) {
             return;
         }
-        
-        FlowersProvider provider = new FlowersProvider(this);
+
+        NotificationsProvider provider = new NotificationsProvider(this);
         long eventId = intent.getLongExtra(EXTRA_EVENT_ID, DatabaseProvider.DEFAULT_ID);
-        Event event = provider.getEventById(eventId);
+        Notification event = provider.getNotificationById(eventId);
         if (event.getFrequency() != null) {
             Calendar eventDate = Calendar.getInstance();
             eventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
-            event.setEventDate(eventDate);
-            provider.createOrUpdateEvent(event);
+            event.setDate(eventDate);
+            provider.createOrUpdateNotification(event);
         }
 
         provider.unbind();

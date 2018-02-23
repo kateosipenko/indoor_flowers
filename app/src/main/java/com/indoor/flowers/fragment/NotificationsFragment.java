@@ -16,8 +16,8 @@ import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter.NotificationDoneListener;
-import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.database.provider.NotificationsProvider;
+import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EndlessRecyclerOnScrollListener;
 import com.indoor.flowers.util.EndlessRecyclerOnScrollListener.LoadMoreScrollListener;
@@ -41,7 +41,7 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
     RecyclerView notificationsList;
 
     private Unbinder unbinder;
-    private FlowersProvider provider;
+    private NotificationsProvider provider;
     private NotificationsByDaysAdapter adapter;
     private EndlessRecyclerOnScrollListener loadMoreListener;
 
@@ -52,7 +52,7 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        provider = new FlowersProvider(getActivity());
+        provider = new NotificationsProvider(getActivity());
     }
 
     @Nullable
@@ -78,8 +78,8 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
     }
 
     @Override
-    public void onNotificationDone(final Event event) {
-        if (CalendarUtils.isToday(event.getEventDate())) {
+    public void onNotificationDone(final Notification event) {
+        if (CalendarUtils.isToday(event.getDate())) {
             provider.markEventDone(event, Calendar.getInstance());
             adapter.onNotificationDone(event);
             FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), event.getId());
@@ -107,16 +107,16 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
         if (startDate != null) {
             startDate = (Calendar) startDate.clone();
             startDate.add(Calendar.DAY_OF_YEAR, 1);
-            List<Event> events = provider.getNearbyEvents(startDate, LOAD_DAYS_COUNT, false);
+            List<Notification> events = provider.getNearbyNotifications(startDate, LOAD_DAYS_COUNT, false);
             adapter.addEvents(events);
             loadMoreListener.onLoadingCompleted();
         }
     }
 
     private void initialLoadEvents() {
-        List<Event> events = provider.getNearbyEvents(Calendar.getInstance(), LOAD_DAYS_COUNT, true);
+        List<Notification> events = provider.getNearbyNotifications(Calendar.getInstance(), LOAD_DAYS_COUNT, true);
         if (events.size() < LOAD_ITEMS_COUNT && events.size() > 0) {
-            events = provider.getNearbyEvents(Calendar.getInstance(), LOAD_DAYS_COUNT * 2, true);
+            events = provider.getNearbyNotifications(Calendar.getInstance(), LOAD_DAYS_COUNT * 2, true);
         }
 
         adapter.setItems(events);

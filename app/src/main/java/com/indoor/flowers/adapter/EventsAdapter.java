@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.indoor.flowers.R;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.util.EventsUtils;
 import com.indoor.flowers.util.RecyclerListAdapter;
 
@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EventsAdapter extends RecyclerListAdapter<Event, EventsAdapter.ViewHolder> {
+public class EventsAdapter extends RecyclerListAdapter<Notification, EventsAdapter.ViewHolder> {
 
     @Override
     public int getRowLayoutRes() {
@@ -55,8 +55,8 @@ public class EventsAdapter extends RecyclerListAdapter<Event, EventsAdapter.View
             }
         }
 
-        private void update(Event event) {
-            iconView.setBackgroundTintList(ColorStateList.valueOf(EventsUtils.getColorForEventType(event.getEventType())));
+        private void update(Notification event) {
+            iconView.setBackgroundTintList(ColorStateList.valueOf(EventsUtils.getColorForEventType(event.getType())));
             titleView.setText(event.getTitle());
             commentView.setText(event.getComment());
         }

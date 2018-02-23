@@ -31,8 +31,9 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.PermissionHelper;
@@ -50,7 +51,7 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.Unbinder;
 
-public class FlowerFragment extends Fragment implements OnPhotoTakenListener, OnItemClickListener<Event> {
+public class FlowerFragment extends Fragment implements OnPhotoTakenListener, OnItemClickListener<Notification> {
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
@@ -75,6 +76,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
 
     private Flower flower;
     private FlowersProvider provider;
+    private NotificationsProvider notificationsProvider;
 
     private EventsAdapter eventsAdapter;
 
@@ -102,6 +104,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         provider = new FlowersProvider(getActivity());
+        notificationsProvider = new NotificationsProvider(getActivity());
         long flowerId = getFlowerIdFromArgs();
         if (flowerId != DatabaseProvider.DEFAULT_ID) {
             flower = provider.getFlowerById(flowerId);
@@ -133,6 +136,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
 
     @Override
     public void onDestroy() {
+        notificationsProvider.unbind();
         provider.unbind();
         super.onDestroy();
     }
@@ -149,7 +153,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mf_delete) {
             FlowersAlarmsUtils.deleteAlarmsForEvents(getActivity(),
-                    provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME));
+                    notificationsProvider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME));
             provider.deleteFlower(flower, true);
             getActivity().onBackPressed();
         }
@@ -186,7 +190,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     void onAddEventClicked() {
         Fragment fragment = null;
         if (tabLayout.getSelectedTabPosition() == 0) {
-            fragment = EventFragment.newInstance(flower.getId(), Flower.TABLE_NAME);
+            fragment = NotificationFragment.newInstance(flower.getId(), Flower.TABLE_NAME);
         } else if (tabLayout.getSelectedTabPosition() == 1) {
             fragment = GroupFragment.newInstanceForFlower(flower.getId());
         }
@@ -229,13 +233,13 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
     }
 
     @Override
-    public void onItemClicked(Event item) {
+    public void onItemClicked(Notification item) {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                EventFragment.newInstance(item.getId()), null, true);
+                NotificationFragment.newInstance(item.getId()), null, true);
     }
 
     private void reloadEvents() {
-        List<Event> events = provider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME);
+        List<Notification> events = notificationsProvider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME);
         eventsAdapter.setItems(events);
     }
 

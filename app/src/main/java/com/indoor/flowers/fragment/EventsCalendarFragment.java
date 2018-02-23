@@ -19,10 +19,10 @@ import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
 import com.indoor.flowers.adapter.EventsPerDayAdapter;
-import com.indoor.flowers.database.provider.FlowersProvider;
+import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.CalendarFilter;
-import com.indoor.flowers.model.Event;
-import com.indoor.flowers.model.EventWithTarget;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.view.CalendarView;
 import com.indoor.flowers.view.CalendarView.OnMonthChangedListener;
@@ -48,7 +48,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     RecyclerView eventsPerDayList;
 
     private Unbinder unbinder;
-    private FlowersProvider provider;
+    private NotificationsProvider provider;
     private EventsPerDayAdapter eventsPerDayAdapter;
     private CalendarFilter filter;
 
@@ -62,7 +62,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        provider = new FlowersProvider(getActivity());
+        provider = new NotificationsProvider(getActivity());
         filter = FilesUtils.getCalendarFilter();
     }
 
@@ -101,8 +101,8 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     }
 
     @Override
-    public void onDayClicked(Calendar item, List<Event> eventsPerDay) {
-        List<EventWithTarget> eventWithTargets = provider.getEventsTarget(eventsPerDay);
+    public void onDayClicked(Calendar item, List<Notification> eventsPerDay) {
+        List<NotificationWithTarget> eventWithTargets = provider.getNotificationsTarget(eventsPerDay);
         eventsPerDayAdapter.setItems(eventWithTargets);
     }
 
@@ -112,7 +112,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                final HashMap<Integer, List<Event>> events = provider.getEventsForPeriod(startDate,
+                final HashMap<Integer, List<Notification>> events = provider.getEventsForPeriod(startDate,
                         endDate, filter);
                 Activity activity = getActivity();
                 if (activity != null && !activity.isDestroyed()) {

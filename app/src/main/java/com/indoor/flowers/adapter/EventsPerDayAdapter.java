@@ -17,9 +17,9 @@ import android.widget.TextView;
 import com.evgeniysharafan.utils.ColorUtils;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.model.Event;
-import com.indoor.flowers.model.EventType;
-import com.indoor.flowers.model.EventWithTarget;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.util.RecyclerListAdapter;
@@ -27,7 +27,7 @@ import com.indoor.flowers.util.RecyclerListAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, EventsPerDayAdapter.ViewHolder> {
+public class EventsPerDayAdapter extends RecyclerListAdapter<NotificationWithTarget, EventsPerDayAdapter.ViewHolder> {
 
     @Override
     public int getRowLayoutRes() {
@@ -54,9 +54,9 @@ public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, Ev
             ButterKnife.bind(this, itemView);
         }
 
-        private void update(EventWithTarget event) {
-            if (event != null && event.getEvent() != null) {
-                titleView.setBackgroundColor(getColorForEvent(event.getEvent()));
+        private void update(NotificationWithTarget event) {
+            if (event != null && event.getNotification() != null) {
+                titleView.setBackgroundColor(getColorForEvent(event.getNotification()));
                 SpannableStringBuilder builder = new SpannableStringBuilder(getEventTitle(event));
                 Drawable drawable = null;
                 String title = null;
@@ -83,20 +83,20 @@ public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, Ev
             }
         }
 
-        private String getEventTitle(EventWithTarget event) {
+        private String getEventTitle(NotificationWithTarget event) {
             String result = null;
-            switch (event.getEvent().getEventType()) {
-                case EventType.CREATED:
+            switch (event.getNotification().getType()) {
+                case NotificationType.CREATED:
                     result = event.getTarget() instanceof Group ? Res.getString(R.string.event_created_group)
                             : Res.getString(R.string.event_created_flower);
                     break;
-                case EventType.FERTILIZER:
+                case NotificationType.FERTILIZER:
                     result = Res.getString(R.string.event_fertilizer);
                     break;
-                case EventType.TRANSPLANTING:
+                case NotificationType.TRANSPLANTING:
                     result = Res.getString(R.string.event_transplanting);
                     break;
-                case EventType.WATERING:
+                case NotificationType.WATERING:
                     result = Res.getString(R.string.event_watering);
                     break;
             }
@@ -118,19 +118,19 @@ public class EventsPerDayAdapter extends RecyclerListAdapter<EventWithTarget, Ev
         }
 
         @ColorInt
-        private int getColorForEvent(Event event) {
+        private int getColorForEvent(Notification event) {
             @ColorInt int color = Color.TRANSPARENT;
-            switch (event.getEventType()) {
-                case EventType.CREATED:
+            switch (event.getType()) {
+                case NotificationType.CREATED:
                     color = Res.getColor(R.color.event_created);
                     break;
-                case EventType.FERTILIZER:
+                case NotificationType.FERTILIZER:
                     color = Res.getColor(R.color.event_fertilizer);
                     break;
-                case EventType.TRANSPLANTING:
+                case NotificationType.TRANSPLANTING:
                     color = Res.getColor(R.color.event_transplantation);
                     break;
-                case EventType.WATERING:
+                case NotificationType.WATERING:
                     color = Res.getColor(R.color.event_watering);
                     break;
             }

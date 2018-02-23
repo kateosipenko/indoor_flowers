@@ -19,9 +19,10 @@ import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
 
@@ -33,7 +34,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
-public class GroupFragment extends Fragment implements OnItemClickListener<Event> {
+public class GroupFragment extends Fragment implements OnItemClickListener<Notification> {
 
     private static final String KEY_GROUP_ID = "key_group_id";
     private static final String KEY_FLOWER_ID = "key_flower_id";
@@ -50,6 +51,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
     Button deleteButton;
 
     private FlowersProvider flowersProvider;
+    private NotificationsProvider notificationsProvider;
     private Unbinder unbinder;
 
     private Group group;
@@ -82,6 +84,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flowersProvider = new FlowersProvider(getActivity());
+        notificationsProvider = new NotificationsProvider(getActivity());
         long groupId = getArguments() != null && getArguments().containsKey(KEY_GROUP_ID)
                 ? getArguments().getLong(KEY_GROUP_ID, DatabaseProvider.DEFAULT_ID)
                 : DatabaseProvider.DEFAULT_ID;
@@ -131,14 +134,14 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
 
         flowersProvider.createOrUpdateGroup(group, flowersAdapter.getSelectedFlowers());
         refreshDeleteButtonVisibility();
-        refreshEventsVisilibty();
+        refreshEventsVisibility();
         reloadEvents();
     }
 
     @OnClick(R.id.fg_delete)
     void onDeleteClick() {
         FlowersAlarmsUtils.deleteAlarmsForEvents(getActivity(),
-                flowersProvider.getEventsForTarget(group.getId(), Group.TABLE_NAME));
+                notificationsProvider.getEventsForTarget(group.getId(), Group.TABLE_NAME));
         flowersProvider.deleteGroup(group);
         getActivity().onBackPressed();
     }
@@ -146,13 +149,13 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
     @OnClick(R.id.fg_add_event)
     void onAddEventClicked() {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                EventFragment.newInstance(group.getId(), Group.TABLE_NAME), null, true);
+                NotificationFragment.newInstance(group.getId(), Group.TABLE_NAME), null, true);
     }
 
     @Override
-    public void onItemClicked(Event item) {
+    public void onItemClicked(Notification item) {
         Fragments.replace(getFragmentManager(), android.R.id.content,
-                EventFragment.newInstance(item.getId()), null, true);
+                NotificationFragment.newInstance(item.getId()), null, true);
     }
 
     private void refreshViewWithGroup() {
@@ -162,10 +165,10 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
 
         nameView.setText(group.getName());
         refreshDeleteButtonVisibility();
-        refreshEventsVisilibty();
+        refreshEventsVisibility();
     }
 
-    private void refreshEventsVisilibty() {
+    private void refreshEventsVisibility() {
         if (eventsListView == null) {
             return;
         }
@@ -212,7 +215,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Event
             return;
         }
 
-        List<Event> events = flowersProvider.getEventsForTarget(group.getId(), Group.TABLE_NAME);
+        List<Notification> events = notificationsProvider.getEventsForTarget(group.getId(), Group.TABLE_NAME);
         eventsAdapter.setItems(events);
     }
 

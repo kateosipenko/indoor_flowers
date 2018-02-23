@@ -21,7 +21,7 @@ import com.indoor.flowers.adapter.FilterSelectionAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.CalendarFilter;
 import com.indoor.flowers.model.CalendarFilter.FilterElements;
-import com.indoor.flowers.model.EventType;
+import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.util.FilesUtils;
@@ -143,16 +143,16 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
         if (filter.getSelectedEventTypes() != null && filter.getSelectedEventTypes().size() > 0) {
             for (int eventType : filter.getSelectedEventTypes()) {
                 switch (eventType) {
-                    case EventType.CREATED:
+                    case NotificationType.CREATED:
                         createdBox.setChecked(true);
                         break;
-                    case EventType.WATERING:
+                    case NotificationType.WATERING:
                         wateringBox.setChecked(true);
                         break;
-                    case EventType.FERTILIZER:
+                    case NotificationType.FERTILIZER:
                         fertilizerBox.setChecked(true);
                         break;
-                    case EventType.TRANSPLANTING:
+                    case NotificationType.TRANSPLANTING:
                         transplantationBox.setChecked(true);
                         break;
                 }
@@ -211,16 +211,16 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
         if (!eventsAllBox.isChecked()) {
             ArrayList<Integer> filteredTypes = new ArrayList<>();
             if (wateringBox.isChecked()) {
-                filteredTypes.add(EventType.WATERING);
+                filteredTypes.add(NotificationType.WATERING);
             }
             if (createdBox.isChecked()) {
-                filteredTypes.add(EventType.CREATED);
+                filteredTypes.add(NotificationType.CREATED);
             }
             if (fertilizerBox.isChecked()) {
-                filteredTypes.add(EventType.FERTILIZER);
+                filteredTypes.add(NotificationType.FERTILIZER);
             }
             if (transplantationBox.isChecked()) {
-                filteredTypes.add(EventType.TRANSPLANTING);
+                filteredTypes.add(NotificationType.TRANSPLANTING);
             }
 
             filter.setSelectedEventTypes(filteredTypes);

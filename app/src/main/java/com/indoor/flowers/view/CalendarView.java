@@ -12,7 +12,7 @@ import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter;
 import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
-import com.indoor.flowers.model.Event;
+import com.indoor.flowers.model.Notification;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -90,7 +90,7 @@ public class CalendarView extends LinearLayout {
         this.daysAdapter.setDayClickListener(listener);
     }
 
-    public void setEventsForMonth(HashMap<Integer, List<Event>> events) {
+    public void setEventsForMonth(HashMap<Integer, List<Notification>> events) {
         daysAdapter.setEvents(events);
     }
 

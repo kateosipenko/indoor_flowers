@@ -27,10 +27,11 @@ import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Event;
-import com.indoor.flowers.model.EventType;
+import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.util.EventsUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.Prefs;
@@ -40,9 +41,10 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
-public class EventFragment extends Fragment implements OnNavigationItemSelectedListener {
+public class NotificationFragment extends Fragment implements OnNavigationItemSelectedListener {
 
     private static final String KEY_TARGET_ID = "key_target_id";
     private static final String KEY_TARGET_TABLE = "key_target_table";
@@ -58,6 +60,8 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
     EditText frequencyView;
     @BindView(R.id.fe_event_date)
     TextView eventDateView;
+    @BindView(R.id.fe_event_end_date)
+    TextView endDateView;
     @BindView(R.id.fe_event_time)
     TextView eventTimeView;
     @BindView(R.id.fe_delete)
@@ -66,27 +70,29 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
     BottomNavigationView eventTypeGroup;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.fe_end_date_clear)
+    View clearEndDateView;
 
     private Unbinder unbinder;
-    private FlowersProvider provider;
-    private Event event;
+    private NotificationsProvider provider;
+    private Notification event;
     private Object target;
 
-    public static EventFragment newInstance(long eventId) {
+    public static NotificationFragment newInstance(long eventId) {
         Bundle args = new Bundle();
         args.putLong(KEY_EVENT_ID, eventId);
 
-        EventFragment fragment = new EventFragment();
+        NotificationFragment fragment = new NotificationFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static EventFragment newInstance(long targetId, String targetTable) {
+    public static NotificationFragment newInstance(long targetId, String targetTable) {
         Bundle args = new Bundle();
         args.putLong(KEY_TARGET_ID, targetId);
         args.putString(KEY_TARGET_TABLE, targetTable);
 
-        EventFragment fragment = new EventFragment();
+        NotificationFragment fragment = new NotificationFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,30 +100,31 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        provider = new FlowersProvider(getActivity());
+        provider = new NotificationsProvider(getActivity());
 
         long eventId = getEventIdFromArgs();
         if (eventId != DatabaseProvider.DEFAULT_ID) {
-            event = provider.getEventById(eventId);
+            event = provider.getNotificationById(eventId);
         }
 
         if (event == null) {
-            event = new Event();
+            event = new Notification();
             event.setId(DatabaseProvider.DEFAULT_ID);
             event.setTargetTable(getTargetTableFromArgs());
             event.setTargetId(getTargetIdFromArgs());
-            event.setCreationDate(Calendar.getInstance());
             Calendar eventDate = Calendar.getInstance();
             Calendar preferredTime = Prefs.getPreferredNotificationTime();
             eventDate.set(Calendar.HOUR_OF_DAY, preferredTime.get(Calendar.HOUR_OF_DAY));
             eventDate.set(Calendar.MINUTE, preferredTime.get(Calendar.MINUTE));
-            event.setEventDate(eventDate);
+            event.setDate(eventDate);
         }
 
         if (!TextUtils.isEmpty(event.getTargetTable())) {
+            FlowersProvider provider = new FlowersProvider(getActivity());
             target = Group.TABLE_NAME.equals(event.getTargetTable())
                     ? provider.getGroupById(event.getTargetId())
                     : provider.getFlowerById(event.getTargetId());
+            provider.unbind();
         }
 
         setHasOptionsMenu(true);
@@ -159,16 +166,50 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
         new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar eventDate = event.getEventDate();
+                Calendar eventDate = event.getDate();
                 eventDate.set(Calendar.YEAR, year);
                 eventDate.set(Calendar.MONTH, month);
                 eventDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                refreshDate();
+                refreshDate(eventDateView, eventDate);
             }
-        }, event.getEventDate().get(Calendar.YEAR),
-                event.getEventDate().get(Calendar.MONTH),
-                event.getEventDate().get(Calendar.DAY_OF_MONTH))
+        }, event.getDate().get(Calendar.YEAR),
+                event.getDate().get(Calendar.MONTH),
+                event.getDate().get(Calendar.DAY_OF_MONTH))
                 .show();
+    }
+
+    @OnClick(R.id.fe_end_date_clear)
+    void onClearEndDateClick() {
+        event.setEndDate(null);
+        refreshDate(endDateView, null);
+    }
+
+    @OnClick(R.id.fe_event_end_date_group)
+    void onEndDateGroupClicked() {
+        final Calendar endDate = event.getEndDate() != null
+                ? event.getEndDate() : Calendar.getInstance();
+
+        new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                endDate.set(Calendar.YEAR, year);
+                endDate.set(Calendar.MONTH, month);
+                endDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                event.setEndDate(endDate);
+                refreshDate(endDateView, endDate);
+            }
+        }, endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH),
+                endDate.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    @OnTextChanged(R.id.fe_event_end_date)
+    void onEndDateTextChanged(CharSequence s, int start, int before, int count) {
+        if (Res.getString(R.string.faf_date_not_set).equals(endDateView.getText().toString())) {
+            clearEndDateView.setVisibility(View.INVISIBLE);
+        } else {
+            clearEndDateView.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick(R.id.fe_event_time_group)
@@ -177,7 +218,7 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
         new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar eventDate = event.getEventDate();
+                Calendar eventDate = event.getDate();
                 eventDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 eventDate.set(Calendar.MINUTE, minute);
                 Prefs.setPreferredNotificationTime(eventDate);
@@ -198,7 +239,11 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
         }
 
         event.setFrequency(frequency);
-        provider.createOrUpdateEvent(event);
+        if (frequency == null) {
+            event.setEndDate(event.getDate());
+        }
+
+        provider.createOrUpdateNotification(event);
         FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), event.getId());
         getActivity().onBackPressed();
     }
@@ -206,14 +251,14 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
     @OnClick(R.id.fe_delete)
     void onDeleteClicked() {
         FlowersAlarmsUtils.deleteEventAlarms(getActivity(), event);
-        provider.deleteEvent(event);
+        provider.deleteNotification(event);
         getActivity().onBackPressed();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        @EventType int eventType = getSelectedEventType(item.getItemId());
-        event.setEventType(eventType);
+        @NotificationType int eventType = getSelectedEventType(item.getItemId());
+        event.setType(eventType);
         refreshTitle();
         return true;
     }
@@ -232,9 +277,10 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
     }
 
     private void setupViewForEvent() {
-        refreshDate();
+        refreshDate(eventDateView, event.getDate());
+        refreshDate(endDateView, event.getEndDate());
         refreshTime();
-        setSelectedEventType(event.getEventType());
+        setSelectedEventType(event.getType());
         if (event.getFrequency() != null) {
             frequencyView.setText(String.valueOf(event.getFrequency()));
         } else {
@@ -264,26 +310,26 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
                 ? ((Group) target).getName() : "");
         if (TextUtils.isEmpty(event.getTitle())) {
             titleView.setText(String.format(FORMAT_TITLE,
-                    EventsUtils.getTitleForEvent(event.getEventType()),
+                    EventsUtils.getTitleForEvent(event.getType()),
                     targetName));
         } else {
             titleView.setText(event.getTitle());
         }
     }
 
-    @EventType
+    @NotificationType
     private int getSelectedEventType(int itemId) {
-        @EventType int result = EventType.WATERING;
+        @NotificationType int result = NotificationType.WATERING;
         if (eventTypeGroup != null) {
             switch (itemId) {
                 case R.id.met_watering:
-                    result = EventType.WATERING;
+                    result = NotificationType.WATERING;
                     break;
                 case R.id.met_fertilizer:
-                    result = EventType.FERTILIZER;
+                    result = NotificationType.FERTILIZER;
                     break;
                 case R.id.met_transplant:
-                    result = EventType.TRANSPLANTING;
+                    result = NotificationType.TRANSPLANTING;
                     break;
             }
         }
@@ -291,31 +337,35 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
         return result;
     }
 
-    private void setSelectedEventType(@EventType int eventType) {
+    private void setSelectedEventType(@NotificationType int eventType) {
         if (eventTypeGroup == null) {
             return;
         }
 
         switch (eventType) {
-            case EventType.FERTILIZER:
+            case NotificationType.FERTILIZER:
                 eventTypeGroup.setSelectedItemId(R.id.met_fertilizer);
                 break;
-            case EventType.TRANSPLANTING:
+            case NotificationType.TRANSPLANTING:
                 eventTypeGroup.setSelectedItemId(R.id.met_transplant);
                 break;
-            case EventType.WATERING:
-            case EventType.CREATED:
+            case NotificationType.WATERING:
+            case NotificationType.CREATED:
                 eventTypeGroup.setSelectedItemId(R.id.met_watering);
                 break;
         }
     }
 
-    private void refreshDate() {
-        if (eventDateView == null) {
+    private void refreshDate(TextView view, Calendar date) {
+        if (view == null) {
             return;
         }
 
-        eventDateView.setText(Res.getString(R.string.full_date_format, event.getEventDate()));
+        if (date == null) {
+            view.setText(Res.getString(R.string.faf_date_not_set));
+        } else {
+            view.setText(Res.getString(R.string.full_date_format, date));
+        }
     }
 
     private void refreshTime() {
@@ -323,7 +373,7 @@ public class EventFragment extends Fragment implements OnNavigationItemSelectedL
             return;
         }
 
-        eventTimeView.setText(Res.getString(R.string.full_time_format, event.getEventDate()));
+        eventTimeView.setText(Res.getString(R.string.full_time_format, event.getDate()));
     }
 
     // region ARGUMENTS
