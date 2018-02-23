@@ -42,4 +42,7 @@
 
     <dimen name="rfs_row_height">50dp</dimen>
 
+    <!--Group-->
+    <dimen name="fg_icon_size">60dp</dimen>
+
 </resources>

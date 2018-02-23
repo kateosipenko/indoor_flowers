@@ -1,76 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_white"
-    android:orientation="vertical"
-    android:padding="@dimen/margin_default">
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <EditText
+    <include layout="@layout/toolbar_main" />
+
+    <ImageView
+        android:id="@+id/fg_group_icon"
+        android:layout_width="@dimen/fg_icon_size"
+        android:layout_height="@dimen/fg_icon_size"
+        android:layout_margin="@dimen/margin_default"
+        android:background="@drawable/ic_group_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:ignore="ContentDescription" />
+
+    <com.indoor.flowers.view.NameView
         android:id="@+id/fg_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:hint="@string/fg_name_hint"
         android:inputType="textCapWords"
         android:textColor="@color/black_primary_text"
+        android:textColorHint="@color/black_disabled_text"
         android:textSize="@dimen/text_body_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fg_group_icon"
+        app:layout_constraintTop_toTopOf="@id/fg_group_icon"
         tools:text="ASDas d" />
 
-    <TextView
+    <android.support.design.widget.TabLayout
+        android:id="@+id/fg_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default"
         android:layout_marginTop="@dimen/margin_default"
-        android:text="@string/fg_group_flowers" />
+        app:layout_constraintTop_toBottomOf="@id/fg_group_icon"
+        app:tabSelectedTextColor="@color/black_primary_text"
+        app:tabTextColor="@color/black_secondary_text" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fg_flowers_list"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fg_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:background="@color/window_bg"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fg_tabs" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fg_add"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/margin_fab"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
-            android:id="@+id/fg_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/primary200"
-            android:text="@string/action_save" />
-
-        <Button
-            android:id="@+id/fg_delete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_weight="1"
-            android:background="@color/accent100"
-            android:text="@string/action_delete" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default"
-        android:layout_marginTop="@dimen/margin_default"
-        android:text="@string/fg_events" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fg_events_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/fg_add_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary200"
-        android:text="@string/faf_add_event" />
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

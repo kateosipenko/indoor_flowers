@@ -21,7 +21,7 @@ public class FlowersProvider extends DatabaseProvider {
         database.getGroupDao().deleteGroup(group);
     }
 
-    public void createOrUpdateGroup(Group group, List<Flower> flowers) {
+    public void createOrUpdateGroup(Group group) {
         if (database.getGroupDao().hasGroup(group.getId())) {
             database.getGroupDao().update(group);
         } else {
@@ -30,7 +30,9 @@ public class FlowersProvider extends DatabaseProvider {
             group.setId(id);
             createEventForCreation(group.getId(), Group.TABLE_NAME, group.getName());
         }
+    }
 
+    public void refreshGroupFlowers(Group group, List<Flower> flowers) {
         database.getGroupDao().updateGroupFlowers(group.getId(), flowers);
     }
 

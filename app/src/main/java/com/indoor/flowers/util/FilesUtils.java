@@ -1,5 +1,7 @@
 package com.indoor.flowers.util;
 
+import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
@@ -16,6 +18,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +30,8 @@ public class FilesUtils {
     private static final String PATTERN_FILE_NAME_COPY_NUMBER = "\\([0-9]+\\)";
     private static final Pattern NAME_COPY_PATTERN = Pattern.compile(PATTERN_FILE_NAME_COPY_NUMBER);
     private static final String CACHE_DIR = "temp";
+
+    private static final String FILE_NAME_FORMAT = "%1$tm-%1$td-%1$tY_%1$tH_%1$tM_%1$tS.png";
 
     private static final String FILE_CALENDAR_FILTER = "calendar_filter.dat";
 
@@ -40,6 +46,35 @@ public class FilesUtils {
         }
 
         return result;
+    }
+
+    public static String getRandomFileName() {
+        return String.format(new Locale("en-US"), FILE_NAME_FORMAT, Calendar.getInstance());
+    }
+
+    @Nullable
+    public static String saveBitmapToFile(String resultFileName, Bitmap bitmap) {
+        File result = null;
+        File folder = getCacheDir();
+        if (folder != null) {
+            resultFileName = resultFileName.replace("/", "_");
+            result = new File(folder, resultFileName);
+            FileOutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(result);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            } catch (Exception ex) {
+                L.w(ex);
+            } finally {
+                if (outputStream != null)
+                    try {
+                        outputStream.close();
+                    } catch (IOException ignore) {
+                    }
+            }
+        }
+
+        return result != null ? result.getPath() : null;
     }
 
     private static void writeData(Serializable object, String fileName) {

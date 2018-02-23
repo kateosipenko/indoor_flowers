@@ -56,8 +56,8 @@
     <!--Create group-->
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
     <string name="fg_group_flowers">Цветы в группе</string>
-    <string name="fg_events">Уведомления</string>
-
+    <string name="fg_notifications">Уведомления</string>
+    <string name="fg_name_hint">Имя группы</string>
 
     <!--Event-->
     <string name="fef_by_type">По типу события</string>

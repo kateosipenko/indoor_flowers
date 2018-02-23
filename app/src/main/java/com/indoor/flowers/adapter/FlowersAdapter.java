@@ -28,7 +28,12 @@ import butterknife.OnClick;
 public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.ViewHolder> {
 
     private boolean isSelectionMode = false;
+    private FlowersSelectionListener selectionListener;
     private List<Flower> selectedFlowers = new ArrayList<>();
+
+    public void setSelectionListener(FlowersSelectionListener listener) {
+        this.selectionListener = listener;
+    }
 
     public void setSelectionMode(boolean isSelectionMode) {
         this.isSelectionMode = isSelectionMode;
@@ -59,6 +64,9 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
 
         if (selectedItem != null && !selectedFlowers.contains(selectedItem)) {
             selectedFlowers.add(selectedItem);
+            if (selectionListener != null) {
+                selectionListener.onSelectedFlowersChanged(selectedFlowers);
+            }
         }
     }
 
@@ -119,8 +127,14 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
             Flower flower = adapter.getItemByPosition(getAdapterPosition());
             if (isChecked && !adapter.selectedFlowers.contains(flower)) {
                 adapter.selectedFlowers.add(flower);
+                if (adapter.selectionListener != null) {
+                    adapter.selectionListener.onSelectedFlowersChanged(adapter.selectedFlowers);
+                }
             } else if (!isChecked && adapter.selectedFlowers.contains(flower)) {
                 adapter.selectedFlowers.remove(flower);
+                if (adapter.selectionListener != null) {
+                    adapter.selectionListener.onSelectedFlowersChanged(adapter.selectedFlowers);
+                }
             }
         }
 
@@ -142,5 +156,9 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
                 nameView.setText(flower.getName());
             }
         }
+    }
+
+    public interface FlowersSelectionListener {
+        void onSelectedFlowersChanged(List<Flower> selectedFlowers);
     }
 }
