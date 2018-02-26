@@ -5,17 +5,15 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 
 import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 
-public class NameView extends android.support.v7.widget.AppCompatEditText
-        implements OnTouchListener {
+public class NameView extends android.support.v7.widget.AppCompatEditText {
 
     private Drawable editIcon;
+    private NameChangeListener listener;
 
     public NameView(Context context) {
         super(context);
@@ -32,17 +30,33 @@ public class NameView extends android.support.v7.widget.AppCompatEditText
         init();
     }
 
+    public void setListener(NameChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public void startEditing() {
+        setEnabled(true);
+        requestFocus();
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.showKeyboard(NameView.this);
+            }
+        }, 100);
+    }
+
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_UP) {
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN && !isEnabled()) {
             int editIconPosition = getRight() - getEditIconWidth();
             if (event.getRawX() >= editIconPosition) {
                 setEnabled(true);
                 requestFocus();
+                setSelection(getText().length());
                 return true;
             }
         }
-        return false;
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -68,10 +82,18 @@ public class NameView extends android.support.v7.widget.AppCompatEditText
         }
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+    }
+
     private void onEditDone() {
         setEnabled(false);
         setCompoundDrawablesWithIntrinsicBounds(null, null, editIcon, null);
         Utils.hideKeyboard(this);
+        if (listener != null) {
+            listener.onNameChanged(getText().toString().trim());
+        }
     }
 
     private void init() {
@@ -79,11 +101,14 @@ public class NameView extends android.support.v7.widget.AppCompatEditText
         editIcon.setTintList(getHintTextColors());
         setCompoundDrawablesWithIntrinsicBounds(null, null, editIcon, null);
         setEnabled(false);
-        setOnTouchListener(this);
         setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     private int getEditIconWidth() {
         return editIcon != null ? editIcon.getBounds().width() : 0;
+    }
+
+    public interface NameChangeListener {
+        void onNameChanged(String name);
     }
 }

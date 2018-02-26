@@ -18,6 +18,8 @@ public class Group {
     private long id;
     @ColumnInfo(name = Columns.NAME)
     private String name;
+    @ColumnInfo(name = Columns.IMAGE_PATH)
+    private String imagePath;
 
     public long getId() {
         return id;
@@ -33,6 +35,14 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override

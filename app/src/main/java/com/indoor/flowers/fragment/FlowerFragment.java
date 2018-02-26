@@ -12,17 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Toasts;
@@ -40,6 +36,8 @@ import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
+import com.indoor.flowers.view.NameView;
+import com.indoor.flowers.view.NameView.NameChangeListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -48,17 +46,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnEditorAction;
 import butterknife.Unbinder;
 
-public class FlowerFragment extends Fragment implements OnPhotoTakenListener, OnItemClickListener<Notification> {
+public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
+        OnItemClickListener<Notification>, NameChangeListener {
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
     @BindView(R.id.faf_flower_image)
     ImageView imageView;
+    @BindView(R.id.faf_choose_image)
+    ImageView changeIconButton;
     @BindView(R.id.faf_flower_name)
-    EditText nameView;
+    NameView nameView;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
     @BindView(R.id.faf_events_list)
@@ -124,6 +124,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         setupEventsList();
         refreshViewWithFlower();
         reloadEvents();
+        nameView.setListener(this);
         return view;
     }
 
@@ -170,20 +171,16 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         }
     }
 
-    @OnEditorAction(R.id.faf_flower_name)
-    boolean onFlowerNameChanged(TextView v, int actionId, KeyEvent event) {
-        String name = nameView.getText().toString().trim();
-        if (actionId == EditorInfo.IME_ACTION_DONE
-                && !TextUtils.isEmpty(name)
-                && !name.equals(flower.getName())) {
+    @Override
+    public void onNameChanged(String name) {
+        if (!TextUtils.isEmpty(name) && !name.equals(flower.getName())) {
             flower.setName(name);
             provider.createOrUpdateFlower(flower);
 
+            refreshChangeIconEnabled();
             refreshEventsVisibility();
             getActivity().invalidateOptionsMenu();
         }
-
-        return false;
     }
 
     @OnClick(R.id.faf_add_event)
@@ -259,13 +256,33 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener, On
         }
 
         refreshEventsVisibility();
+        refreshChangeIconEnabled();
         nameView.setText(flower.getName());
+        if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
+            nameView.startEditing();
+        }
         if (!TextUtils.isEmpty(flower.getImagePath())) {
             Picasso.with(getActivity())
                     .load(new File(flower.getImagePath()))
                     .transform(new CircleTransformation(0, 0))
                     .into(imageView);
         }
+    }
+
+    private void refreshChangeIconEnabled() {
+        if (imageView == null) {
+            return;
+        }
+
+        if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
+            changeIconButton.setVisibility(View.INVISIBLE);
+            imageView.setEnabled(false);
+        } else {
+            changeIconButton.setVisibility(View.VISIBLE);
+            imageView.setEnabled(true);
+        }
+
+
     }
 
     private void refreshEventsVisibility() {

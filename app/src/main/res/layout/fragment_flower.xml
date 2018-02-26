@@ -57,7 +57,7 @@
                         app:layout_constraintEnd_toEndOf="@id/faf_flower_image"
                         tools:ignore="ContentDescription" />
 
-                    <EditText
+                    <com.indoor.flowers.view.NameView
                         android:id="@+id/faf_flower_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -72,7 +72,8 @@
                         android:singleLine="true"
                         android:textColor="@color/white_primary_text"
                         android:textColorHint="@color/white_disabled_text"
-                        android:textSize="@dimen/text_headline_small"
+                        android:textCursorDrawable="@drawable/shape_accent_cursor"
+                        android:textSize="@dimen/text_body_big"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/faf_flower_image"
                         app:layout_constraintTop_toTopOf="@id/faf_flower_image" />

@@ -16,10 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.adapter.FlowersAdapter;
@@ -31,25 +31,30 @@ import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
+import com.indoor.flowers.util.PhotoUtils;
+import com.indoor.flowers.view.NameView;
+import com.indoor.flowers.view.NameView.NameChangeListener;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
 public class GroupFragment extends Fragment implements OnItemClickListener<Notification>,
-        OnPageChangeListener, FlowersSelectionListener {
+        OnPageChangeListener, FlowersSelectionListener, NameChangeListener {
 
     private static final String KEY_GROUP_ID = "key_group_id";
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
     @BindView(R.id.fg_title)
-    EditText nameView;
+    NameView nameView;
     @BindView(R.id.fg_group_icon)
     ImageView iconView;
     @BindView(R.id.fg_tabs)
@@ -119,6 +124,8 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         initPager();
         refreshViewWithGroup();
         reloadItems();
+        refreshIconView();
+        nameView.setListener(this);
         return view;
     }
 
@@ -155,14 +162,12 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         return super.onOptionsItemSelected(item);
     }
 
-    @OnTextChanged(R.id.fg_title)
-    void onNameTextChanged(CharSequence s, int start, int before, int count) {
-        String name = nameView.getText().toString().trim();
+    @Override
+    public void onNameChanged(String name) {
         if (!TextUtils.isEmpty(name) && !name.equals(group.getName())) {
             group.setName(nameView.getText().toString());
             flowersProvider.createOrUpdateGroup(group);
             flowersProvider.refreshGroupFlowers(group, flowersAdapter.getSelectedFlowers());
-            getActivity().invalidateOptionsMenu();
             refreshAddButtonVisibility();
         }
     }
@@ -205,6 +210,11 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     public void onSelectedFlowersChanged(List<Flower> selectedFlowers) {
         if (group.getId() != DatabaseProvider.DEFAULT_ID) {
             flowersProvider.refreshGroupFlowers(group, selectedFlowers);
+            FilesUtils.deleteFile(group.getImagePath());
+            group.setImagePath(PhotoUtils.tryGenerateGroupPhoto(200, 200,
+                    flowersAdapter.getSelectedFlowers()));
+            flowersProvider.createOrUpdateGroup(group);
+            refreshIconView();
         }
     }
 
@@ -221,6 +231,21 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         }
     }
 
+    private void refreshIconView() {
+        if (iconView == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(group.getImagePath())) {
+            iconView.setImageBitmap(null);
+        } else {
+            Picasso.with(getActivity())
+                    .load(new File(group.getImagePath()))
+                    .transform(new CircleTransformation(0, 0))
+                    .into(iconView);
+        }
+    }
+
     private void refreshViewWithGroup() {
         if (nameView == null) {
             return;
@@ -228,6 +253,9 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
 
         nameView.setText(group.getName());
         refreshAddButtonVisibility();
+        if (group.getId() == DatabaseProvider.DEFAULT_ID) {
+            nameView.startEditing();
+        }
     }
 
     private void refreshAddButtonVisibility() {

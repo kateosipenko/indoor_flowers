@@ -77,6 +77,15 @@ public class FilesUtils {
         return result != null ? result.getPath() : null;
     }
 
+    public static void deleteFile(String filePath) {
+        if (TextUtils.isEmpty(filePath)) {
+            return;
+        }
+
+        File file = new File(filePath);
+        file.deleteOnExit();
+    }
+
     private static void writeData(Serializable object, String fileName) {
         File cacheDir = getCacheDir();
         File resultFile = checkFileNameAndCreate(cacheDir, fileName, true);
