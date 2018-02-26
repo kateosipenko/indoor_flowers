@@ -15,6 +15,10 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region GROUP
 
+    public List<Group> getGroupsForFlower(long id) {
+        return database.getGroupDao().getGroupsForFlower(id);
+    }
+
     public void deleteGroup(Group group) {
         database.getNotificationDao().deleteForTarget(group.getId(), Group.TABLE_NAME);
         database.getGroupDao().deleteFlowersForGroup(group.getId());

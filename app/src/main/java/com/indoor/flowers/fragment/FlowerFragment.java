@@ -55,11 +55,9 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
-    @BindView(R.id.faf_flower_image)
+    @BindView(R.id.ff_icon)
     ImageView imageView;
-    @BindView(R.id.faf_choose_image)
-    ImageView changeIconButton;
-    @BindView(R.id.faf_flower_name)
+    @BindView(R.id.ff_name)
     NameView nameView;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
@@ -67,7 +65,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     ViewPager viewPager;
     @BindView(R.id.faf_add_event)
     View addEventButton;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.ff_toolbar)
     Toolbar toolbar;
     @BindView(R.id.ff_tabs)
     TabLayout tabLayout;
@@ -129,6 +127,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         setupViewPager();
         refreshViewWithFlower();
         reloadEvents();
+        reloadGroups();
 
         nameView.setListener(this);
         return view;
@@ -168,7 +167,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.faf_choose_image, R.id.faf_flower_image})
+    @OnClick({R.id.ff_icon})
     void onChooseImageClicked() {
         if (permissionHelper.hasAllPermissions()) {
             TakePhotoUtils.getInstance().showSystemChooser(this);
@@ -240,6 +239,11 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         eventsAdapter.setItems(events);
     }
 
+    private void reloadGroups() {
+        List<Group> groups = provider.getGroupsForFlower(flower.getId());
+        groupsAdapter.setItems(groups);
+    }
+
     private void setupViewPager() {
         if (pagerAdapter == null) {
             pagerAdapter = new FlowerPagerAdapter();
@@ -295,10 +299,8 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         }
 
         if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
-            changeIconButton.setVisibility(View.INVISIBLE);
             imageView.setEnabled(false);
         } else {
-            changeIconButton.setVisibility(View.VISIBLE);
             imageView.setEnabled(true);
         }
     }

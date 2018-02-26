@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
+import com.indoor.flowers.util.SpaceItemDecoration;
 
 import java.util.Objects;
 
@@ -56,6 +57,7 @@ public class FlowerPagerAdapter extends PagerAdapter {
         recyclerView.setClipChildren(false);
         recyclerView.setFocusableInTouchMode(true);
         recyclerView.setClickable(true);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
         container.addView(recyclerView);
         return recyclerView;
     }

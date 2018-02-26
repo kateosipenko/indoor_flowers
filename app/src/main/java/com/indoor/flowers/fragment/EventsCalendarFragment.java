@@ -80,12 +80,6 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
     public void onDestroyView() {
         unbinder.unbind();
         super.onDestroyView();

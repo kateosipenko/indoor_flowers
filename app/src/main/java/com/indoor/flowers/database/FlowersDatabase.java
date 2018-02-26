@@ -1,8 +1,10 @@
 package com.indoor.flowers.database;
 
 import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
+import android.content.Context;
 import android.support.annotation.IntDef;
 
 import com.indoor.flowers.database.dao.EventActionDao;
@@ -28,8 +30,16 @@ import java.lang.annotation.RetentionPolicy;
         })
 public abstract class FlowersDatabase extends RoomDatabase {
 
-    public static final String DATABASE_NAME = "indoorFlowers.db";
+    private static final String DATABASE_NAME = "indoorFlowers.db";
+
     static final int DATABASE_VERSION = Versions.VERSION_1;
+
+    public static FlowersDatabase createInstance(Context context) {
+        return Room.databaseBuilder(context, FlowersDatabase.class, DATABASE_NAME)
+                .allowMainThreadQueries()
+                .addMigrations(FlowersDatabase.getMigrations())
+                .build();
+    }
 
     public static Migration[] getMigrations() {
         return new Migration[]{

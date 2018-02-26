@@ -30,7 +30,7 @@
 
 
     <!--Add flower-->
-    <dimen name="faf_image_size">70dp</dimen>
+    <dimen name="faf_image_size">40dp</dimen>
     <dimen name="faf_flower_container_margin">36dp</dimen>
     <dimen name="ff_image_size">120dp</dimen>
 
