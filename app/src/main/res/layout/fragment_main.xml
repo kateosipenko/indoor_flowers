@@ -3,28 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/gray_light">
 
     <include layout="@layout/toolbar_main" />
 
-    <FrameLayout
-        android:id="@+id/fm_content"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/fm_bottom_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/fm_bottom_bar"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/fm_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/material_white"
-        android:elevation="@dimen/margin_default"
-        android:orientation="horizontal"
+        android:background="@color/primary"
         android:theme="@style/PopupTheme"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:tabMode="scrollable"
+        app:tabPadding="@dimen/margin_small"
+        app:tabSelectedTextColor="@color/white_primary_text"
+        app:tabTextColor="@color/white_secondary_text" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/fm_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_navigation_drawer" />
+        app:layout_constraintTop_toBottomOf="@id/fm_tabs" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fm_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_fab"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -21,9 +21,9 @@ import com.indoor.flowers.adapter.FilterSelectionAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.CalendarFilter;
 import com.indoor.flowers.model.CalendarFilter.FilterElements;
-import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.SpaceItemDecoration;
 
@@ -224,6 +224,8 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
             }
 
             filter.setSelectedEventTypes(filteredTypes);
+        } else {
+            filter.setSelectedEventTypes(new ArrayList<Integer>());
         }
     }
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EventsUtils;
 import com.indoor.flowers.util.RecyclerListAdapter;
@@ -23,17 +24,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification, NotificationsByDaysAdapter.ViewHolder> {
+public class NotificationsByDaysAdapter extends RecyclerListAdapter<NotificationWithTarget, NotificationsByDaysAdapter.ViewHolder> {
 
     private Calendar today = Calendar.getInstance();
 
     private NotificationDoneListener listener;
+    private boolean editable = true;
+
+    public void setEditable(boolean value) {
+        this.editable = value;
+    }
 
     public void setListener(NotificationDoneListener listener) {
         this.listener = listener;
     }
 
-    public void addEvents(List<Notification> events) {
+    public void addEvents(List<NotificationWithTarget> events) {
         if (events != null) {
             items.addAll(events);
             notifyItemRangeInserted(items.size() - events.size(), events.size());
@@ -43,8 +49,9 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
     public void onNotificationDone(Notification event) {
         int position = -1;
         for (int i = 0; i < items.size(); i++) {
-            Notification current = items.get(i);
-            if (current.getId() == event.getId() && current.getDate().equals(event.getDate())) {
+            NotificationWithTarget current = items.get(i);
+            if (current.getNotification().getId() == event.getId()
+                    && current.getNotification().getDate().equals(event.getDate())) {
                 position = i;
                 break;
             }
@@ -57,8 +64,9 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
 
     @Nullable
     public Calendar getLastItemDate() {
-        Notification lastItem = getItemByPosition(getItemCount() - 1);
-        return lastItem != null ? lastItem.getDate() : null;
+        NotificationWithTarget lastItem = getItemByPosition(getItemCount() - 1);
+        return lastItem != null && lastItem.getNotification() != null
+                ? lastItem.getNotification().getDate() : null;
     }
 
     @Override
@@ -111,35 +119,46 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
         @OnClick(R.id.rn_done)
         void onDoneClicked() {
             if (adapter.listener != null) {
-                adapter.listener.onNotificationDone(adapter.getItemByPosition(getAdapterPosition()));
+                adapter.listener.onNotificationDone(
+                        adapter.getItemByPosition(getAdapterPosition()).getNotification());
             }
         }
 
-        private void update(Notification event) {
+        private void update(NotificationWithTarget notificationWithTarget) {
+            Notification event = notificationWithTarget.getNotification();
             colorView.setBackgroundColor(EventsUtils.getColorForEventType(event.getType()));
             titleView.setText(event.getTitle());
             commentView.setText(event.getComment());
 
             boolean isToday = CalendarUtils.isToday(event.getDate());
 
-            doneButton.setVisibility(isToday || event.getDate().before(adapter.today)
-                    ? View.VISIBLE : View.GONE);
-            if (isToday) {
+            if (adapter.editable) {
+                doneButton.setVisibility(isToday || event.getDate().before(adapter.today)
+                        ? View.VISIBLE : View.GONE);
+            }
+            if (isToday || !adapter.editable) {
                 eventsContainer.setBackgroundTintList(null);
             } else if (event.getDate().before(adapter.today)) {
-                eventsContainer.setBackgroundTintList(ColorStateList.valueOf(Res.getColor(R.color.material_red_primary50)));
+                eventsContainer.setBackgroundTintList(ColorStateList.valueOf(
+                        Res.getColor(R.color.material_red_primary50)));
             } else if (event.getDate().after(adapter.today)) {
-                eventsContainer.setBackgroundTintList(ColorStateList.valueOf(Res.getColor(R.color.material_grey_primary100)));
+                eventsContainer.setBackgroundTintList(ColorStateList.valueOf(
+                        Res.getColor(R.color.material_grey_primary100)));
             }
 
-            refreshDateView(event);
+            refreshDateView(notificationWithTarget);
         }
 
-        private void refreshDateView(Notification event) {
-            Notification previous = adapter.getItemByPosition(getAdapterPosition() - 1);
+        private void refreshDateView(NotificationWithTarget notificationWithTarget) {
+            Notification event = notificationWithTarget.getNotification();
+            NotificationWithTarget previous = adapter.getItemByPosition(getAdapterPosition() - 1);
             dayTitle.setText(Res.getString(R.string.day_title_format, event.getDate()));
-            dayTitle.setVisibility(previous == null || CalendarUtils.getDaysDiff(previous.getDate(), event.getDate()) > 0
-                    ? View.VISIBLE : View.GONE);
+            if (adapter.editable) {
+                dayTitle.setVisibility(previous == null
+                        || CalendarUtils.getDaysDiff(previous.getNotification().getDate(),
+                        event.getDate()) > 0
+                        ? View.VISIBLE : View.GONE);
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Res;
+import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter;
 import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
@@ -57,12 +58,6 @@ public class CalendarView extends LinearLayout {
 
     public Calendar getEndDate() {
         return daysAdapter.getEndDate();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        daysAdapter.setItemHeight((int) (daysList.getMeasuredHeight() / 5f));
     }
 
     @OnClick(R.id.vc_previous_month)
@@ -123,11 +118,19 @@ public class CalendarView extends LinearLayout {
     }
 
     private void onMonthUpdated() {
-        currentMonthView.setText(Res.getString(R.string.month_title_format, currentDate));
+        currentMonthView.setText(Res.getString(R.string.month_title_format,
+                getTextForMonth(currentDate.get(Calendar.MONTH)),
+                currentDate));
         if (monthChangedListener != null) {
             monthChangedListener.onMonthChanged(daysAdapter.getStartDate(), daysAdapter.getEndDate());
         }
     }
+
+    private String getTextForMonth(int monthNumber) {
+        int id = Res.get().getIdentifier("month_" + monthNumber, "string", Utils.getPackageName());
+        return Res.getString(id);
+    }
+
 
     public interface OnMonthChangedListener {
         void onMonthChanged(Calendar startDate, Calendar endDate);

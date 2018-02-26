@@ -1,16 +1,14 @@
 package com.indoor.flowers.adapter;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.RecyclerListAdapter;
@@ -87,22 +85,12 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.rf_root)
-        ConstraintLayout rootLayout;
         @BindView(R.id.rf_icon)
         ImageView iconView;
         @BindView(R.id.rf_title)
         TextView nameView;
-        @BindView(R.id.rf_days_to_watering)
-        TextView daysToWateringView;
-        @BindView(R.id.rf_last_watering)
-        TextView lastWateringView;
-        @BindView(R.id.rf_watering_level)
-        ProgressBar wateringLevel;
         @BindView(R.id.rf_check_box)
         CheckBox checkBox;
-
-        ConstraintSet set = new ConstraintSet();
 
         private FlowersAdapter adapter;
 
@@ -112,8 +100,7 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
             this.adapter = adapter;
         }
 
-        @OnClick({R.id.rf_title, R.id.rf_icon, R.id.rf_days_to_watering, R.id.rf_last_watering,
-                R.id.rf_root})
+        @OnClick({R.id.rf_title, R.id.rf_icon, R.id.rf_root})
         void onFlowerClick(View view) {
             if (adapter.isSelectionMode) {
                 checkBox.setChecked(!checkBox.isChecked());
@@ -144,11 +131,11 @@ public class FlowersAdapter extends RecyclerListAdapter<Flower, FlowersAdapter.V
             if (flower == null) {
                 iconView.setImageBitmap(null);
                 nameView.setText(null);
-                daysToWateringView.setText(null);
             } else {
                 if (!TextUtils.isEmpty(flower.getImagePath())) {
                     Picasso.with(itemView.getContext())
                             .load(new File(flower.getImagePath()))
+                            .transform(new CircleTransformation(0, 0))
                             .into(iconView);
                 } else {
                     iconView.setImageBitmap(null);

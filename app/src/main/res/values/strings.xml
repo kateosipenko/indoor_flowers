@@ -18,12 +18,10 @@
     <string name="action_repeat">Повторять</string>
 
     <!--NavigationDrawerActivity-->
-    <string name="mnd_notifications">События</string>
-    <string name="mnd_flowers">Цветы</string>
-    <string name="mnd_groups">Группы</string>
-    <string name="mnd_calendar">Календарь</string>
-    <string name="and_drawer_open">Открыть</string>
-    <string name="and_drawer_close">Закрыть</string>
+    <string name="fm_notifications">События</string>
+    <string name="fm_flowers">Цветы</string>
+    <string name="fm_groups">Группы</string>
+    <string name="fm_calendar">Календарь</string>
 
     <!--Flowers-->
     <string name="mf_filter_all_flowers">Все цветы</string>
@@ -32,7 +30,7 @@
     <!--Dates-->
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="full_time_format">%1$tH:%1$tM</string>
-    <string name="month_title_format">%1$tB %1$tY</string>
+    <string name="month_title_format">%1$s %2$tY</string>
     <string name="day_title_format">%1$td %1$tb</string>
 
     <!--Events-->
@@ -78,5 +76,19 @@
     <string name="fe_event_end_date">Конец</string>
     <string name="fe_event_time">Время уведомлений</string>
     <string name="fe_event_name_hint">Название уведомления</string>
+
+    <!--Calendar-->
+    <string name="month_0">Январь</string>
+    <string name="month_1">Февраль</string>
+    <string name="month_2">Март</string>
+    <string name="month_3">Апрель</string>
+    <string name="month_4">Май</string>
+    <string name="month_5">Июнь</string>
+    <string name="month_6">Июль</string>
+    <string name="month_7">Август</string>
+    <string name="month_8">Сентябрь</string>
+    <string name="month_9">Октябрь</string>
+    <string name="month_10">Ноябрь</string>
+    <string name="month_11">Декабрь</string>
 
 </resources>

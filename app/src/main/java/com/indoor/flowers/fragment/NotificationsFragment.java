@@ -18,6 +18,7 @@ import com.indoor.flowers.adapter.NotificationsByDaysAdapter;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter.NotificationDoneListener;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EndlessRecyclerOnScrollListener;
 import com.indoor.flowers.util.EndlessRecyclerOnScrollListener.LoadMoreScrollListener;
@@ -35,7 +36,7 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
         LoadMoreScrollListener {
 
     private static final int LOAD_DAYS_COUNT = 10;
-    private static final int LOAD_ITEMS_COUNT = 10;
+    private static final int LOAD_ITEMS_COUNT = 20;
 
     @BindView(R.id.fn_notifications_list)
     RecyclerView notificationsList;
@@ -107,16 +108,24 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
         if (startDate != null) {
             startDate = (Calendar) startDate.clone();
             startDate.add(Calendar.DAY_OF_YEAR, 1);
-            List<Notification> events = provider.getNearbyNotifications(startDate, LOAD_DAYS_COUNT, false);
+            List<NotificationWithTarget> events = provider.getNearbyNotifications(startDate,
+                    LOAD_DAYS_COUNT, false);
             adapter.addEvents(events);
             loadMoreListener.onLoadingCompleted();
         }
     }
 
     private void initialLoadEvents() {
-        List<Notification> events = provider.getNearbyNotifications(Calendar.getInstance(), LOAD_DAYS_COUNT, true);
+        Calendar startDate = Calendar.getInstance();
+        List<NotificationWithTarget> events = provider.getNearbyNotifications(startDate,
+                LOAD_DAYS_COUNT, true);
         if (events.size() < LOAD_ITEMS_COUNT && events.size() > 0) {
-            events = provider.getNearbyNotifications(Calendar.getInstance(), LOAD_DAYS_COUNT * 2, true);
+            do {
+                startDate.add(Calendar.DAY_OF_YEAR, LOAD_DAYS_COUNT + 1);
+                List<NotificationWithTarget> moreEvents = provider.getNearbyNotifications(startDate,
+                        LOAD_DAYS_COUNT, false);
+                events.addAll(moreEvents);
+            } while (events.size() < LOAD_ITEMS_COUNT);
         }
 
         adapter.setItems(events);

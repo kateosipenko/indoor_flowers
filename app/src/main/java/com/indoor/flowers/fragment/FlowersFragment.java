@@ -3,6 +3,7 @@ package com.indoor.flowers.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.OnItemClickListener;
+import com.indoor.flowers.util.Prefs;
+import com.indoor.flowers.util.SpaceItemDecoration;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class FlowersFragment extends Fragment implements OnItemClickListener<Flower> {
@@ -36,7 +39,7 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
 
     private Unbinder unbinder;
 
-    private boolean showAllFlowers = false;
+    private boolean hideGroupFlowers;
 
     public static FlowersFragment newInstance() {
         return new FlowersFragment();
@@ -47,6 +50,7 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         provider = new FlowersProvider(getActivity());
+        hideGroupFlowers = Prefs.getHideFlowersWithGroups();
     }
 
     @Nullable
@@ -86,33 +90,32 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mf_filter_all_flowers:
-                showAllFlowers = true;
+                hideGroupFlowers = true;
                 reloadItems();
                 break;
             case R.id.mf_filter_without_group:
-                showAllFlowers = false;
+                hideGroupFlowers = false;
                 reloadItems();
                 break;
         }
 
+        Prefs.setHideFlowersWithGroup(hideGroupFlowers);
         return super.onOptionsItemSelected(item);
-    }
-
-    @OnClick(R.id.ff_add_flower)
-    public void onAddFlowerClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                FlowerFragment.newInstance(), null, true);
     }
 
     @Override
     public void onItemClicked(Flower item) {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                FlowerFragment.newInstance(item.getId()), null, true);
+        FragmentManager manager = getParentFragment() != null
+                ? getParentFragment().getFragmentManager() : getFragmentManager();
+        if (manager != null) {
+            Fragments.replace(manager, android.R.id.content,
+                    FlowerFragment.newInstance(item.getId()), null, true);
+        }
     }
 
     private void reloadItems() {
         List<Flower> flowers = null;
-        if (showAllFlowers) {
+        if (hideGroupFlowers) {
             flowers = provider.getAllFlowers();
         } else {
             flowers = provider.getFlowersWithoutGroup();
@@ -129,5 +132,6 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
         adapter.setListener(this);
         flowersList.setAdapter(adapter);
         flowersList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        flowersList.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
     }
 }

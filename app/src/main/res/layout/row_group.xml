@@ -10,20 +10,28 @@
     android:orientation="horizontal"
     tools:layout_height="60dp">
 
+    <ImageView
+        android:id="@+id/rg_icon"
+        android:layout_width="@dimen/fm_rooms_width"
+        android:layout_height="@dimen/fm_rooms_width"
+        android:background="@drawable/ic_group_circle"
+        android:elevation="@dimen/margin_small"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toEndOf="@id/rf_check_box"
+        tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/rg_title"
-        style="@style/GroupTitleStyle"
-        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_default"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/black_primary_text"
+        app:layout_constraintBottom_toBottomOf="@id/rg_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rg_icon"
+        app:layout_constraintTop_toTopOf="@id/rg_icon"
         tools:text="Kitchen" />
-
-    <View
-        android:layout_width="@dimen/circle_notification_size"
-        android:layout_height="@dimen/circle_notification_size"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:background="@drawable/shape_circle_accent"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@id/rg_title"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

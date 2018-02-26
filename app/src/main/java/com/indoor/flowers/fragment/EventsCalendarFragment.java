@@ -1,11 +1,11 @@
 package com.indoor.flowers.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,14 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
-import com.indoor.flowers.adapter.EventsPerDayAdapter;
+import com.indoor.flowers.adapter.NotificationsByDaysAdapter;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.CalendarFilter;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.FilesUtils;
+import com.indoor.flowers.util.SpaceItemDecoration;
 import com.indoor.flowers.view.CalendarView;
 import com.indoor.flowers.view.CalendarView.OnMonthChangedListener;
 
@@ -40,8 +42,6 @@ import butterknife.Unbinder;
 public class EventsCalendarFragment extends Fragment implements OnDayClickedListener,
         OnMonthChangedListener {
 
-    private static final int REQUEST_CODE_FILTER = 5645;
-
     @BindView(R.id.fec_events_calendar)
     CalendarView calendarView;
     @BindView(R.id.fec_events_per_day_list)
@@ -49,7 +49,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
 
     private Unbinder unbinder;
     private NotificationsProvider provider;
-    private EventsPerDayAdapter eventsPerDayAdapter;
+    private NotificationsByDaysAdapter eventsAdapter;
     private CalendarFilter filter;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -63,7 +63,6 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         provider = new NotificationsProvider(getActivity());
-        filter = FilesUtils.getCalendarFilter();
     }
 
     @Nullable
@@ -71,12 +70,19 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_events_calendar, container, false);
         unbinder = ButterKnife.bind(this, view);
-
+        filter = FilesUtils.getCalendarFilter();
         initEventsList();
 
         calendarView.setDayClickListener(this);
         calendarView.setMonthChangedListener(this);
+        onMonthChanged(calendarView.getStartDate(), calendarView.getEndDate());
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -92,23 +98,14 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_FILTER && data != null && data.hasExtra(EventFilterFragment.EXTRA_FILTER)) {
-            filter = (CalendarFilter) data.getSerializableExtra(EventFilterFragment.EXTRA_FILTER);
-            onMonthChanged(calendarView.getStartDate(), calendarView.getEndDate());
-        }
-    }
-
-    @Override
     public void onDayClicked(Calendar item, List<Notification> eventsPerDay) {
         List<NotificationWithTarget> eventWithTargets = provider.getNotificationsTarget(eventsPerDay);
-        eventsPerDayAdapter.setItems(eventWithTargets);
+        eventsAdapter.setItems(eventWithTargets);
     }
 
     @Override
     public void onMonthChanged(final Calendar startDate, final Calendar endDate) {
-        eventsPerDayAdapter.clear();
+        eventsAdapter.clear();
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -138,20 +135,25 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.mc_filter) {
             Fragment fragment = EventFilterFragment.newInstance();
-            fragment.setTargetFragment(this, REQUEST_CODE_FILTER);
-            Fragments.replace(getFragmentManager(), android.R.id.content,
-                    fragment, null, true);
+            FragmentManager fragmentManager = getParentFragment() != null
+                    ? getParentFragment().getFragmentManager() : getFragmentManager();
+            if (fragmentManager != null) {
+                Fragments.replace(fragmentManager, android.R.id.content,
+                        fragment, null, true);
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void initEventsList() {
-        if (eventsPerDayAdapter == null) {
-            eventsPerDayAdapter = new EventsPerDayAdapter();
+        if (eventsAdapter == null) {
+            eventsAdapter = new NotificationsByDaysAdapter();
         }
 
+        eventsAdapter.setEditable(false);
         eventsPerDayList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventsPerDayList.setAdapter(eventsPerDayAdapter);
+        eventsPerDayList.setAdapter(eventsAdapter);
+        eventsPerDayList.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
     }
 }

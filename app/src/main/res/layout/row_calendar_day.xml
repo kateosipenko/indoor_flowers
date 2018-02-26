@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rcd_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <View
-        android:id="@+id/rcd_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/divider_size"
-        android:background="@drawable/sel_calendar_day"
-        android:clickable="true"
-        android:focusable="true" />
+    android:layout_height="wrap_content"
+    android:background="@drawable/sel_calendar_day"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_small">
 
     <TextView
         android:id="@+id/rcd_day_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small"
+        android:layout_width="@dimen/rcd_text_size"
+        android:layout_height="@dimen/rcd_text_size"
+        android:background="@drawable/sel_calendar_day_circle"
         android:gravity="center"
-        android:textColor="@color/sel_tabs"
+        android:textColor="@color/sel_calendar_day"
         android:textSize="@dimen/text_body_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="35" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/divider_size"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rcd_day_text">
 
         <View
             android:id="@+id/rcd_notification_created"
             android:layout_width="@dimen/rcd_notification_size"
             android:layout_height="@dimen/rcd_notification_size"
-            android:layout_margin="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/bg_day_notification"
             android:backgroundTint="@color/event_created"
             android:gravity="center"
@@ -47,7 +46,8 @@
             android:id="@+id/rcd_notification_watering"
             android:layout_width="@dimen/rcd_notification_size"
             android:layout_height="@dimen/rcd_notification_size"
-            android:layout_margin="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/bg_day_notification"
             android:backgroundTint="@color/event_watering"
             android:gravity="center"
@@ -58,7 +58,8 @@
             android:id="@+id/rcd_notification_fertilizer"
             android:layout_width="@dimen/rcd_notification_size"
             android:layout_height="@dimen/rcd_notification_size"
-            android:layout_margin="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/bg_day_notification"
             android:backgroundTint="@color/event_fertilizer"
             android:gravity="center"
@@ -69,7 +70,8 @@
             android:id="@+id/rcd_notification_transplantation"
             android:layout_width="@dimen/rcd_notification_size"
             android:layout_height="@dimen/rcd_notification_size"
-            android:layout_margin="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/bg_day_notification"
             android:backgroundTint="@color/event_transplantation"
             android:gravity="center"
@@ -77,4 +79,4 @@
             tools:visibility="visible" />
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

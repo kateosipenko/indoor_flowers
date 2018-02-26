@@ -2,22 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false">
         <shape android:shape="rectangle">
-            <solid android:color="@color/material_grey_primary200" />
-        </shape>
-    </item>
-    <item android:state_selected="true">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/material_blue_grey_primary100" />
-        </shape>
-    </item>
-    <item android:state_pressed="true">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/material_blue_grey_primary100" />
+            <solid android:color="@color/window_bg" />
         </shape>
     </item>
     <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@color/material_white" />
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
         </shape>
     </item>
 </selector>

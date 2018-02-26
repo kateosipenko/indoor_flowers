@@ -20,6 +20,11 @@ public interface NotificationDao {
             " or _id in " +
             " (select notification_id from EventActionTable where date between %1$s and  %2$s))";
 
+    String QUERY_EVENTS_FILTER = "select * from NotificationTable where " +
+            " (frequency not null and frequency > 0 and (end_date is null or end_date >= %2$s) " +
+            " or _id in " +
+            " (select notification_id from EventActionTable where date between %1$s and  %2$s))";
+
     @Insert
     long insert(Notification event);
 

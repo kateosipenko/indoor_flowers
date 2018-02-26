@@ -10,22 +10,21 @@ import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.util.SpaceItemDecoration;
 
 import java.util.Objects;
 
-public class GroupPagerAdapter extends PagerAdapter {
+public class FlowerPagerAdapter extends PagerAdapter {
 
-    public static final int POSITION_FLOWERS = 0;
-    public static final int POSITION_EVENTS = 1;
+    public static final int POSITION_EVENTS = 0;
+    public static final int POSITION_GROUPS = 1;
 
     private static final int ITEMS_COUNT = 2;
 
-    private FlowersAdapter flowersAdapter;
+    private GroupsAdapter groupsAdapter;
     private EventsAdapter eventsAdapter;
 
-    public void setAdapters(FlowersAdapter flowersAdapter, EventsAdapter eventsAdapter) {
-        this.flowersAdapter = flowersAdapter;
+    public void setAdapters(GroupsAdapter groupsAdapter, EventsAdapter eventsAdapter) {
+        this.groupsAdapter = groupsAdapter;
         this.eventsAdapter = eventsAdapter;
         notifyDataSetChanged();
     }
@@ -35,11 +34,11 @@ public class GroupPagerAdapter extends PagerAdapter {
     public CharSequence getPageTitle(int position) {
         String result = null;
         switch (position) {
-            case POSITION_FLOWERS:
-                result = Res.getString(R.string.fg_group_flowers);
+            case POSITION_GROUPS:
+                result = Res.getString(R.string.faf_tab_groups);
                 break;
             case POSITION_EVENTS:
-                result = Res.getString(R.string.fg_notifications);
+                result = Res.getString(R.string.faf_tab_notifications);
                 break;
         }
         return result;
@@ -57,7 +56,6 @@ public class GroupPagerAdapter extends PagerAdapter {
         recyclerView.setClipChildren(false);
         recyclerView.setFocusableInTouchMode(true);
         recyclerView.setClickable(true);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
         container.addView(recyclerView);
         return recyclerView;
     }
@@ -79,8 +77,8 @@ public class GroupPagerAdapter extends PagerAdapter {
 
     private RecyclerView.Adapter getAdapterForPosition(int position) {
         switch (position) {
-            case POSITION_FLOWERS:
-                return flowersAdapter;
+            case POSITION_GROUPS:
+                return groupsAdapter;
             case POSITION_EVENTS:
                 return eventsAdapter;
         }

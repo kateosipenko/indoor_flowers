@@ -168,6 +168,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             group.setName(nameView.getText().toString());
             flowersProvider.createOrUpdateGroup(group);
             flowersProvider.refreshGroupFlowers(group, flowersAdapter.getSelectedFlowers());
+            refreshPagerEnabled();
             refreshAddButtonVisibility();
         }
     }
@@ -256,6 +257,8 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         if (group.getId() == DatabaseProvider.DEFAULT_ID) {
             nameView.startEditing();
         }
+
+        refreshPagerEnabled();
     }
 
     private void refreshAddButtonVisibility() {
@@ -264,6 +267,18 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         }
 
         addButtonView.setVisibility(group.getId() == DatabaseProvider.DEFAULT_ID ? View.GONE : View.VISIBLE);
+    }
+
+    private void refreshPagerEnabled() {
+        if (viewPager == null || group == null) {
+            return;
+        }
+
+        if (group.getId() == DatabaseProvider.DEFAULT_ID) {
+            viewPager.setVisibility(View.INVISIBLE);
+        } else {
+            viewPager.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initPager() {

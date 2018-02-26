@@ -3,6 +3,7 @@ package com.indoor.flowers.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,22 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.GroupsAdapter;
-import com.indoor.flowers.adapter.GroupsAdapter.GroupClickListener;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.util.OnItemClickListener;
+import com.indoor.flowers.util.SpaceItemDecoration;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class GroupsFragment extends Fragment implements GroupClickListener {
-
-    public static final String KEY_SELECTED_GROUP = "key_selected_group";
+public class GroupsFragment extends Fragment implements OnItemClickListener<Group> {
 
     @BindView(R.id.fr_groups_list)
     RecyclerView groupsList;
@@ -74,21 +74,19 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
         super.onDestroy();
     }
 
-    @OnClick(R.id.fr_create_group)
-    void onCreateGroupClicked() {
-        Fragments.replace(getFragmentManager(), android.R.id.content, GroupFragment.newInstance(),
-                null, true);
-    }
-
     @Override
-    public void onGroupClicked(Group group) {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                GroupFragment.newInstance(group.getId()), null, true);
+    public void onItemClicked(Group group) {
+        FragmentManager manager = getParentFragment() != null
+                ? getParentFragment().getFragmentManager() : getFragmentManager();
+        if (manager != null) {
+            Fragments.replace(manager, android.R.id.content,
+                    GroupFragment.newInstance(group.getId()), null, true);
+        }
     }
 
     private void reloadGroups() {
         List<Group> allGroups = provider.getAllGroups();
-        adapter.setGroups(allGroups);
+        adapter.setItems(allGroups);
     }
 
     private void initList() {
@@ -99,5 +97,6 @@ public class GroupsFragment extends Fragment implements GroupClickListener {
         adapter.setListener(this);
         groupsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         groupsList.setAdapter(adapter);
+        groupsList.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
     }
 }

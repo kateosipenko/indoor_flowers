@@ -6,10 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,10 +24,13 @@ import com.evgeniysharafan.utils.Toasts;
 import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
+import com.indoor.flowers.adapter.FlowerPagerAdapter;
+import com.indoor.flowers.adapter.GroupsAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
@@ -49,7 +51,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
-        OnItemClickListener<Notification>, NameChangeListener {
+        NameChangeListener {
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
@@ -61,8 +63,8 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     NameView nameView;
     @BindView(R.id.faf_snackbar)
     CoordinatorLayout snackbarContainer;
-    @BindView(R.id.faf_events_list)
-    RecyclerView eventsList;
+    @BindView(R.id.faf_pager)
+    ViewPager viewPager;
     @BindView(R.id.faf_add_event)
     View addEventButton;
     @BindView(R.id.toolbar)
@@ -78,9 +80,11 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     private FlowersProvider provider;
     private NotificationsProvider notificationsProvider;
 
-    private EventsAdapter eventsAdapter;
-
     private Unbinder unbinder;
+
+    private FlowerPagerAdapter pagerAdapter;
+    private EventsAdapter eventsAdapter;
+    private GroupsAdapter groupsAdapter;
 
     public FlowerFragment() {
         permissionHelper = new PermissionHelper(this, 0, PermissionUtil.CAMERA_PERMISSIONS,
@@ -119,11 +123,13 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flower, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setupActionBar();
         permissionHelper.setSnackbarContainer(snackbarContainer);
-        setupEventsList();
+
+        setupActionBar();
+        setupViewPager();
         refreshViewWithFlower();
         reloadEvents();
+
         nameView.setListener(this);
         return view;
     }
@@ -178,7 +184,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
             provider.createOrUpdateFlower(flower);
 
             refreshChangeIconEnabled();
-            refreshEventsVisibility();
+            refreshDataVisibility();
             getActivity().invalidateOptionsMenu();
         }
     }
@@ -229,25 +235,39 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         hideProgress();
     }
 
-    @Override
-    public void onItemClicked(Notification item) {
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                NotificationFragment.newInstance(item.getId()), null, true);
-    }
-
     private void reloadEvents() {
         List<Notification> events = notificationsProvider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME);
         eventsAdapter.setItems(events);
     }
 
-    private void setupEventsList() {
+    private void setupViewPager() {
+        if (pagerAdapter == null) {
+            pagerAdapter = new FlowerPagerAdapter();
+        }
         if (eventsAdapter == null) {
             eventsAdapter = new EventsAdapter();
         }
+        if (groupsAdapter == null) {
+            groupsAdapter = new GroupsAdapter();
+        }
 
-        eventsAdapter.setListener(this);
-        eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventsList.setAdapter(eventsAdapter);
+        eventsAdapter.setListener(new OnItemClickListener<Notification>() {
+            @Override
+            public void onItemClicked(Notification item) {
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        NotificationFragment.newInstance(item.getId()), null, true);
+            }
+        });
+        groupsAdapter.setListener(new OnItemClickListener<Group>() {
+            @Override
+            public void onItemClicked(Group item) {
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        GroupFragment.newInstance(item.getId()), null, true);
+            }
+        });
+        pagerAdapter.setAdapters(groupsAdapter, eventsAdapter);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void refreshViewWithFlower() {
@@ -255,7 +275,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
             return;
         }
 
-        refreshEventsVisibility();
+        refreshDataVisibility();
         refreshChangeIconEnabled();
         nameView.setText(flower.getName());
         if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
@@ -281,20 +301,18 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
             changeIconButton.setVisibility(View.VISIBLE);
             imageView.setEnabled(true);
         }
-
-
     }
 
-    private void refreshEventsVisibility() {
-        if (flower == null || eventsList == null) {
+    private void refreshDataVisibility() {
+        if (viewPager == null || flower == null) {
             return;
         }
 
         if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
-            eventsList.setVisibility(View.INVISIBLE);
+            viewPager.setVisibility(View.INVISIBLE);
             addEventButton.setVisibility(View.INVISIBLE);
         } else {
-            eventsList.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.VISIBLE);
             addEventButton.setVisibility(View.VISIBLE);
         }
     }
@@ -305,6 +323,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
             activity.setSupportActionBar(toolbar);
             ActionBar actionBar = activity.getSupportActionBar();
             if (actionBar != null) {
+                actionBar.setTitle(null);
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
             }

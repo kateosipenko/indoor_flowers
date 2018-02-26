@@ -32,8 +32,8 @@ public class NotificationsProvider extends DatabaseProvider {
         database.getEventActionDao().insert(action);
     }
 
-    public List<Notification> getNearbyNotifications(Calendar start, int daysCount,
-                                                     boolean includeOldEvents) {
+    public List<NotificationWithTarget> getNearbyNotifications(Calendar start, int daysCount,
+                                                               boolean includeOldEvents) {
         Calendar startDate = (Calendar) start.clone();
         Calendar endDate = (Calendar) startDate.clone();
         endDate.add(Calendar.DAY_OF_YEAR, daysCount);
@@ -43,7 +43,12 @@ public class NotificationsProvider extends DatabaseProvider {
             events = EventsUtils.createOrderedEventsWithPeriodically(events, startDate, endDate, includeOldEvents);
         }
 
-        return events;
+        List<NotificationWithTarget> result = new ArrayList<>();
+        if (events != null) {
+            result = getNotificationsTarget(events);
+        }
+
+        return result;
     }
 
     public List<Notification> getEventsForTarget(long targetId, String targetTable) {
@@ -80,7 +85,7 @@ public class NotificationsProvider extends DatabaseProvider {
                     + ") ";
         }
 
-        String query = String.format(NotificationDao.QUERY_NOTIFICATION_FILTER, startDate.getTimeInMillis(),
+        String query = String.format(NotificationDao.QUERY_EVENTS_FILTER, startDate.getTimeInMillis(),
                 endDate.getTimeInMillis());
         if (!TextUtils.isEmpty(selection)) {
             query += " and " + selection;

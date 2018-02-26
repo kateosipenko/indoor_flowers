@@ -21,14 +21,14 @@ import butterknife.OnClick;
 
 public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapter.ViewHolder> {
 
-    private static final int DAYS_COUNT = 7 * 5; // max displaying weeks is 5
+    public static final int WEEKS_COUNT = 6;
+    private static final int DAYS_COUNT = 7 * WEEKS_COUNT;
 
     private int selectedPosition = -1;
 
     private Calendar monthDate;
     private Calendar startDate;
     private OnDayClickedListener dayClickListener;
-    private int itemHeight;
 
     private HashMap<Integer, List<Notification>> eventsByDays = new HashMap<>();
 
@@ -55,11 +55,6 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         return getItemByPosition(DAYS_COUNT - 1);
     }
 
-    public void setItemHeight(int itemHeight) {
-        this.itemHeight = itemHeight;
-        notifyItemRangeChanged(0, getItemCount(), "ItemHeight");
-    }
-
     public void setEvents(HashMap<Integer, List<Notification>> events) {
         eventsByDays.clear();
         eventsByDays.putAll(events);
@@ -68,7 +63,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_calendar_day, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_calendar_day,
+                parent, false);
         return new ViewHolder(view, this);
     }
 
@@ -83,8 +79,6 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
             super.onBindViewHolder(holder, position, payloads);
         } else if (payloads.get(0) instanceof Integer) {
             holder.updateSelection();
-        } else if (payloads.get(0) instanceof String) {
-            holder.updateHeight();
         } else {
             holder.updateNotifications(getItemByPosition(position));
         }
@@ -110,10 +104,6 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.rcd_root)
-        ViewGroup rootView;
-        @BindView(R.id.rcd_background)
-        View backgroundView;
         @BindView(R.id.rcd_day_text)
         TextView daysTextView;
         @BindView(R.id.rcd_notification_created)
@@ -124,6 +114,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         View fertilizerView;
         @BindView(R.id.rcd_notification_transplantation)
         View transplantationView;
+        @BindView(R.id.rcd_root)
+        ViewGroup rootView;
 
         private CalendarDaysAdapter adapter;
 
@@ -133,7 +125,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
             this.adapter = adapter;
         }
 
-        @OnClick({R.id.rcd_background, R.id.rcd_day_text})
+        @OnClick({R.id.rcd_day_text})
         void onDayClicked() {
             adapter.setSelectedPosition(getAdapterPosition());
             if (adapter.dayClickListener != null) {
@@ -144,23 +136,16 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         }
 
         private void update(Calendar calendar) {
-            updateHeight();
             updateSelection();
-            backgroundView.setEnabled(calendar.get(Calendar.MONTH) == adapter.monthDate.get(Calendar.MONTH));
-            rootView.setAlpha(backgroundView.isEnabled() ? 1f : 0.5f);
+            daysTextView.setEnabled(calendar.get(Calendar.MONTH) == adapter.monthDate.get(Calendar.MONTH));
             daysTextView.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
-            daysTextView.setSelected(CalendarUtils.isToday(calendar));
+            daysTextView.setActivated(CalendarUtils.isToday(calendar));
             updateNotifications(calendar);
         }
 
-        private void updateHeight() {
-            ViewGroup.LayoutParams params = itemView.getLayoutParams();
-            params.height = adapter.itemHeight;
-            itemView.setLayoutParams(params);
-        }
-
         private void updateSelection() {
-            backgroundView.setSelected(getAdapterPosition() == adapter.selectedPosition);
+            daysTextView.setSelected(getAdapterPosition() == adapter.selectedPosition);
+            rootView.setSelected(getAdapterPosition() == adapter.selectedPosition);
         }
 
         private void updateNotifications(Calendar calendar) {

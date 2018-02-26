@@ -87,26 +87,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
-                app:layout_constraintTop_toBottomOf="@id/faf_flower_image">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/ff_tab_notifications"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/faf_tab_notifications" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/ff_tab_groups"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/faf_tab_groups" />
-
-            </android.support.design.widget.TabLayout>
+                app:layout_constraintTop_toBottomOf="@id/faf_flower_image" />
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/faf_events_list"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/faf_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/margin_default"

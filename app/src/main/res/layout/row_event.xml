@@ -23,10 +23,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_default"
+        android:paddingBottom="@dimen/margin_normal"
+        android:paddingTop="@dimen/margin_normal"
         android:textColor="@color/black_primary_text"
         android:textSize="@dimen/text_body_medium"
+        app:layout_constraintBottom_toTopOf="@+id/re_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/re_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Watering Flower" />
 
     <TextView
@@ -38,6 +42,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/re_title"
         app:layout_constraintTop_toBottomOf="@id/re_title"
-        tools:text="Asd; kas;dk as;ldk" />
+        tools:text="Asd; kas;dk as;ldk"
+        tools:visibility="gone" />
 
 </android.support.constraint.ConstraintLayout>
