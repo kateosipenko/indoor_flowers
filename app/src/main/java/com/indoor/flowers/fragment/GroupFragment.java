@@ -1,7 +1,9 @@
 package com.indoor.flowers.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -19,11 +21,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Toasts;
 import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.adapter.FlowersAdapter;
 import com.indoor.flowers.adapter.FlowersAdapter.FlowersSelectionListener;
+import com.indoor.flowers.adapter.GalleryAdapter;
 import com.indoor.flowers.adapter.GroupPagerAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
@@ -31,15 +35,21 @@ import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.PhotoItem;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
+import com.indoor.flowers.util.PermissionHelper;
+import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.PhotoUtils;
+import com.indoor.flowers.util.TakePhotoUtils;
+import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
 import com.indoor.flowers.view.NameView;
 import com.indoor.flowers.view.NameView.NameChangeListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,7 +58,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class GroupFragment extends Fragment implements OnItemClickListener<Notification>,
-        OnPageChangeListener, FlowersSelectionListener, NameChangeListener {
+        OnPageChangeListener, FlowersSelectionListener, NameChangeListener,
+        OnPhotoTakenListener {
 
     private static final String KEY_GROUP_ID = "key_group_id";
     private static final String KEY_FLOWER_ID = "key_flower_id";
@@ -65,6 +76,8 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     View addButtonView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.snackbar_container)
+    CoordinatorLayout snackbarContainer;
 
     private FlowersProvider flowersProvider;
     private NotificationsProvider notificationsProvider;
@@ -75,6 +88,14 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     private GroupPagerAdapter pagerAdapter;
     private FlowersAdapter flowersAdapter;
     private EventsAdapter eventsAdapter;
+    private GalleryAdapter galleryAdapter;
+
+    private PermissionHelper permissionHelper;
+
+    public GroupFragment() {
+        permissionHelper = new PermissionHelper(this, 0, PermissionUtil.CAMERA_PERMISSIONS,
+                new int[]{R.string.permissions_camera_required, R.string.permissions_storage_required});
+    }
 
     public static GroupFragment newInstance() {
         return new GroupFragment();
@@ -120,6 +141,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         unbinder = ButterKnife.bind(this, view);
+        permissionHelper.setSnackbarContainer(snackbarContainer);
         setupActionBar();
         initPager();
         refreshViewWithGroup();
@@ -139,6 +161,20 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     public void onDestroy() {
         flowersProvider.unbind();
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case TakePhotoUtils.REQUEST_CODE_CAMERA:
+            case TakePhotoUtils.REQUEST_CODE_GALLERY:
+            case TakePhotoUtils.REQUEST_CODE_SYSTEM_CHOOSER:
+                if (TakePhotoUtils.getInstance().isPhotoRequestOk(requestCode, resultCode)) {
+                    TakePhotoUtils.getInstance().onActivityResult(requestCode, resultCode, data, this);
+                }
+                break;
+        }
     }
 
     @Override
@@ -175,15 +211,25 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
 
     @OnClick(R.id.fg_add)
     void onAddClicked() {
-        Fragment fragment = null;
-        if (viewPager.getCurrentItem() == GroupPagerAdapter.POSITION_EVENTS) {
-            fragment = NotificationFragment.newInstance(group.getId(), Group.TABLE_NAME);
-        } else {
-            fragment = FlowerFragment.newInstance();
+        switch (viewPager.getCurrentItem()) {
+            case GroupPagerAdapter.POSITION_EVENTS:
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        NotificationFragment.newInstance(group.getId(), Group.TABLE_NAME),
+                        null, true);
+                break;
+            case GroupPagerAdapter.POSITION_FLOWERS:
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        FlowerFragment.newInstance(),
+                        null, true);
+                break;
+            case GroupPagerAdapter.POSITION_GALLERY:
+                if (permissionHelper.hasAllPermissions()) {
+                    TakePhotoUtils.getInstance().showSystemChooser(this);
+                } else {
+                    permissionHelper.checkPermissions();
+                }
+                break;
         }
-
-        Fragments.replace(getFragmentManager(), android.R.id.content,
-                fragment, null, true);
     }
 
     @Override
@@ -217,6 +263,22 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             flowersProvider.createOrUpdateGroup(group);
             refreshIconView();
         }
+    }
+
+    @Override
+    public void onPhotoTaken(File photo) {
+        PhotoItem photoItem = new PhotoItem();
+        photoItem.setImagePath(photo.getPath());
+        photoItem.setTargetId(group.getId());
+        photoItem.setTargetTable(Group.TABLE_NAME);
+        photoItem.setDate(Calendar.getInstance());
+        flowersProvider.addPhoto(photoItem);
+        galleryAdapter.add(photoItem);
+    }
+
+    @Override
+    public void onPhotoError() {
+        Toasts.showLong(R.string.photo_choose_error);
     }
 
     private void setupActionBar() {
@@ -282,16 +344,35 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     }
 
     private void initPager() {
-        initEventsAdapter();
-        initFlowersAdapter();
-        if (pagerAdapter == null) {
-            pagerAdapter = new GroupPagerAdapter();
-        }
-
-        pagerAdapter.setAdapters(flowersAdapter, eventsAdapter);
+        initAdapters();
+        pagerAdapter.setAdapters(flowersAdapter, eventsAdapter, galleryAdapter);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
         tabsView.setupWithViewPager(viewPager);
+    }
+
+    private void initAdapters() {
+        initEventsAdapter();
+        initFlowersAdapter();
+        initGalleryAdapter();
+        if (pagerAdapter == null) {
+            pagerAdapter = new GroupPagerAdapter();
+        }
+    }
+
+    private void initGalleryAdapter() {
+        if (galleryAdapter == null) {
+            galleryAdapter = new GalleryAdapter();
+        }
+
+        galleryAdapter.setListener(new OnItemClickListener<PhotoItem>() {
+            @Override
+            public void onItemClicked(PhotoItem item) {
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        GalleryFragment.newInstance(group.getId(), Group.TABLE_NAME, item.getId()),
+                        null, true);
+            }
+        });
     }
 
     private void initEventsAdapter() {
@@ -316,16 +397,28 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             return;
         }
 
-        if (viewPager.getCurrentItem() == GroupPagerAdapter.POSITION_FLOWERS) {
-            reloadFlowers();
-        } else {
-            reloadEvents();
+        switch (viewPager.getCurrentItem()) {
+            case GroupPagerAdapter.POSITION_FLOWERS:
+                reloadFlowers();
+                break;
+            case GroupPagerAdapter.POSITION_EVENTS:
+                reloadEvents();
+                break;
+            case GroupPagerAdapter.POSITION_GALLERY:
+                reloadGallery();
+                break;
         }
+
     }
 
     private void reloadEvents() {
         List<Notification> events = notificationsProvider.getEventsForTarget(group.getId(), Group.TABLE_NAME);
         eventsAdapter.setItems(events);
+    }
+
+    private void reloadGallery() {
+        List<PhotoItem> photoItems = flowersProvider.getPhotosForTarget(group.getId(), Group.TABLE_NAME);
+        galleryAdapter.setItems(photoItems);
     }
 
     private void reloadFlowers() {

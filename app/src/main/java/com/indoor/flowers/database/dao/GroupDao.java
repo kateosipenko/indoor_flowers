@@ -45,6 +45,9 @@ public abstract class GroupDao {
             + "(select group_id from GroupFlowerTable where flower_id=:id)")
     public abstract List<Group> getGroupsForFlower(long id);
 
+    @Query("select name from GroupTable where _id=:targetId")
+    public abstract String getGroupName(long targetId);
+
     public void updateGroupFlowers(long groupId, List<Flower> flowers) {
         deleteFlowersForGroup(groupId);
         if (flowers != null) {

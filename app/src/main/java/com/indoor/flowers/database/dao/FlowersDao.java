@@ -39,4 +39,7 @@ public interface FlowersDao {
 
     @Query("select count(*)>0 from FlowerTable where _id=:id")
     boolean hasFlower(long id);
+
+    @Query("select name from FlowerTable where _id=:targetId")
+    String getFlowerName(long targetId);
 }

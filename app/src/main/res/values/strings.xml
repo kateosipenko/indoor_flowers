@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Поливалка</string>
-    <string name="photo_choose_error">Во время выбора фотографии произошла ошика</string>
+    <string name="photo_choose_error">Во время выбора фотографии произошла ошибка</string>
 
     <!--Permissions-->
     <string name="permission_dialog_title">Необходимо разрешение</string>
@@ -48,14 +48,16 @@
     <string name="faf_flower_name_hint">Имя вашего растения</string>
     <string name="faf_add_event">Добавить уведомление</string>
     <string name="faf_tab_notifications">Уведомления</string>
+    <string name="faf_tab_gallery">Галерея</string>
     <string name="faf_tab_groups">Группы</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
     <string name="faf_date_not_set">Не задано</string>
 
     <!--Create group-->
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
-    <string name="fg_group_flowers">Цветы в группе</string>
+    <string name="fg_group_flowers">Цветы</string>
     <string name="fg_notifications">Уведомления</string>
+    <string name="fg_gallery">Галерея</string>
     <string name="fg_name_hint">Имя группы</string>
 
     <!--Event-->
@@ -91,5 +93,8 @@
     <string name="month_9">Октябрь</string>
     <string name="month_10">Ноябрь</string>
     <string name="month_11">Декабрь</string>
+
+    <!--Gallert-->
+    <string name="fg_title_format">Галерея "%1$s"</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.PhotoItem;
 
 import java.util.List;
 
@@ -85,11 +86,41 @@ public class FlowersProvider extends DatabaseProvider {
     }
 
     public void deleteFlower(Flower flower, boolean deleteTargetNotifications) {
-        database.getFlowersDao().delete(flower);
         if (deleteTargetNotifications) {
             database.getNotificationDao().deleteForTarget(flower.getId(), Flower.TABLE_NAME);
         }
+        database.getPhotoItemDao().deleteForTarget(flower.getId(), Flower.TABLE_NAME);
+        database.getFlowersDao().delete(flower);
     }
 
     // endregion FLOWER
+
+    // region PHOTOS
+
+    public List<PhotoItem> getPhotosForTarget(long id, String tableName) {
+        return database.getPhotoItemDao().getPhotosForTarget(id, tableName);
+    }
+
+    public void addPhoto(PhotoItem photoItem) {
+        photoItem.setId(invalidateIdForInsert(photoItem.getId()));
+        long id = database.getPhotoItemDao().insert(photoItem);
+        photoItem.setId(id);
+    }
+
+    public String getTargetName(long targetId, String targetTable) {
+        String result = null;
+        if (Flower.TABLE_NAME.equalsIgnoreCase(targetTable)) {
+            result = database.getFlowersDao().getFlowerName(targetId);
+        } else if (Group.TABLE_NAME.equalsIgnoreCase(targetTable)) {
+            result = database.getGroupDao().getGroupName(targetId);
+        }
+
+        return result;
+    }
+
+    public void deletePhoto(PhotoItem photoItem) {
+        database.getPhotoItemDao().delete(photoItem);
+    }
+
+    // endregion PHOTOS
 }

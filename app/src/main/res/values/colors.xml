@@ -51,4 +51,6 @@
     <color name="event_fertilizer">@color/material_green_accent200</color>
     <color name="event_transplantation">@color/material_brown_primary300</color>
 
+    <color name="gallery_background">#161616</color>
+
 </resources>

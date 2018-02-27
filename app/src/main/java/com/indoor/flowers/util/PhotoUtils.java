@@ -23,7 +23,10 @@ public class PhotoUtils {
         List<Bitmap> bitmaps = new ArrayList<>();
         for (Flower flower : flowers) {
             if (!TextUtils.isEmpty(flower.getImagePath())) {
-                bitmaps.add(BitmapFactory.decodeFile(flower.getImagePath()));
+                Bitmap bitmap = BitmapFactory.decodeFile(flower.getImagePath());
+                if (bitmap != null) {
+                    bitmaps.add(bitmap);
+                }
             }
 
             if (bitmaps.size() == MAX_BITMAPS_FOR_COMBINATION) {

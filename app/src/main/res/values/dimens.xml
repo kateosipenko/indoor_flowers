@@ -30,7 +30,7 @@
 
 
     <!--Add flower-->
-    <dimen name="faf_image_size">40dp</dimen>
+    <dimen name="faf_image_size">60dp</dimen>
     <dimen name="faf_flower_container_margin">36dp</dimen>
     <dimen name="ff_image_size">120dp</dimen>
 
@@ -45,5 +45,8 @@
 
     <!--Group-->
     <dimen name="fg_icon_size">60dp</dimen>
+
+    <!--Gallery-->
+    <dimen name="rg_image_height">150dp</dimen>
 
 </resources>

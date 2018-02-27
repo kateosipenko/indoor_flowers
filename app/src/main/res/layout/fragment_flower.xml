@@ -9,27 +9,51 @@
         android:id="@+id/ff_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/material_white"
+        android:background="@color/primary"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/LightToolbarTheme"
+        android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/PopupTheme"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ff_data_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_white"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_small"
+        app:layout_constraintTop_toBottomOf="@id/ff_toolbar">
 
         <ImageView
             android:id="@+id/ff_icon"
             android:layout_width="@dimen/faf_image_size"
             android:layout_height="@dimen/faf_image_size"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_default"
             android:background="@drawable/ic_flower_circle"
             android:elevation="@dimen/margin_normal"
             android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/ff_change_icon"
+            style="@style/ImageButtonStyle"
+            android:elevation="@dimen/margin_default"
+            android:src="@drawable/ic_photo_camera"
+            android:tint="@color/accent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ff_icon"
+            app:layout_constraintStart_toEndOf="@id/ff_icon"
             tools:ignore="ContentDescription" />
 
         <com.indoor.flowers.view.NameView
             android:id="@+id/ff_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/margin_default"
@@ -41,9 +65,13 @@
             android:textColorHint="@color/black_secondary_text"
             android:textCursorDrawable="@drawable/shape_accent_cursor"
             android:textSize="@dimen/text_body_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ff_icon"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="ASd asd " />
+    </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/ff_tabs"
@@ -51,13 +79,13 @@
         android:layout_height="wrap_content"
         android:background="@color/material_white"
         android:theme="@style/PopupTheme"
-        app:layout_constraintTop_toBottomOf="@id/ff_toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/ff_data_container"
+        app:tabMode="scrollable" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/faf_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="@dimen/margin_default"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toTopOf="@+id/faf_snackbar"
         app:layout_constraintEnd_toEndOf="parent"

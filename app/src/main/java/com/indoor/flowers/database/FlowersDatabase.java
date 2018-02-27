@@ -11,11 +11,13 @@ import com.indoor.flowers.database.dao.EventActionDao;
 import com.indoor.flowers.database.dao.FlowersDao;
 import com.indoor.flowers.database.dao.GroupDao;
 import com.indoor.flowers.database.dao.NotificationDao;
+import com.indoor.flowers.database.dao.PhotoItemDao;
 import com.indoor.flowers.model.EventAction;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.GroupFlower;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.PhotoItem;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,7 +28,8 @@ import java.lang.annotation.RetentionPolicy;
                 Flower.class,
                 GroupFlower.class,
                 Notification.class,
-                EventAction.class
+                EventAction.class,
+                PhotoItem.class
         })
 public abstract class FlowersDatabase extends RoomDatabase {
 
@@ -53,6 +56,8 @@ public abstract class FlowersDatabase extends RoomDatabase {
     public abstract NotificationDao getNotificationDao();
 
     public abstract EventActionDao getEventActionDao();
+
+    public abstract PhotoItemDao getPhotoItemDao();
 
     @IntDef({Versions.VERSION_1})
     @Retention(RetentionPolicy.SOURCE)
