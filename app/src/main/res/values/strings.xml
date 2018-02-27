@@ -16,6 +16,7 @@
     <string name="action_done">Готово</string>
     <string name="action_filter">Фильтровать</string>
     <string name="action_repeat">Повторять</string>
+    <string name="action_calendar">Календарь</string>
 
     <!--NavigationDrawerActivity-->
     <string name="fm_notifications">События</string>

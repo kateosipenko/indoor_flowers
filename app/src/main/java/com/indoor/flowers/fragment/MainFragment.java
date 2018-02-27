@@ -11,6 +11,9 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -41,6 +44,12 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
         return new MainFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +65,22 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
         unbinder.unbind();
         removeToolbar();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.mm_calendar) {
+            Fragments.replace(getFragmentManager(), android.R.id.content,
+                    EventsCalendarFragment.newInstance(), null, true);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -97,7 +122,7 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
     private void removeToolbar() {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
-//            activity.setSupportActionBar(null);
+            activity.setSupportActionBar(null);
         }
     }
 

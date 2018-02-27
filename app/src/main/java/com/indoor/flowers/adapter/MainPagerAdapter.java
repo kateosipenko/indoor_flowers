@@ -7,19 +7,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.fragment.EventsCalendarFragment;
 import com.indoor.flowers.fragment.FlowersFragment;
 import com.indoor.flowers.fragment.GroupsFragment;
 import com.indoor.flowers.fragment.NotificationsFragment;
 
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
-    private static final int ITEMS_COUNT = 4;
+    private static final int ITEMS_COUNT = 3;
 
     public static final int POSITION_NOTIFICATIONS = 0;
     public static final int POSITION_FLOWERS = 1;
     public static final int POSITION_GROUPS = 2;
-    public static final int POSITION_CALENDAR = 3;
 
     public MainPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -37,9 +35,6 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
                 break;
             case POSITION_GROUPS:
                 result = GroupsFragment.newInstance();
-                break;
-            case POSITION_CALENDAR:
-                result = EventsCalendarFragment.newInstance();
                 break;
         }
 
@@ -59,9 +54,6 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
                 break;
             case POSITION_GROUPS:
                 result = Res.getString(R.string.fm_groups);
-                break;
-            case POSITION_CALENDAR:
-                result = Res.getString(R.string.fm_calendar);
                 break;
         }
         return result;

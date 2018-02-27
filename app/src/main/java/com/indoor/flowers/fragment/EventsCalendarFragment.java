@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +49,8 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     CalendarView calendarView;
     @BindView(R.id.fec_events_per_day_list)
     RecyclerView eventsPerDayList;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private Unbinder unbinder;
     private NotificationsProvider provider;
@@ -71,6 +76,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
         View view = inflater.inflate(R.layout.fragment_events_calendar, container, false);
         unbinder = ButterKnife.bind(this, view);
         filter = FilesUtils.getCalendarFilter();
+        setupActionBar();
         initEventsList();
 
         calendarView.setDayClickListener(this);
@@ -149,5 +155,18 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
         eventsPerDayList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsPerDayList.setAdapter(eventsAdapter);
         eventsPerDayList.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
+    }
+
+    private void setupActionBar() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolbar);
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setHomeButtonEnabled(true);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(R.string.action_calendar);
+            }
+        }
     }
 }
