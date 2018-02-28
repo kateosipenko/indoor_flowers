@@ -42,7 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_default"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fg_group_icon"
+        app:tabGravity="center"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/black_primary_text"
         app:tabTextColor="@color/black_secondary_text" />

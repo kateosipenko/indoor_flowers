@@ -3,6 +3,7 @@ package com.indoor.flowers.database.provider;
 import android.content.Context;
 
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithWatering;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.PhotoItem;
 
@@ -71,6 +72,14 @@ public class FlowersProvider extends DatabaseProvider {
 
     public List<Flower> getAllFlowers() {
         return database.getFlowersDao().getAllFlowers();
+    }
+
+    public List<FlowerWithWatering> getAllFlowersWithWatering() {
+        return database.getFlowersDao().getAllFlowersWithWatering();
+    }
+
+    public List<FlowerWithWatering> getFlowersWithoutGroupWithWatering() {
+        return database.getFlowersDao().getFlowersWithoutGroupWithWatering();
     }
 
     public Flower getFlowerById(long flowerId) {

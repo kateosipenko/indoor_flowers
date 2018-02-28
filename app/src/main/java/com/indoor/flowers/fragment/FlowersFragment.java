@@ -16,9 +16,9 @@ import android.view.ViewGroup;
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.adapter.FlowersAdapter;
+import com.indoor.flowers.adapter.FlowersWithWateringAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithWatering;
 import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.Prefs;
 import com.indoor.flowers.util.SpaceItemDecoration;
@@ -29,12 +29,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FlowersFragment extends Fragment implements OnItemClickListener<Flower> {
+public class FlowersFragment extends Fragment implements OnItemClickListener<FlowerWithWatering> {
 
     @BindView(R.id.ff_flowers_list)
     RecyclerView flowersList;
 
-    private FlowersAdapter adapter;
+    private FlowersWithWateringAdapter adapter;
     private FlowersProvider provider;
 
     private Unbinder unbinder;
@@ -104,21 +104,21 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
     }
 
     @Override
-    public void onItemClicked(Flower item) {
+    public void onItemClicked(FlowerWithWatering item) {
         FragmentManager manager = getParentFragment() != null
                 ? getParentFragment().getFragmentManager() : getFragmentManager();
         if (manager != null) {
             Fragments.replace(manager, android.R.id.content,
-                    FlowerFragment.newInstance(item.getId()), null, true);
+                    FlowerFragment.newInstance(item.getFlower().getId()), null, true);
         }
     }
 
     private void reloadItems() {
-        List<Flower> flowers = null;
+        List<FlowerWithWatering> flowers = null;
         if (hideGroupFlowers) {
-            flowers = provider.getAllFlowers();
+            flowers = provider.getAllFlowersWithWatering();
         } else {
-            flowers = provider.getFlowersWithoutGroup();
+            flowers = provider.getFlowersWithoutGroupWithWatering();
         }
 
         adapter.setItems(flowers);
@@ -126,7 +126,7 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
 
     private void initList() {
         if (adapter == null) {
-            adapter = new FlowersAdapter();
+            adapter = new FlowersWithWateringAdapter();
         }
 
         adapter.setListener(this);

@@ -79,7 +79,10 @@
         android:layout_height="wrap_content"
         android:background="@color/material_white"
         android:theme="@style/PopupTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ff_data_container"
+        app:tabGravity="center"
         app:tabMode="scrollable" />
 
     <android.support.v4.view.ViewPager

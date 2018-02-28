@@ -21,8 +21,8 @@
         android:id="@+id/rf_icon"
         android:layout_width="@dimen/fm_rooms_width"
         android:layout_height="@dimen/fm_rooms_width"
-        android:elevation="@dimen/margin_small"
         android:background="@drawable/ic_flower_circle"
+        android:elevation="@dimen/margin_small"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toEndOf="@id/rf_check_box"
         tools:ignore="ContentDescription" />
@@ -37,9 +37,20 @@
         android:textColor="@color/black_primary_text"
         android:textSize="@dimen/text_body_medium"
         app:layout_constraintBottom_toBottomOf="@id/rf_icon"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rf_watering_status"
         app:layout_constraintStart_toEndOf="@id/rf_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="New flower" />
+
+    <com.indoor.flowers.view.NotificationStatus
+        android:id="@+id/rf_watering_status"
+        android:layout_width="@dimen/fm_rooms_width"
+        android:layout_height="@dimen/fm_rooms_width"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:progressTint="@color/material_blue_primary400"
+        app:textColor="@color/black_primary_text"
+        app:textSize="@dimen/text_body_medium"
+        tools:progress="20" />
 
 </android.support.constraint.ConstraintLayout>

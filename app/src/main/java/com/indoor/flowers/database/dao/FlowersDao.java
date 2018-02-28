@@ -8,6 +8,8 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.FlowerWithWatering;
+import com.indoor.flowers.model.NotificationType;
 
 import java.util.List;
 
@@ -36,6 +38,23 @@ public interface FlowersDao {
 
     @Query("select * from FlowerTable")
     List<Flower> getAllFlowers();
+
+    @Query("select FlowerTable.*, NotificationTable.frequency, EventActionTable.date from FlowerTable "
+            + " inner join NotificationTable "
+            + " on NotificationTable.target_id=FlowerTable._id "
+            + " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=" + NotificationType.WATERING
+            + " inner join EventActionTable "
+            + " on EventActionTable.notification_id=NotificationTable._id")
+    List<FlowerWithWatering> getAllFlowersWithWatering();
+
+    @Query("select FlowerTable.*, NotificationTable.frequency, EventActionTable.date from FlowerTable "
+            + " inner join NotificationTable "
+            + " on NotificationTable.target_id=FlowerTable._id "
+            + " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=" + NotificationType.WATERING
+            + " inner join EventActionTable "
+            + " on EventActionTable.notification_id=NotificationTable._id "
+            + " where FlowerTable._id not in (select flower_id from GroupFlowerTable)")
+    List<FlowerWithWatering> getFlowersWithoutGroupWithWatering();
 
     @Query("select count(*)>0 from FlowerTable where _id=:id")
     boolean hasFlower(long id);

@@ -1,14 +1,10 @@
 <resources>
 
-    <declare-styleable name="ValueSeekBar">
-        <attr name="header" format="string" />
-        <attr name="headerTextColor" format="color" />
-        <attr name="headerTextSize" format="dimension" />
-        <attr name="valueTextColor" format="color" />
-        <attr name="valueTextSize" format="dimension" />
-        <attr name="minValue" format="float" />
-        <attr name="maxValue" format="float" />
-        <attr name="defaultValue" format="float" />
+    <declare-styleable name="NotificationStatus">
+        <attr name="progress" format="integer" />
+        <attr name="progressTint" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="color" />
     </declare-styleable>
 
     <style name="ImageButtonStyle">
