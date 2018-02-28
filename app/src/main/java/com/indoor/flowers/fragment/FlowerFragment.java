@@ -2,6 +2,7 @@ package com.indoor.flowers.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -178,12 +179,8 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
 
     @OnClick({R.id.ff_icon, R.id.ff_change_icon})
     void onChooseImageClicked() {
-        if (permissionHelper.hasAllPermissions()) {
-            isProfilePhotoChoosing = true;
-            TakePhotoUtils.getInstance().showSystemChooser(this);
-        } else {
-            permissionHelper.checkPermissions();
-        }
+        isProfilePhotoChoosing = true;
+        tryAddPhoto();
     }
 
     @Override
@@ -207,12 +204,8 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
                         null, true);
                 break;
             case FlowerPagerAdapter.POSITION_GALLERY:
-                if (permissionHelper.hasAllPermissions()) {
-                    isProfilePhotoChoosing = false;
-                    TakePhotoUtils.getInstance().showSystemChooser(FlowerFragment.this);
-                } else {
-                    permissionHelper.checkPermissions();
-                }
+                isProfilePhotoChoosing = false;
+                tryAddPhoto();
                 break;
             case FlowerPagerAdapter.POSITION_GROUPS:
                 Fragments.replace(getFragmentManager(), android.R.id.content,
@@ -235,6 +228,13 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        tryAddPhoto();
     }
 
     @Override
@@ -268,6 +268,14 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     public void onPhotoError() {
         Toasts.showLong(R.string.photo_choose_error);
         hideProgress();
+    }
+
+    private void tryAddPhoto() {
+        if (permissionHelper.hasAllPermissions()) {
+            TakePhotoUtils.getInstance().showSystemChooser(FlowerFragment.this);
+        } else {
+            permissionHelper.checkPermissions();
+        }
     }
 
     private void reloadData() {

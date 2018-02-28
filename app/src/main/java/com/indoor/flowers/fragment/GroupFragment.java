@@ -2,6 +2,7 @@ package com.indoor.flowers.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -178,6 +179,13 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        addPhotoToGallery();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (group.getId() != DatabaseProvider.DEFAULT_ID) {
             inflater.inflate(R.menu.menu_group, menu);
@@ -223,11 +231,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
                         null, true);
                 break;
             case GroupPagerAdapter.POSITION_GALLERY:
-                if (permissionHelper.hasAllPermissions()) {
-                    TakePhotoUtils.getInstance().showSystemChooser(this);
-                } else {
-                    permissionHelper.checkPermissions();
-                }
+                addPhotoToGallery();
                 break;
         }
     }
@@ -279,6 +283,14 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     @Override
     public void onPhotoError() {
         Toasts.showLong(R.string.photo_choose_error);
+    }
+
+    private void addPhotoToGallery() {
+        if (permissionHelper.hasAllPermissions()) {
+            TakePhotoUtils.getInstance().showSystemChooser(this);
+        } else {
+            permissionHelper.checkPermissions();
+        }
     }
 
     private void setupActionBar() {
