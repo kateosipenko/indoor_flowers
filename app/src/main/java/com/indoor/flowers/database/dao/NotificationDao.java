@@ -7,7 +7,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
-import com.evgeniysharafan.utils.L;
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationType;
@@ -48,6 +47,20 @@ public abstract class NotificationDao {
 
     @Query("select * from NotificationTable where _id=:eventId")
     public abstract Notification getNotificationById(long eventId);
+
+    @Query("select NotificationTable.*, " +
+            "    case when target_table='FlowerTable' " +
+            "    then (select name from FlowerTable where _id=target_id) " +
+            "    else (select name from GroupTable where _id=target_id) " +
+            "    end as name, " +
+            "                 " +
+            "    case when target_table='FlowerTable' " +
+            "    then (select image_path from FlowerTable where _id=target_id) " +
+            "    else (select image_path from GroupTable where _id=target_id) " +
+            "    end as image_path " +
+            " from NotificationTable " +
+            " where _id=:notificationId")
+    public abstract NotificationWithTarget getNotificationWithTarget(long notificationId);
 
     @Query("select * from NotificationTable where target_id=:targetId and target_table=:targetTable "
             + " and type!=" + NotificationType.CREATED)
@@ -94,15 +107,10 @@ public abstract class NotificationDao {
                 }
 
                 if (eventDate.before(startDate) && !includeOldNotifications) {
-                    L.e(String.format("startDate %1$tD %1$tH:%1$tM", startDate));
-                    L.e(String.format("endDate %1$tD %1$tH:%1$tM", endDate));
                     long daysDiff = CalendarUtils.getDaysDiff(eventDate, startDate);
-
                     eventDate.set(Calendar.DAY_OF_YEAR, startDate.get(Calendar.DAY_OF_YEAR));
                     int daysToEvent = (int) (daysDiff % notification.getFrequency());
                     int addDays = daysToEvent > 0 ? notification.getFrequency() - daysToEvent : 0;
-                    L.e("daysDiff=" + daysDiff + ";freq=" + notification.getFrequency() + ";addDays=" + addDays);
-
                     eventDate.add(Calendar.DAY_OF_YEAR, addDays);
                 }
 

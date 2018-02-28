@@ -109,6 +109,10 @@ public class NotificationsProvider extends DatabaseProvider {
         return database.getNotificationDao().getNotificationById(id);
     }
 
+    public NotificationWithTarget getNotificationWithTarget(long id) {
+        return database.getNotificationDao().getNotificationWithTarget(id);
+    }
+
     public void createOrUpdateNotification(Notification notification) {
         if (notification.getId() == DEFAULT_ID) {
             notification.setId(invalidateIdForInsert(notification.getId()));

@@ -18,6 +18,11 @@
     <string name="action_repeat">Повторять</string>
     <string name="action_calendar">Календарь</string>
 
+    <!--Notifications-->
+    <string name="notifications_channel_watering">Уведомления про полив</string>
+    <string name="notifications_channel_fertilizing">Уведомления про подкормку</string>
+    <string name="notifications_channel_transplanting">Уведомления про пересадку</string>
+
     <!--NavigationDrawerActivity-->
     <string name="fm_notifications">События</string>
     <string name="fm_flowers">Цветы</string>
@@ -41,8 +46,6 @@
     <string name="event_watering">Полить</string>
     <string name="event_fertilizer">Подкормить</string>
     <string name="event_transplanting">Пересадить</string>
-
-    <!--Settings-->
 
     <!--Add flower-->
     <string name="faf_flower_name_hint">Имя вашего растения</string>
