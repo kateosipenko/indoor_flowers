@@ -7,52 +7,123 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.RawQuery;
 import android.arch.persistence.room.Update;
 
+import com.evgeniysharafan.utils.L;
+import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
+import com.indoor.flowers.util.CalendarUtils;
+import com.indoor.flowers.util.EventDatesComparator;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 @Dao
-public interface NotificationDao {
+public abstract class NotificationDao {
 
-    String QUERY_NOTIFICATION_FILTER = "select * from NotificationTable where type!=0 and " +
-            " (frequency not null and frequency > 0 and (end_date is null or end_date >= %2$s) " +
-            " or _id in " +
-            " (select notification_id from EventActionTable where date between %1$s and  %2$s))";
-
-    String QUERY_EVENTS_FILTER = "select * from NotificationTable where " +
-            " (frequency not null and frequency > 0 and (end_date is null or end_date >= %2$s) " +
-            " or _id in " +
-            " (select notification_id from EventActionTable where date between %1$s and  %2$s))";
+    public static final String QUERY_EVENTS_FILTER = "select * from NotificationTable "
+            + " where (end_date between %1$s and  %2$s "
+            + " or frequency not null and frequency > 0 and (end_date is null or end_date>=%1$s))";
 
     @Insert
-    long insert(Notification event);
+    public abstract long insert(Notification event);
 
     @Update
-    void update(Notification event);
+    public abstract void update(Notification event);
 
     @Delete
-    void delete(Notification event);
+    public abstract void delete(Notification event);
 
     @Query("delete from NotificationTable where target_id=:targetId and target_table=:targetTable ")
-    void deleteForTarget(long targetId, String targetTable);
+    public abstract void deleteForTarget(long targetId, String targetTable);
 
     @Query("select * from NotificationTable where target_id=:targetId and target_table=:targetTable "
             + " and type=:eventType limit 1")
-    Notification getForTarget(long targetId, String targetTable, int eventType);
+    public abstract Notification getForTarget(long targetId, String targetTable, int eventType);
 
     @RawQuery
-    List<Notification> getNotificationForSelection(String query);
+    public abstract List<Notification> getNotificationForSelection(String query);
 
     @Query("select * from NotificationTable where _id=:eventId")
-    Notification getNotificationById(long eventId);
+    public abstract Notification getNotificationById(long eventId);
 
     @Query("select * from NotificationTable where target_id=:targetId and target_table=:targetTable "
             + " and type!=" + NotificationType.CREATED)
-    List<Notification> getNotificationForTarget(long targetId, String targetTable);
+    public abstract List<Notification> getNotificationForTarget(long targetId, String targetTable);
 
-    @Query("select * from NotificationTable "
-            + " where (frequency not null and frequency > 0 or end_date between :startDate and :endDate) "
-            + " and type!=" + NotificationType.CREATED)
-    List<Notification> getNearbyNotifications(long startDate, long endDate);
+    @Query("select NotificationTable.*, " +
+            "    case when target_table='FlowerTable' " +
+            "    then (select name from FlowerTable where _id=target_id) " +
+            "    else (select name from GroupTable where _id=target_id) " +
+            "    end as name, " +
+            "                 " +
+            "    case when target_table='FlowerTable' " +
+            "    then (select image_path from FlowerTable where _id=target_id) " +
+            "    else (select image_path from GroupTable where _id=target_id) " +
+            "    end as image_path, " +
+            "                 " +
+            "    (select max(date) from EventActionTable " +
+            "     where EventActionTable.notification_id=NotificationTable._id) " +
+            "     as " + Columns.EVENT_DATE +
+            "                 " +
+            "from NotificationTable " +
+            "where date>=:startDate or end_date between :startDate and :endDate " +
+            "or frequency>0 and (end_date is null or end_date>=:startDate) and date<=:startDate")
+    public abstract List<NotificationWithTarget> getNotificationsForRange(long startDate, long endDate);
+
+    public List<NotificationWithTarget> getNearbyEvents(Calendar startDate, Calendar endDate,
+                                                        boolean includeOldNotifications) {
+        List<NotificationWithTarget> notificationsInRange = getNotificationsForRange(
+                startDate.getTimeInMillis(), endDate.getTimeInMillis());
+        List<NotificationWithTarget> result = new ArrayList<>();
+        for (NotificationWithTarget notificationWithTarget : notificationsInRange) {
+            Notification notification = notificationWithTarget.getNotification();
+            if (notification.getType() == NotificationType.CREATED) {
+                continue;
+            }
+
+            if (notification.getFrequency() != null) {
+                Calendar eventDate = null;
+                if (notificationWithTarget.getEventDate() != null) {
+                    eventDate = (Calendar) notificationWithTarget.getEventDate().clone();
+                    eventDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
+                } else {
+                    eventDate = notification.getDate();
+                }
+
+                if (eventDate.before(startDate) && !includeOldNotifications) {
+                    L.e(String.format("startDate %1$tD %1$tH:%1$tM", startDate));
+                    L.e(String.format("endDate %1$tD %1$tH:%1$tM", endDate));
+                    long daysDiff = CalendarUtils.getDaysDiff(eventDate, startDate);
+
+                    eventDate.set(Calendar.DAY_OF_YEAR, startDate.get(Calendar.DAY_OF_YEAR));
+                    int daysToEvent = (int) (daysDiff % notification.getFrequency());
+                    int addDays = daysToEvent > 0 ? notification.getFrequency() - daysToEvent : 0;
+                    L.e("daysDiff=" + daysDiff + ";freq=" + notification.getFrequency() + ";addDays=" + addDays);
+
+                    eventDate.add(Calendar.DAY_OF_YEAR, addDays);
+                }
+
+                do {
+                    NotificationWithTarget periodically = notificationWithTarget.clone();
+                    periodically.setEventDate(eventDate);
+                    result.add(periodically);
+                    eventDate = (Calendar) eventDate.clone();
+                    eventDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
+                } while (eventDate.before(endDate)
+                        || CalendarUtils.getDaysDiff(eventDate, endDate) == 0);
+            } else {
+                if (notificationWithTarget.getEventDate() == null) {
+                    notificationWithTarget.setEventDate(notification.getDate());
+                }
+
+                result.add(notificationWithTarget);
+            }
+        }
+
+        Collections.sort(result, new EventDatesComparator());
+        return result;
+    }
 }

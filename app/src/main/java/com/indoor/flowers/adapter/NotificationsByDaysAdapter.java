@@ -46,12 +46,12 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
         }
     }
 
-    public void onNotificationDone(Notification event) {
+    public void onNotificationDone(NotificationWithTarget notification) {
         int position = -1;
         for (int i = 0; i < items.size(); i++) {
             NotificationWithTarget current = items.get(i);
-            if (current.getNotification().getId() == event.getId()
-                    && current.getNotification().getDate().equals(event.getDate())) {
+            if (current.getNotification().getId() == notification.getNotification().getId()
+                    && current.getEventDate().equals(notification.getEventDate())) {
                 position = i;
                 break;
             }
@@ -65,8 +65,7 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
     @Nullable
     public Calendar getLastItemDate() {
         NotificationWithTarget lastItem = getItemByPosition(getItemCount() - 1);
-        return lastItem != null && lastItem.getNotification() != null
-                ? lastItem.getNotification().getDate() : null;
+        return lastItem != null ? lastItem.getEventDate() : null;
     }
 
     @Override
@@ -119,50 +118,48 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
         @OnClick(R.id.rn_done)
         void onDoneClicked() {
             if (adapter.listener != null) {
-                adapter.listener.onNotificationDone(
-                        adapter.getItemByPosition(getAdapterPosition()).getNotification());
+                adapter.listener.onNotificationDone(adapter.getItemByPosition(getAdapterPosition()));
             }
         }
 
-        private void update(NotificationWithTarget notificationWithTarget) {
-            Notification event = notificationWithTarget.getNotification();
+        private void update(NotificationWithTarget notification) {
+            Notification event = notification.getNotification();
             colorView.setBackgroundColor(EventsUtils.getColorForEventType(event.getType()));
             titleView.setText(event.getTitle());
             commentView.setText(event.getComment());
 
-            boolean isToday = CalendarUtils.isToday(event.getDate());
+            boolean isToday = CalendarUtils.isToday(notification.getEventDate());
 
             if (adapter.editable) {
-                doneButton.setVisibility(isToday || event.getDate().before(adapter.today)
+                doneButton.setVisibility(isToday || notification.getEventDate().before(adapter.today)
                         ? View.VISIBLE : View.GONE);
             }
             if (isToday || !adapter.editable) {
                 eventsContainer.setBackgroundTintList(null);
-            } else if (event.getDate().before(adapter.today)) {
+            } else if (notification.getEventDate().before(adapter.today)) {
                 eventsContainer.setBackgroundTintList(ColorStateList.valueOf(
                         Res.getColor(R.color.material_red_primary50)));
-            } else if (event.getDate().after(adapter.today)) {
+            } else if (notification.getEventDate().after(adapter.today)) {
                 eventsContainer.setBackgroundTintList(ColorStateList.valueOf(
                         Res.getColor(R.color.material_grey_primary100)));
             }
 
-            refreshDateView(notificationWithTarget);
+            refreshDateView(notification);
         }
 
-        private void refreshDateView(NotificationWithTarget notificationWithTarget) {
-            Notification event = notificationWithTarget.getNotification();
+        private void refreshDateView(NotificationWithTarget notification) {
             NotificationWithTarget previous = adapter.getItemByPosition(getAdapterPosition() - 1);
-            dayTitle.setText(Res.getString(R.string.day_title_format, event.getDate()));
+            dayTitle.setText(Res.getString(R.string.day_title_format, notification.getEventDate()));
             if (adapter.editable) {
                 dayTitle.setVisibility(previous == null
-                        || CalendarUtils.getDaysDiff(previous.getNotification().getDate(),
-                        event.getDate()) > 0
+                        || CalendarUtils.getDaysDiff(previous.getEventDate(),
+                        notification.getEventDate()) > 0
                         ? View.VISIBLE : View.GONE);
             }
         }
     }
 
     public interface NotificationDoneListener {
-        void onNotificationDone(Notification event);
+        void onNotificationDone(NotificationWithTarget event);
     }
 }

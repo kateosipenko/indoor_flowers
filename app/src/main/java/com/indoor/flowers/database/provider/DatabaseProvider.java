@@ -101,7 +101,8 @@ public abstract class DatabaseProvider {
         Notification notification = new Notification();
         notification.setTargetId(targetId);
         notification.setTargetTable(tableName);
-        notification.setDate(java.util.Calendar.getInstance());
+        notification.setDate(Calendar.getInstance());
+        notification.setEndDate(Calendar.getInstance());
         notification.setType(NotificationType.CREATED);
         notification.setTitle(title);
         long id = database.getNotificationDao().insert(notification);

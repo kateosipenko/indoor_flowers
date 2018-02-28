@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CalendarFilter implements Serializable {
 
@@ -59,18 +58,6 @@ public class CalendarFilter implements Serializable {
         if (selectedGroups != null) {
             selectedGroups.clear();
         }
-    }
-
-    public List<Long> getSelectedElements() {
-        List<Long> result = new ArrayList<>();
-        if (selectedFlowers != null) {
-            result.addAll(selectedFlowers);
-        }
-        if (selectedGroups != null) {
-            result.addAll(selectedGroups);
-        }
-
-        return result;
     }
 
     @IntDef({FilterElements.NONE, FilterElements.FLOWERS, FilterElements.GROUPS, FilterElements.SELECTED})

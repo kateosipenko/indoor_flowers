@@ -99,6 +99,7 @@ public class NameView extends android.support.v7.widget.AppCompatEditText {
     private void init() {
         editIcon = getResources().getDrawable(R.drawable.ic_edit);
         editIcon.setTintList(getHintTextColors());
+        setInputType(EditorInfo.TYPE_TEXT_FLAG_CAP_WORDS);
         setCompoundDrawablesWithIntrinsicBounds(null, null, editIcon, null);
         setEnabled(false);
         setImeOptions(EditorInfo.IME_ACTION_DONE);

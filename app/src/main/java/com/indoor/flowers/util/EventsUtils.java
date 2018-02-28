@@ -4,12 +4,14 @@ import android.support.annotation.ColorInt;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
+import com.indoor.flowers.database.FlowersDatabase;
+import com.indoor.flowers.model.EventAction;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,75 +57,61 @@ public class EventsUtils {
         return result;
     }
 
-    public static List<Notification> createOrderedEventsWithPeriodically(List<Notification> events, Calendar minDate,
-                                                                         Calendar maxDate, boolean includeOldEvents) {
-        List<Notification> result = new ArrayList<>();
-        for (Notification event : events) {
-            if (event.getFrequency() != null) {
-                if (event.getDate().after(maxDate)) {
-                    continue;
-                }
-
-                Calendar eventDate = (Calendar) event.getDate().clone();
-                if (eventDate.before(minDate) && !includeOldEvents) {
-                    long daysDiff = CalendarUtils.getDaysDiff(event.getDate(), minDate);
-                    eventDate = (Calendar) minDate.clone();
-                    eventDate.add(Calendar.DAY_OF_YEAR, (int) (daysDiff % event.getFrequency()));
-                }
-
-                do {
-                    Notification periodically = event.clone();
-                    periodically.setDate(eventDate);
-                    result.add(periodically);
-                    eventDate = (Calendar) eventDate.clone();
-                    eventDate.add(Calendar.DAY_OF_YEAR, event.getFrequency());
-                } while (eventDate.before(maxDate));
-            } else {
-                result.add(event);
-            }
-        }
-
-        Collections.sort(result, new EventDatesComparator());
-        return result;
-    }
-
-    public static HashMap<Integer, List<Notification>> groupNotifications(List<Notification> notifications, Calendar minDate,
-                                                                          Calendar maxDate) {
-        HashMap<Integer, List<Notification>> eventsByDays = new HashMap<>();
+    public static HashMap<Integer, List<NotificationWithTarget>> createDayNotificationsMap(
+            List<Notification> notifications, FlowersDatabase database,
+            Calendar minDate, Calendar maxDate) {
+        HashMap<Integer, List<NotificationWithTarget>> eventsByDays = new HashMap<>();
         int daysCount = CalendarUtils.getDaysDiff(minDate, maxDate);
         int startDayOfYear = minDate.get(Calendar.DAY_OF_YEAR);
         for (int i = 0; i < daysCount; i++) {
-            eventsByDays.put(startDayOfYear, new ArrayList<Notification>());
+            eventsByDays.put(startDayOfYear, new ArrayList<NotificationWithTarget>());
             ++startDayOfYear;
         }
 
         for (Notification notification : notifications) {
+            List<EventAction> actionsPerRange = database.getEventActionDao()
+                    .getEventActionsPerNotification(notification.getId(), minDate.getTimeInMillis(),
+                            maxDate.getTimeInMillis());
+            Calendar lastActionDate = database.getEventActionDao()
+                    .getNotificationLastActionDate(notification.getId());
+            if (actionsPerRange != null && actionsPerRange.size() > 0) {
+                for (EventAction action : actionsPerRange) {
+                    addNotificationForDay(notification, action.getDate(), eventsByDays);
+                }
+            }
+
             if (notification.getFrequency() != null) {
-                if (notification.getDate().after(maxDate)) {
-                    continue;
+                if (lastActionDate == null) {
+                    lastActionDate = notification.getDate();
+                    addNotificationForDay(notification, lastActionDate, eventsByDays);
                 }
 
-                int firstEventDay = notification.getDate().get(Calendar.DAY_OF_YEAR);
-                if (!eventsByDays.containsKey(firstEventDay)) {
-                    long daysDiff = CalendarUtils.getDaysDiff(notification.getDate(), minDate);
-                    firstEventDay = (int) (daysDiff % notification.getFrequency()
-                            + minDate.get(Calendar.DAY_OF_YEAR));
-                }
-                List<Notification> itemsPerDay = eventsByDays.get(firstEventDay);
-                if (itemsPerDay != null) {
-                    do {
-                        itemsPerDay.add(notification);
-                        firstEventDay += notification.getFrequency();
-                        itemsPerDay = eventsByDays.get(firstEventDay);
-                    } while (itemsPerDay != null);
-                }
-            } else {
-                List<Notification> itemsPerDay = eventsByDays.get(notification.getDate().get(Calendar.DAY_OF_YEAR));
-                itemsPerDay.add(notification);
+                do {
+                    lastActionDate = (Calendar) lastActionDate.clone();
+                    lastActionDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
+                    if (notification.getEndDate() == null
+                            || lastActionDate.before(notification.getEndDate())) {
+                        addNotificationForDay(notification, lastActionDate, eventsByDays);
+                    }
+                } while (lastActionDate.before(maxDate)
+                        && (notification.getEndDate() == null
+                        || lastActionDate.before(notification.getEndDate())));
+            } else if (actionsPerRange == null) {
+                addNotificationForDay(notification, notification.getDate(), eventsByDays);
             }
         }
 
         return eventsByDays;
     }
 
+    private static void addNotificationForDay(Notification notification, Calendar date,
+                                              HashMap<Integer, List<NotificationWithTarget>> eventsByDays) {
+        NotificationWithTarget target = new NotificationWithTarget();
+        target.setNotification(notification);
+        target.setEventDate(date);
+        List<NotificationWithTarget> dayEvents = eventsByDays.get(date.get(Calendar.DAY_OF_YEAR));
+        if (dayEvents != null) {
+            dayEvents.add(target);
+        }
+    }
 }

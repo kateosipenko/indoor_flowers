@@ -11,9 +11,9 @@ import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationWithTarget;
+import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EventsUtils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -32,31 +32,27 @@ public class NotificationsProvider extends DatabaseProvider {
         database.getEventActionDao().insert(action);
     }
 
-    public List<NotificationWithTarget> getNearbyNotifications(Calendar start, int daysCount,
-                                                               boolean includeOldEvents) {
+    public List<NotificationWithTarget> getNearbyEvents(Calendar start, int daysCount,
+                                                        boolean includeOldEvents) {
         Calendar startDate = (Calendar) start.clone();
         Calendar endDate = (Calendar) startDate.clone();
         endDate.add(Calendar.DAY_OF_YEAR, daysCount);
-        List<Notification> events = database.getNotificationDao().getNearbyNotifications(startDate.getTimeInMillis(),
-                endDate.getTimeInMillis());
-        if (events != null) {
-            events = EventsUtils.createOrderedEventsWithPeriodically(events, startDate, endDate, includeOldEvents);
-        }
-
-        List<NotificationWithTarget> result = new ArrayList<>();
-        if (events != null) {
-            result = getNotificationsTarget(events);
-        }
-
-        return result;
+        return database.getNotificationDao().getNearbyEvents(startDate, endDate, includeOldEvents);
     }
 
     public List<Notification> getEventsForTarget(long targetId, String targetTable) {
         return database.getNotificationDao().getNotificationForTarget(targetId, targetTable);
     }
 
-    public HashMap<Integer, List<Notification>> getEventsForPeriod(Calendar startDate, Calendar endDate,
-                                                                   CalendarFilter filter) {
+    public HashMap<Integer, List<NotificationWithTarget>> getEventsForPeriod(Calendar startDate, Calendar endDate,
+                                                                             CalendarFilter filter) {
+        String query = buildNotificationsCalendarQuery(filter, startDate, endDate);
+        List<Notification> notifications = database.getNotificationDao().getNotificationForSelection(query);
+        return EventsUtils.createDayNotificationsMap(notifications, database, startDate, endDate);
+    }
+
+    private String buildNotificationsCalendarQuery(CalendarFilter filter, Calendar startDate,
+                                                   Calendar endDate) {
         String selection = "";
         switch (filter.getElementsFilterType()) {
             case CalendarFilter.FilterElements.FLOWERS:
@@ -66,10 +62,25 @@ public class NotificationsProvider extends DatabaseProvider {
                 selection += Columns.TARGET_TABLE + "='" + Group.TABLE_NAME + "'";
                 break;
             case CalendarFilter.FilterElements.SELECTED:
-                if (filter.getSelectedElements() != null && filter.getSelectedElements().size() > 0) {
-                    selection += Columns.TARGET_ID + " in ("
-                            + TextUtils.join(",", filter.getSelectedElements())
-                            + ") ";
+                if (filter.getSelectedFlowers() != null && filter.getSelectedFlowers().size() > 0) {
+                    selection += "(" + Columns.TARGET_TABLE + "='" + Flower.TABLE_NAME + "'"
+                            + " and " + Columns.TARGET_ID + " in ("
+                            + TextUtils.join(",", filter.getSelectedFlowers())
+                            + ")) ";
+                }
+                if (filter.getSelectedGroups() != null && filter.getSelectedGroups().size() > 0) {
+                    if (!TextUtils.isEmpty(selection)) {
+                        selection += " or ";
+                    }
+
+                    selection += "(" + Columns.TARGET_TABLE + "='" + Group.TABLE_NAME + "'"
+                            + " and " + Columns.TARGET_ID + " in ("
+                            + TextUtils.join(",", filter.getSelectedGroups())
+                            + ")) ";
+                }
+
+                if (!TextUtils.isEmpty(selection)) {
+                    selection = "(" + selection + ")";
                 }
 
                 break;
@@ -91,29 +102,7 @@ public class NotificationsProvider extends DatabaseProvider {
             query += " and " + selection;
         }
 
-        List<Notification> items = database.getNotificationDao().getNotificationForSelection(query);
-        return EventsUtils.groupNotifications(items, startDate, endDate);
-    }
-
-    public List<NotificationWithTarget> getNotificationsTarget(List<Notification> itemsPerDay) {
-        List<NotificationWithTarget> result = new ArrayList<>();
-        if (itemsPerDay != null) {
-            for (Notification notification : itemsPerDay) {
-                NotificationWithTarget item = new NotificationWithTarget();
-                item.setNotification(notification);
-                if (Flower.TABLE_NAME.equalsIgnoreCase(notification.getTargetTable())) {
-                    Flower flower = database.getFlowersDao().getFlowerById(notification.getTargetId());
-                    item.setTarget(flower);
-                } else if (Group.TABLE_NAME.equalsIgnoreCase(notification.getTargetTable())) {
-                    Group group = database.getGroupDao().getGroupById(notification.getTargetId());
-                    item.setTarget(group);
-                }
-
-                result.add(item);
-            }
-        }
-
-        return result;
+        return query;
     }
 
     public Notification getNotificationById(long id) {
@@ -125,6 +114,19 @@ public class NotificationsProvider extends DatabaseProvider {
             notification.setId(invalidateIdForInsert(notification.getId()));
             long id = database.getNotificationDao().insert(notification);
             notification.setId(id);
+            if (CalendarUtils.isOldDate(notification.getDate())) {
+                if (notification.getFrequency() != null) {
+                    Calendar eventDate = notification.getDate();
+                    Calendar today = Calendar.getInstance();
+                    do {
+                        markEventDone(notification, eventDate);
+                        eventDate = (Calendar) eventDate.clone();
+                        eventDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
+                    } while (eventDate.before(today));
+                } else {
+                    markEventDone(notification, notification.getDate());
+                }
+            }
         } else {
             database.getNotificationDao().update(notification);
         }

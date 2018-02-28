@@ -161,7 +161,7 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
             eventsAllBox.setChecked(true);
         }
 
-        adapter.setSelection(filter.getSelectedElements());
+        adapter.setSelection(filter.getSelectedFlowers(), filter.getSelectedGroups());
     }
 
     private void setResult() {

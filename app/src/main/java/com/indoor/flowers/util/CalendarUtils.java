@@ -34,4 +34,14 @@ public class CalendarUtils {
         return current.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
                 && current.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR);
     }
+
+    public static boolean isOldDate(Calendar date) {
+        if (date == null)
+            return false;
+
+        Calendar current = Calendar.getInstance();
+        current.set(Calendar.HOUR_OF_DAY, 0);
+        current.set(Calendar.MINUTE, 0);
+        return date.before(current);
+    }
 }

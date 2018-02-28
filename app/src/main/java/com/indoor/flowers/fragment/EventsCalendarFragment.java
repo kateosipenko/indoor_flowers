@@ -25,7 +25,6 @@ import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.CalendarFilter;
-import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.SpaceItemDecoration;
@@ -98,9 +97,8 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
     }
 
     @Override
-    public void onDayClicked(Calendar item, List<Notification> eventsPerDay) {
-        List<NotificationWithTarget> eventWithTargets = provider.getNotificationsTarget(eventsPerDay);
-        eventsAdapter.setItems(eventWithTargets);
+    public void onDayClicked(Calendar item, List<NotificationWithTarget> eventsPerDay) {
+        eventsAdapter.setItems(eventsPerDay);
     }
 
     @Override
@@ -109,7 +107,7 @@ public class EventsCalendarFragment extends Fragment implements OnDayClickedList
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                final HashMap<Integer, List<Notification>> events = provider.getEventsForPeriod(startDate,
+                final HashMap<Integer, List<NotificationWithTarget>> events = provider.getEventsForPeriod(startDate,
                         endDate, filter);
                 Activity activity = getActivity();
                 if (activity != null && !activity.isDestroyed()) {

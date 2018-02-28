@@ -65,15 +65,15 @@ public class FilterSelectionAdapter extends RecyclerListAdapter<Object, FilterSe
         holder.update(getItemByPosition(position));
     }
 
-    public void setSelection(List<Long> selectedElements) {
+    public void setSelection(List<Long> selectedFlowers, List<Long> selectedGroups) {
         this.selectedItems.clear();
-        if (selectedElements != null) {
-            for (Object item : items) {
-                if (item instanceof Flower && selectedElements.contains(((Flower) item).getId())) {
-                    selectedItems.add(item);
-                } else if (item instanceof Group && selectedElements.contains(((Group) item).getId())) {
-                    selectedItems.add(item);
-                }
+        for (Object item : items) {
+            if (item instanceof Flower && selectedFlowers != null
+                    && selectedFlowers.contains(((Flower) item).getId())) {
+                selectedItems.add(item);
+            } else if (item instanceof Group && selectedGroups != null
+                    && selectedGroups.contains(((Group) item).getId())) {
+                selectedItems.add(item);
             }
         }
 

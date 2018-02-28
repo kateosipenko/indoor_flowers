@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.indoor.flowers.R;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.CalendarUtils;
 
 import java.util.Calendar;
@@ -30,7 +31,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
     private Calendar startDate;
     private OnDayClickedListener dayClickListener;
 
-    private HashMap<Integer, List<Notification>> eventsByDays = new HashMap<>();
+    private HashMap<Integer, List<NotificationWithTarget>> eventsByDays = new HashMap<>();
 
     public void setDayClickListener(OnDayClickedListener listener) {
         this.dayClickListener = listener;
@@ -43,7 +44,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         this.eventsByDays.clear();
 
         startDate = (Calendar) monthDate.clone();
-        startDate.add(Calendar.DAY_OF_MONTH, -1 * startDate.get(Calendar.DAY_OF_WEEK));
+        startDate.add(Calendar.DAY_OF_MONTH, -1 * startDate.get(Calendar.DAY_OF_WEEK)
+                + startDate.getActualMinimum(Calendar.DAY_OF_WEEK));
         notifyDataSetChanged();
     }
 
@@ -55,7 +57,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         return getItemByPosition(DAYS_COUNT - 1);
     }
 
-    public void setEvents(HashMap<Integer, List<Notification>> events) {
+    public void setEvents(HashMap<Integer, List<NotificationWithTarget>> events) {
         eventsByDays.clear();
         eventsByDays.putAll(events);
         notifyItemRangeChanged(0, getItemCount(), eventsByDays);
@@ -130,7 +132,7 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
             adapter.setSelectedPosition(getAdapterPosition());
             if (adapter.dayClickListener != null) {
                 Calendar calendar = adapter.getItemByPosition(getAdapterPosition());
-                List<Notification> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
+                List<NotificationWithTarget> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
                 adapter.dayClickListener.onDayClicked(calendar, eventsForDay);
             }
         }
@@ -149,13 +151,14 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         }
 
         private void updateNotifications(Calendar calendar) {
-            List<Notification> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
+            List<NotificationWithTarget> eventsForDay = adapter.eventsByDays.get(calendar.get(Calendar.DAY_OF_YEAR));
             int wateringCount = 0;
             int createdCount = 0;
             int fertilizerCount = 0;
             int transplantationCount = 0;
             if (eventsForDay != null) {
-                for (Notification event : eventsForDay) {
+                for (NotificationWithTarget notification : eventsForDay) {
+                    Notification event = notification.getNotification();
                     switch (event.getType()) {
                         case NotificationType.CREATED:
                             ++createdCount;
@@ -185,6 +188,6 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
     }
 
     public interface OnDayClickedListener {
-        void onDayClicked(Calendar day, List<Notification> events);
+        void onDayClicked(Calendar day, List<NotificationWithTarget> events);
     }
 }

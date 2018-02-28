@@ -17,7 +17,6 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter;
 import com.indoor.flowers.adapter.NotificationsByDaysAdapter.NotificationDoneListener;
 import com.indoor.flowers.database.provider.NotificationsProvider;
-import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EndlessRecyclerOnScrollListener;
@@ -79,11 +78,11 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
     }
 
     @Override
-    public void onNotificationDone(final Notification event) {
-        if (CalendarUtils.isToday(event.getDate())) {
-            provider.markEventDone(event, Calendar.getInstance());
-            adapter.onNotificationDone(event);
-            FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), event.getId());
+    public void onNotificationDone(final NotificationWithTarget notification) {
+        if (CalendarUtils.isToday(notification.getEventDate())) {
+            provider.markEventDone(notification.getNotification(), Calendar.getInstance());
+            adapter.onNotificationDone(notification);
+            FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), notification.getNotification().getId());
         } else {
             final Calendar eventDoneDate = Calendar.getInstance();
             new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -92,9 +91,10 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
                     eventDoneDate.set(Calendar.YEAR, year);
                     eventDoneDate.set(Calendar.MONTH, month);
                     eventDoneDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    provider.markEventDone(event, eventDoneDate);
-                    adapter.onNotificationDone(event);
-                    FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), event.getId());
+                    provider.markEventDone(notification.getNotification(), eventDoneDate);
+                    adapter.onNotificationDone(notification);
+                    initialLoadEvents();
+                    FlowersAlarmsUtils.refreshAlarmsForEvent(getActivity(), notification.getNotification().getId());
                 }
             }, eventDoneDate.get(Calendar.YEAR), eventDoneDate.get(Calendar.MONTH),
                     eventDoneDate.get(Calendar.DAY_OF_MONTH))
@@ -108,7 +108,7 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
         if (startDate != null) {
             startDate = (Calendar) startDate.clone();
             startDate.add(Calendar.DAY_OF_YEAR, 1);
-            List<NotificationWithTarget> events = provider.getNearbyNotifications(startDate,
+            List<NotificationWithTarget> events = provider.getNearbyEvents(startDate,
                     LOAD_DAYS_COUNT, false);
             adapter.addEvents(events);
             loadMoreListener.onLoadingCompleted();
@@ -117,12 +117,12 @@ public class NotificationsFragment extends Fragment implements NotificationDoneL
 
     private void initialLoadEvents() {
         Calendar startDate = Calendar.getInstance();
-        List<NotificationWithTarget> events = provider.getNearbyNotifications(startDate,
+        List<NotificationWithTarget> events = provider.getNearbyEvents(startDate,
                 LOAD_DAYS_COUNT, true);
         if (events.size() < LOAD_ITEMS_COUNT && events.size() > 0) {
             do {
                 startDate.add(Calendar.DAY_OF_YEAR, LOAD_DAYS_COUNT + 1);
-                List<NotificationWithTarget> moreEvents = provider.getNearbyNotifications(startDate,
+                List<NotificationWithTarget> moreEvents = provider.getNearbyEvents(startDate,
                         LOAD_DAYS_COUNT, false);
                 events.addAll(moreEvents);
             } while (events.size() < LOAD_ITEMS_COUNT);

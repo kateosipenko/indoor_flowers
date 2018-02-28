@@ -13,7 +13,7 @@ import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.CalendarDaysAdapter;
 import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
-import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationWithTarget;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -85,11 +85,13 @@ public class CalendarView extends LinearLayout {
         this.daysAdapter.setDayClickListener(listener);
     }
 
-    public void setEventsForMonth(HashMap<Integer, List<Notification>> events) {
+    public void setEventsForMonth(HashMap<Integer, List<NotificationWithTarget>> events) {
         daysAdapter.setEvents(events);
     }
 
     private void initialize() {
+        Locale locale = Locale.forLanguageTag("ru-RU");
+        Locale.setDefault(locale);
         LayoutInflater.from(getContext()).inflate(R.layout.view_calendar, this, true);
         ButterKnife.bind(this);
         setOrientation(VERTICAL);
@@ -109,10 +111,10 @@ public class CalendarView extends LinearLayout {
 
     private void setupWeekDays() {
         Calendar temp = Calendar.getInstance();
-        temp.set(Calendar.DAY_OF_WEEK, temp.getMinimum(Calendar.DAY_OF_WEEK));
+        temp.set(Calendar.DAY_OF_WEEK, temp.getActualMinimum(Calendar.DAY_OF_WEEK));
         for (int i = 0; i < weekDaysContainer.getChildCount(); i++) {
             TextView textView = (TextView) weekDaysContainer.getChildAt(i);
-            textView.setText(temp.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, new Locale("ru")));
+            textView.setText(temp.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()));
             temp.add(Calendar.DAY_OF_WEEK, 1);
         }
     }
