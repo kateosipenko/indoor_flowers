@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="window_bg">#F4F4F4</color>
+    <color name="window_bg">@color/material_white</color>
 
     <!--primary-->
-    <color name="primary50">#EDF9F2</color>
-    <color name="primary100">#ECF8F1</color>
-    <color name="primary200">#DBECE2</color>
-    <color name="primary300">#CDE0D6</color>
-    <color name="primary400">#A5C4B2</color>
-    <color name="primary500">#81AA94</color>
-    <color name="primary600">#81AA94</color>
-    <color name="primary700">#5F8772</color>
-    <color name="primary800">#49725C</color>
-    <color name="primary900">#385646</color>
+    <color name="primary50">#BAE2CD</color>
+    <color name="primary100">#A3E0C0</color>
+    <color name="primary200">#83C6A2</color>
+    <color name="primary300">#20E588</color>
+    <color name="primary400">#1BC475</color>
+    <color name="primary500">#19B770</color>
+    <color name="primary600">#169E5E</color>
+    <color name="primary700">#127F4C</color>
+    <color name="primary800">#127F4C</color>
+    <color name="primary900">#094026</color>
 
     <!--accent-->
-    <color name="accent50">#EAD0B2</color>
-    <color name="accent100">#E8C194</color>
-    <color name="accent200">#E2943B</color>
-    <color name="accent400">#E08421</color>
-    <color name="accent700">#DD7200</color>
+    <color name="accent50">#FFD3AD</color>
+    <color name="accent100">#FFBB7C</color>
+    <color name="accent200">#FFA347</color>
+    <color name="accent400">#FF7D05</color>
+    <color name="accent700">#CE6204</color>
 
     <color name="primary">@color/primary500</color>
     <color name="primary_dark">@color/primary800</color>
-    <color name="accent">#E2943B</color>
+    <color name="accent">#FFA347</color>
     <color name="control_highlight">@color/primary50</color>
     <color name="control_highlight_selected">@color/primary200</color>
     <color name="toolbar_control_normal">@color/white_primary_text</color>

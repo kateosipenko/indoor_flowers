@@ -67,11 +67,17 @@ public class FlowersWithWateringAdapter extends RecyclerListAdapter<FlowerWithWa
         private void update(FlowerWithWatering flowerWithWatering) {
             Flower flower = flowerWithWatering.getFlower();
 
-            Calendar nextWatering = (Calendar) flowerWithWatering.getDate().clone();
-            nextWatering.add(Calendar.DAY_OF_YEAR, flowerWithWatering.getFrequency());
+            if (flowerWithWatering.getDate() != null) {
+                Calendar nextWatering = (Calendar) flowerWithWatering.getDate().clone();
+                nextWatering.add(Calendar.DAY_OF_YEAR, flowerWithWatering.getFrequency());
 
-            int daysDiff = CalendarUtils.getDaysDiff(Calendar.getInstance(), nextWatering);
-            wateringStatus.setProgress(flowerWithWatering.getFrequency(), daysDiff);
+
+                int daysDiff = CalendarUtils.getDaysDiff(Calendar.getInstance(), nextWatering);
+                wateringStatus.setProgress(flowerWithWatering.getFrequency(), daysDiff);
+                wateringStatus.setVisibility(View.VISIBLE);
+            } else {
+                wateringStatus.setVisibility(View.GONE);
+            }
             if (flower == null) {
                 iconView.setImageBitmap(null);
                 nameView.setText(null);

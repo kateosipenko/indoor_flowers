@@ -245,6 +245,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
                     .load(photo)
                     .transform(new CircleTransformation(0, 0))
                     .into(imageView);
+            imageView.setPadding(0, 0, 0, 0);
             provider.updateFlower(flower);
         }
 
@@ -363,6 +364,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
                     .load(new File(flower.getImagePath()))
                     .transform(new CircleTransformation(0, 0))
                     .into(imageView);
+            imageView.setPadding(0, 0, 0, 0);
         }
     }
 

@@ -76,7 +76,7 @@ public class FlowersProvider extends DatabaseProvider {
 
     public List<FlowerWithWatering> getAllFlowersWithWatering() {
         return database.getFlowersDao().getAllFlowersWithWatering();
-    }
+}
 
     public List<FlowerWithWatering> getFlowersWithoutGroupWithWatering() {
         return database.getFlowersDao().getFlowersWithoutGroupWithWatering();

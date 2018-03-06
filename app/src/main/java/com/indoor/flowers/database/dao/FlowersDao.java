@@ -39,20 +39,20 @@ public interface FlowersDao {
     @Query("select * from FlowerTable")
     List<Flower> getAllFlowers();
 
-    @Query("select FlowerTable.*, NotificationTable.frequency, EventActionTable.date from FlowerTable "
-            + " inner join NotificationTable "
-            + " on NotificationTable.target_id=FlowerTable._id "
-            + " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=" + NotificationType.WATERING
-            + " inner join EventActionTable "
-            + " on EventActionTable.notification_id=NotificationTable._id")
+    @Query("select FlowerTable.*, \n" +
+            "(select NotificationTable.frequency from NotificationTable where  NotificationTable.target_id=FlowerTable._id \n" +
+            " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=1) as frequency,\n" +
+            " (select EventActionTable.date from EventActionTable where EventActionTable.notification_id=(select NotificationTable._id from NotificationTable where  NotificationTable.target_id=FlowerTable._id \n" +
+            " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=1)) as date\n" +
+            " from FlowerTable\n")
     List<FlowerWithWatering> getAllFlowersWithWatering();
 
-    @Query("select FlowerTable.*, NotificationTable.frequency, EventActionTable.date from FlowerTable "
-            + " inner join NotificationTable "
-            + " on NotificationTable.target_id=FlowerTable._id "
-            + " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=" + NotificationType.WATERING
-            + " inner join EventActionTable "
-            + " on EventActionTable.notification_id=NotificationTable._id "
+    @Query("select FlowerTable.*, \n" +
+            "(select NotificationTable.frequency from NotificationTable where  NotificationTable.target_id=FlowerTable._id \n" +
+            " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=1) as frequency,\n" +
+            " (select EventActionTable.date from EventActionTable where EventActionTable.notification_id=(select NotificationTable._id from NotificationTable where  NotificationTable.target_id=FlowerTable._id \n" +
+            " and NotificationTable.target_table='FlowerTable' and NotificationTable.type=1)) as date\n" +
+            " from FlowerTable\n"
             + " where FlowerTable._id not in (select flower_id from GroupFlowerTable)")
     List<FlowerWithWatering> getFlowersWithoutGroupWithWatering();
 
