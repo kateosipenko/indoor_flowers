@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -80,7 +81,7 @@ public class NotificationStatus extends RelativeLayout {
             if (typedArray.hasValue(R.styleable.NotificationStatus_textSize) && !isInEditMode()) {
                 int textSize = typedArray.getDimensionPixelSize(R.styleable.NotificationStatus_textSize,
                         Res.getDimensionPixelSize(R.dimen.text_body_normal));
-                titleView.setTextSize(textSize);
+                titleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
             if (typedArray.hasValue(R.styleable.NotificationStatus_textColor)) {
                 int color = typedArray.getColor(R.styleable.NotificationStatus_textColor, Color.BLACK);

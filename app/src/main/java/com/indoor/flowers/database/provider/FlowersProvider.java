@@ -5,6 +5,7 @@ import android.content.Context;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.FlowerWithWatering;
 import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.GroupWithWatering;
 import com.indoor.flowers.model.PhotoItem;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class FlowersProvider extends DatabaseProvider {
 
     public List<Group> getGroupsForFlower(long id) {
         return database.getGroupDao().getGroupsForFlower(id);
+    }
+
+    public List<GroupWithWatering> getAllGroupsWithWatering() {
+        return database.getGroupDao().getAllGroupsWithWatering();
     }
 
     public void deleteGroup(Group group) {
@@ -76,7 +81,7 @@ public class FlowersProvider extends DatabaseProvider {
 
     public List<FlowerWithWatering> getAllFlowersWithWatering() {
         return database.getFlowersDao().getAllFlowersWithWatering();
-}
+    }
 
     public List<FlowerWithWatering> getFlowersWithoutGroupWithWatering() {
         return database.getFlowersDao().getFlowersWithoutGroupWithWatering();

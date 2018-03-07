@@ -87,7 +87,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_fab"
-        android:backgroundTint="@color/primary_dark"
         android:src="@drawable/ic_add"
         app:layout_anchor="@+id/faf_snackbar"
         app:layout_anchorGravity="end" />

@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import com.evgeniysharafan.utils.Fragments;
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
-import com.indoor.flowers.adapter.GroupsAdapter;
+import com.indoor.flowers.adapter.GroupsWithWateringAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
-import com.indoor.flowers.model.Group;
+import com.indoor.flowers.model.GroupWithWatering;
 import com.indoor.flowers.util.OnItemClickListener;
 import com.indoor.flowers.util.SpaceItemDecoration;
 
@@ -25,14 +25,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GroupsFragment extends Fragment implements OnItemClickListener<Group> {
+public class GroupsFragment extends Fragment implements OnItemClickListener<GroupWithWatering> {
 
     @BindView(R.id.fr_groups_list)
     RecyclerView groupsList;
 
     private Unbinder unbinder;
 
-    private GroupsAdapter adapter;
+    private GroupsWithWateringAdapter adapter;
     private FlowersProvider provider;
 
     public static GroupsFragment newInstance() {
@@ -75,23 +75,23 @@ public class GroupsFragment extends Fragment implements OnItemClickListener<Grou
     }
 
     @Override
-    public void onItemClicked(Group group) {
+    public void onItemClicked(GroupWithWatering group) {
         FragmentManager manager = getParentFragment() != null
                 ? getParentFragment().getFragmentManager() : getFragmentManager();
         if (manager != null) {
             Fragments.replace(manager, android.R.id.content,
-                    GroupFragment.newInstance(group.getId()), null, true);
+                    GroupFragment.newInstance(group.getGroup().getId()), null, true);
         }
     }
 
     private void reloadGroups() {
-        List<Group> allGroups = provider.getAllGroups();
+        List<GroupWithWatering> allGroups = provider.getAllGroupsWithWatering();
         adapter.setItems(allGroups);
     }
 
     private void initList() {
         if (adapter == null) {
-            adapter = new GroupsAdapter();
+            adapter = new GroupsWithWateringAdapter();
         }
 
         adapter.setListener(this);

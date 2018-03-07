@@ -54,7 +54,6 @@ public class FlowersWithWateringAdapter extends RecyclerListAdapter<FlowerWithWa
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.adapter = adapter;
-            this.wateringStatus.setVisibility(View.VISIBLE);
         }
 
         @OnClick({R.id.rf_title, R.id.rf_icon, R.id.rf_root})

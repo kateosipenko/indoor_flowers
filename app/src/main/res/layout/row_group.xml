@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:focusable="true"
     android:orientation="horizontal"
     tools:layout_height="60dp">
@@ -24,14 +26,28 @@
         android:id="@+id/rg_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_normal"
         android:layout_marginStart="@dimen/margin_default"
         android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/black_primary_text"
         app:layout_constraintBottom_toBottomOf="@id/rg_icon"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rg_watering_status"
         app:layout_constraintStart_toEndOf="@id/rg_icon"
         app:layout_constraintTop_toTopOf="@id/rg_icon"
         tools:text="Kitchen" />
+
+    <com.indoor.flowers.view.NotificationStatus
+        android:id="@+id/rg_watering_status"
+        android:layout_width="@dimen/rf_status_size"
+        android:layout_height="@dimen/rf_status_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:progressTint="@color/material_blue_primary300"
+        app:textColor="@color/black_primary_text"
+        app:textSize="@dimen/text_body_normal"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

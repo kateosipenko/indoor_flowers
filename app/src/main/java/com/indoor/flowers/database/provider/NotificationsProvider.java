@@ -118,18 +118,16 @@ public class NotificationsProvider extends DatabaseProvider {
             notification.setId(invalidateIdForInsert(notification.getId()));
             long id = database.getNotificationDao().insert(notification);
             notification.setId(id);
-            if (CalendarUtils.isOldDate(notification.getDate())) {
-                if (notification.getFrequency() != null) {
-                    Calendar eventDate = notification.getDate();
-                    Calendar today = Calendar.getInstance();
-                    do {
-                        markEventDone(notification, eventDate);
-                        eventDate = (Calendar) eventDate.clone();
-                        eventDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
-                    } while (eventDate.before(today));
-                } else {
-                    markEventDone(notification, notification.getDate());
-                }
+            if (notification.getFrequency() != null && CalendarUtils.isOldDate(notification.getDate())) {
+                Calendar eventDate = notification.getDate();
+                Calendar today = Calendar.getInstance();
+                do {
+                    markEventDone(notification, eventDate);
+                    eventDate = (Calendar) eventDate.clone();
+                    eventDate.add(Calendar.DAY_OF_YEAR, notification.getFrequency());
+                } while (eventDate.before(today));
+            } else {
+                markEventDone(notification, notification.getDate());
             }
         } else {
             database.getNotificationDao().update(notification);

@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.GroupFlower;
+import com.indoor.flowers.model.GroupWithWatering;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,17 @@ public abstract class GroupDao {
 
     @Query("select * from GroupTable")
     public abstract List<Group> getAllGroups();
+
+    @Query("select GroupTable.*, " +
+            "(select NotificationTable.frequency from NotificationTable " +
+            " where  NotificationTable.target_id=GroupTable._id " +
+            " and NotificationTable.target_table='GroupTable' and NotificationTable.type=1) as frequency, " +
+            " (select EventActionTable.date from EventActionTable " +
+            "  where EventActionTable.notification_id=(select NotificationTable._id from NotificationTable " +
+            "  where  NotificationTable.target_id=GroupTable._id " +
+            " and NotificationTable.target_table='GroupTable' and NotificationTable.type=1)) as date " +
+            " from GroupTable")
+    public abstract List<GroupWithWatering> getAllGroupsWithWatering();
 
     @Query("select * from GroupTable where _id=:groupId")
     public abstract Group getGroupById(long groupId);

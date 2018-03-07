@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:focusable="true"
     android:orientation="vertical">
 
@@ -19,8 +21,8 @@
 
     <ImageView
         android:id="@+id/rf_icon"
-        android:layout_width="@dimen/fm_rooms_width"
-        android:layout_height="@dimen/fm_rooms_width"
+        android:layout_width="@dimen/rf_icon_size"
+        android:layout_height="@dimen/rf_icon_size"
         android:background="@drawable/ic_flower_circle"
         android:elevation="@dimen/margin_small"
         android:scaleType="centerCrop"
@@ -44,13 +46,16 @@
 
     <com.indoor.flowers.view.NotificationStatus
         android:id="@+id/rf_watering_status"
-        android:layout_width="@dimen/fm_rooms_width"
-        android:layout_height="@dimen/fm_rooms_width"
+        android:layout_width="@dimen/rf_status_size"
+        android:layout_height="@dimen/rf_status_size"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/rf_icon"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rf_icon"
         app:progressTint="@color/material_blue_primary400"
         app:textColor="@color/black_primary_text"
         app:textSize="@dimen/text_body_medium"
-        tools:progress="20" />
+        tools:progress="20"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>
