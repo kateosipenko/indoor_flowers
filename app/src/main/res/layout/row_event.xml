@@ -5,44 +5,72 @@
     android:id="@+id/re_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/sel_image_btn_bg"
     android:clickable="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:focusable="true">
 
-    <View
+    <ImageView
         android:id="@+id/re_icon"
-        android:layout_width="@dimen/margin_default"
-        android:layout_height="@dimen/margin_default"
-        android:background="@drawable/shape_circle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="@dimen/re_icon_size"
+        android:layout_height="@dimen/re_icon_size"
+        android:background="@drawable/bg_event_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:backgroundTint="@color/event_watering" />
+        tools:backgroundTint="@color/event_watering"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_event_watering" />
 
     <TextView
         android:id="@+id/re_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_default"
-        android:paddingBottom="@dimen/margin_normal"
-        android:paddingTop="@dimen/margin_normal"
+        android:gravity="center_vertical"
         android:textColor="@color/black_primary_text"
-        android:textSize="@dimen/text_body_medium"
-        app:layout_constraintBottom_toTopOf="@+id/re_comment"
+        android:textSize="@dimen/text_body_big"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/re_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Watering Flower" />
 
     <TextView
+        android:id="@+id/re_start_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/re_title"
+        app:layout_constraintTop_toBottomOf="@id/re_title"
+        tools:text="17 Ноября 2018 20:40 каждые 3 дня" />
+
+    <TextView
+        android:id="@+id/re_end_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_secondary_text"
+        android:textSize="@dimen/text_body_normal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/re_title"
+        app:layout_constraintTop_toBottomOf="@id/re_start_date"
+        tools:text="до 24 Мая 2019"
+        tools:visibility="visible" />
+
+    <TextView
         android:id="@+id/re_comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
         android:textColor="@color/black_secondary_text"
         android:textSize="@dimen/text_body_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/re_title"
-        app:layout_constraintTop_toBottomOf="@id/re_title"
-        tools:text="Asd; kas;dk as;ldk"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/re_end_date"
+        tools:text="Asd; kas;dk as;ldk asdkljsa dlasj ldsadlasjd ljad pasodpdpao iasodpi aspodi apsodi aod apsodi apsodiapsoapsod apsodiaspoiaspdoiasd apsodi aspodi"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

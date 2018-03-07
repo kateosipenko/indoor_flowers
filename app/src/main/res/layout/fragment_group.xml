@@ -131,7 +131,6 @@
         android:singleLine="true"
         android:textColor="@color/black_primary_text"
         android:textColorHint="@color/black_secondary_text"
-        android:textCursorDrawable="@drawable/shape_accent_cursor"
         android:textSize="@dimen/text_headline_big"
         app:collapsedMarginStart="@dimen/ff_name_collapsed_margin"
         app:layout_anchor="@id/fg_icon"

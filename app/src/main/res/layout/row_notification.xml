@@ -34,6 +34,20 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@color/event_watering" />
 
+        <ImageView
+            android:id="@+id/rn_icon"
+            android:layout_width="@dimen/rn_icon_size"
+            android:layout_height="@dimen/rn_icon_size"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="@drawable/bg_flower_profile_icon"
+            android:padding="@dimen/rn_icon_padding"
+            app:layout_constraintStart_toEndOf="@id/rn_notification_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@tools:sample/avatars" />
+
         <TextView
             android:id="@+id/rn_title"
             android:layout_width="0dp"
@@ -45,11 +59,23 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/black_primary_text"
-            android:textSize="@dimen/text_body_medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/rn_notification_color"
+            android:textSize="@dimen/text_body_big"
+            app:layout_constraintEnd_toStartOf="@+id/rn_time"
+            app:layout_constraintStart_toEndOf="@id/rn_icon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Watering FLower" />
+
+        <TextView
+            android:id="@+id/rn_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:textColor="@color/black_secondary_text"
+            android:textSize="@dimen/text_body_normal"
+            app:layout_constraintBottom_toBottomOf="@id/rn_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/rn_title"
+            tools:text="20:00" />
 
         <TextView
             android:id="@+id/rn_comment"

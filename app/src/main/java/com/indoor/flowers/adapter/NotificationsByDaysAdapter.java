@@ -2,21 +2,27 @@ package com.indoor.flowers.adapter;
 
 import android.content.res.ColorStateList;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Res;
+import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
+import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EventsUtils;
 import com.indoor.flowers.util.RecyclerListAdapter;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 
@@ -106,6 +112,10 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
         Button doneButton;
         @BindView(R.id.rn_event_container)
         ViewGroup eventsContainer;
+        @BindView(R.id.rn_icon)
+        ImageView iconView;
+        @BindView(R.id.rn_time)
+        TextView timeView;
 
         private NotificationsByDaysAdapter adapter;
 
@@ -127,6 +137,20 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
             colorView.setBackgroundColor(EventsUtils.getColorForEventType(event.getType()));
             titleView.setText(event.getTitle());
             commentView.setText(event.getComment());
+            timeView.setText(Res.getString(R.string.full_time_format, notification.getEventDate()));
+
+            boolean isGroupNotification = Group.TABLE_NAME.equals(notification.getNotification().getTargetTable());
+            if (!TextUtils.isEmpty(notification.getImagePath())) {
+                Picasso.with(iconView.getContext())
+                        .load(new File(notification.getImagePath()))
+                        .transform(new CircleTransformation(0, 0))
+                        .into(iconView);
+            } else {
+                iconView.setImageResource(isGroupNotification ? R.drawable.ic_group_circle : R.drawable.ic_flower_circle);
+            }
+
+            iconView.setBackgroundTintList(ColorStateList.valueOf(Res.getColor(
+                    isGroupNotification ? R.color.accent50 : R.color.primary600)));
 
             boolean isToday = CalendarUtils.isToday(notification.getEventDate());
 

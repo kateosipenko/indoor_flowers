@@ -82,6 +82,12 @@
     <string name="fe_event_end_date">Конец</string>
     <string name="fe_event_time">Время уведомлений</string>
     <string name="fe_event_name_hint">Название уведомления</string>
+    <string name="re_end_date_format">до %1$td %1$tB %1$tY</string>
+    <string name="re_start_date_format">с %1$td %1$tB %1$tY %1tH:%1$tM</string>
+    <string name="re_frequency_one">каждый день</string>
+    <string name="re_frequency_one_format">каждый %1$s день</string>
+    <string name="re_frequency_four_format">каждые %1$s дня</string>
+    <string name="re_frequency_more_format">каждые %1$s дней</string>
 
     <!--Calendar-->
     <string name="month_0">Январь</string>
@@ -97,7 +103,7 @@
     <string name="month_10">Ноябрь</string>
     <string name="month_11">Декабрь</string>
 
-    <!--Gallert-->
+    <!--Gallery-->
     <string name="fg_title_format">Галерея "%1$s"</string>
 
 </resources>

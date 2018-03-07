@@ -90,8 +90,6 @@ public class CalendarView extends LinearLayout {
     }
 
     private void initialize() {
-        Locale locale = Locale.forLanguageTag("ru-RU");
-        Locale.setDefault(locale);
         LayoutInflater.from(getContext()).inflate(R.layout.view_calendar, this, true);
         ButterKnife.bind(this);
         setOrientation(VERTICAL);

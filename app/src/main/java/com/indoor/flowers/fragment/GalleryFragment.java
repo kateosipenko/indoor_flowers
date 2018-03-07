@@ -1,6 +1,7 @@
 package com.indoor.flowers.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,9 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.evgeniysharafan.utils.Res;
+import com.evgeniysharafan.utils.Utils;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.GalleryPagerAdapter;
 import com.indoor.flowers.database.provider.FlowersProvider;
@@ -75,18 +79,20 @@ public class GalleryFragment extends Fragment implements OnPageChangeListener {
         unbinder = ButterKnife.bind(this, view);
 
         setupActionBar();
-
+        refreshStatusBarColor(R.color.material_black);
         setupViewPager();
         reloadData();
         if (savedInstanceState == null) {
             scrollToSelectedPosition();
         }
 
+        onPageSelected(dataPager.getCurrentItem());
         return view;
     }
 
     @Override
     public void onDestroyView() {
+        refreshStatusBarColor(R.color.primary_dark);
         unbinder.unbind();
         super.onDestroyView();
     }
@@ -177,6 +183,14 @@ public class GalleryFragment extends Fragment implements OnPageChangeListener {
                     actionBar.setTitle(Res.getString(R.string.fg_title_format, targetName));
                 }
             }
+        }
+    }
+
+    private void refreshStatusBarColor(@ColorRes int color) {
+        if (Utils.hasLollipop()) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Res.getColor(color));
         }
     }
 

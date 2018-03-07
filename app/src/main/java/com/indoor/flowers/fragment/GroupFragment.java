@@ -2,6 +2,7 @@ package com.indoor.flowers.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -141,12 +142,6 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             group = new Group();
             group.setId(DatabaseProvider.DEFAULT_ID);
         }
-
-        if (Utils.hasLollipop()) {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Res.getColor(R.color.accent700));
-        }
     }
 
     @Nullable
@@ -155,6 +150,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         unbinder = ButterKnife.bind(this, view);
         permissionHelper.setSnackbarContainer(snackbarContainer);
+        refreshStatusBarColor(R.color.accent700);
         setupActionBar();
         initPager();
         refreshViewWithGroup();
@@ -172,12 +168,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
 
     @Override
     public void onDestroy() {
-        if (Utils.hasLollipop()) {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Res.getColor(R.color.primary_dark));
-        }
-
+        refreshStatusBarColor(R.color.primary_dark);
         flowersProvider.unbind();
         super.onDestroy();
     }
@@ -304,6 +295,14 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     public void onPhotoError() {
         hideProgress();
         Toasts.showLong(R.string.photo_choose_error);
+    }
+
+    private void refreshStatusBarColor(@ColorRes int color) {
+        if (Utils.hasLollipop()) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Res.getColor(color));
+        }
     }
 
     private void addPhotoToGallery() {

@@ -64,13 +64,9 @@ public class GroupPagerAdapter extends PagerAdapter {
         recyclerView.setClipChildren(false);
         recyclerView.setFocusableInTouchMode(true);
         recyclerView.setClickable(true);
-        if (position != POSITION_GALLERY) {
-            int padding = Res.getDimensionPixelSize(R.dimen.margin_normal);
-            recyclerView.setPadding(padding, padding, padding, padding);
-            recyclerView.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal),
-                    Res.getDimensionPixelSize(R.dimen.margin_normal)));
-        }
-
+        int padding = Res.getDimensionPixelSize(R.dimen.margin_default);
+        recyclerView.setPadding(padding, padding, padding, padding);
+        recyclerView.addItemDecoration(new SpaceItemDecoration(padding, padding));
         container.addView(recyclerView);
         return recyclerView;
     }

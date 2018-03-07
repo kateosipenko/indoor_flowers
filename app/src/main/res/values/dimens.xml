@@ -54,4 +54,9 @@
     <!--Gallery-->
     <dimen name="rg_image_height">150dp</dimen>
 
+    <!--Events-->
+    <dimen name="re_icon_size">60dp</dimen>
+    <dimen name="rn_icon_size">60dp</dimen>
+    <dimen name="rn_icon_padding">3dp</dimen>
+
 </resources>

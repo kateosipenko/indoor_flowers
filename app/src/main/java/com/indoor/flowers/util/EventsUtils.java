@@ -1,6 +1,7 @@
 package com.indoor.flowers.util;
 
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
@@ -51,6 +52,27 @@ public class EventsUtils {
                 break;
             case NotificationType.WATERING:
                 result = Res.getColor(R.color.event_watering);
+                break;
+        }
+
+        return result;
+    }
+
+    @DrawableRes
+    public static int getIconForEventType(@NotificationType int eventType) {
+        @DrawableRes int result = R.drawable.ic_flower;
+        switch (eventType) {
+            case NotificationType.CREATED:
+                result = R.drawable.ic_flower;
+                break;
+            case NotificationType.FERTILIZER:
+                result = R.drawable.ic_event_fertilizer;
+                break;
+            case NotificationType.TRANSPLANTING:
+                result = R.drawable.ic_event_transplanting;
+                break;
+            case NotificationType.WATERING:
+                result = R.drawable.ic_event_watering;
                 break;
         }
 
