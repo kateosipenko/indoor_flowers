@@ -19,10 +19,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.Toasts;
+import com.evgeniysharafan.utils.Utils;
 import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.EventsAdapter;
@@ -65,20 +69,22 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     private static final String KEY_GROUP_ID = "key_group_id";
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
-    @BindView(R.id.fg_title)
+    @BindView(R.id.fg_name)
     NameView nameView;
-    @BindView(R.id.fg_group_icon)
+    @BindView(R.id.fg_icon)
     ImageView iconView;
     @BindView(R.id.fg_tabs)
     TabLayout tabsView;
     @BindView(R.id.fg_pager)
     ViewPager viewPager;
-    @BindView(R.id.fg_add)
+    @BindView(R.id.fg_add_event)
     View addButtonView;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.fg_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.snackbar_container)
+    @BindView(R.id.fg_snackbar)
     CoordinatorLayout snackbarContainer;
+    @BindView(R.id.fg_progress_container)
+    ViewGroup progressContainer;
 
     private FlowersProvider flowersProvider;
     private NotificationsProvider notificationsProvider;
@@ -135,6 +141,12 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             group = new Group();
             group.setId(DatabaseProvider.DEFAULT_ID);
         }
+
+        if (Utils.hasLollipop()) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Res.getColor(R.color.accent700));
+        }
     }
 
     @Nullable
@@ -160,6 +172,12 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
 
     @Override
     public void onDestroy() {
+        if (Utils.hasLollipop()) {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Res.getColor(R.color.primary_dark));
+        }
+
         flowersProvider.unbind();
         super.onDestroy();
     }
@@ -172,6 +190,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             case TakePhotoUtils.REQUEST_CODE_GALLERY:
             case TakePhotoUtils.REQUEST_CODE_SYSTEM_CHOOSER:
                 if (TakePhotoUtils.getInstance().isPhotoRequestOk(requestCode, resultCode)) {
+                    showProgress();
                     TakePhotoUtils.getInstance().onActivityResult(requestCode, resultCode, data, this);
                 }
                 break;
@@ -217,7 +236,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         }
     }
 
-    @OnClick(R.id.fg_add)
+    @OnClick(R.id.fg_add_event)
     void onAddClicked() {
         switch (viewPager.getCurrentItem()) {
             case GroupPagerAdapter.POSITION_EVENTS:
@@ -278,10 +297,12 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
         photoItem.setDate(Calendar.getInstance());
         flowersProvider.addPhoto(photoItem);
         galleryAdapter.add(photoItem);
+        hideProgress();
     }
 
     @Override
     public void onPhotoError() {
+        hideProgress();
         Toasts.showLong(R.string.photo_choose_error);
     }
 
@@ -311,14 +332,19 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
             return;
         }
 
+        int padding = 0;
         if (TextUtils.isEmpty(group.getImagePath())) {
-            iconView.setImageBitmap(null);
+            padding = Res.getDimensionPixelSize(R.dimen.ff_image_start_padding);
+            iconView.setImageResource(R.drawable.ic_photo_camera);
         } else {
+            padding = Res.getDimensionPixelSize(R.dimen.ff_image_padding);
             Picasso.with(getActivity())
                     .load(new File(group.getImagePath()))
                     .transform(new CircleTransformation(0, 0))
                     .into(iconView);
         }
+
+        iconView.setPadding(padding, padding, padding, padding);
     }
 
     private void refreshViewWithGroup() {
@@ -445,5 +471,21 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
     private long getFlowerIdFromArgs() {
         return getArguments() != null ? getArguments().getLong(KEY_FLOWER_ID, DatabaseProvider.DEFAULT_ID)
                 : DatabaseProvider.DEFAULT_ID;
+    }
+
+    private void showProgress() {
+        if (progressContainer == null) {
+            return;
+        }
+
+        progressContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        if (progressContainer == null) {
+            return;
+        }
+
+        progressContainer.setVisibility(View.GONE);
     }
 }
