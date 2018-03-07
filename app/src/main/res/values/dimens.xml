@@ -2,6 +2,7 @@
 <resources>
 
     <dimen name="divider_size">1dp</dimen>
+    <dimen name="toolbar_padding">50dp</dimen>
 
     <!-- text size -->
     <dimen name="text_body_small">12sp</dimen>
@@ -21,6 +22,7 @@
     <dimen name="margin_normal">8dp</dimen>
     <dimen name="margin_default">16dp</dimen>
     <dimen name="margin_fab">24dp</dimen>
+    <dimen name="margin_big">32dp</dimen>
 
     <dimen name="and_header_height">176dp</dimen>
 
@@ -30,9 +32,12 @@
 
 
     <!--Add flower-->
-    <dimen name="faf_image_size">60dp</dimen>
-    <dimen name="faf_flower_container_margin">36dp</dimen>
     <dimen name="ff_image_size">120dp</dimen>
+    <dimen name="ff_collapsing_bar_size">200dp</dimen>
+    <dimen name="ff_image_padding">5dp</dimen>
+    <dimen name="ff_image_start_padding">30dp</dimen>
+    <dimen name="ff_name_width">250dp</dimen>
+    <dimen name="ff_name_collapsed_margin">100dp</dimen>
 
     <!--CalendarView-->
     <dimen name="vc_month_title_height">40dp</dimen>

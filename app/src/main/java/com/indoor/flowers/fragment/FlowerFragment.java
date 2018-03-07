@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.evgeniysharafan.utils.Fragments;
+import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.Toasts;
 import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
@@ -241,11 +242,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     public void onPhotoTaken(File photo) {
         if (isProfilePhotoChoosing) {
             flower.setImagePath(photo.getPath());
-            Picasso.with(getActivity())
-                    .load(photo)
-                    .transform(new CircleTransformation(0, 0))
-                    .into(imageView);
-            imageView.setPadding(0, 0, 0, 0);
+            refreshFlowerImage();
             provider.updateFlower(flower);
         }
 
@@ -359,13 +356,28 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
             nameView.startEditing();
         }
-        if (!TextUtils.isEmpty(flower.getImagePath())) {
+
+        refreshFlowerImage();
+    }
+
+    private void refreshFlowerImage() {
+        if (imageView == null) {
+            return;
+        }
+
+        int padding = 0;
+        if (TextUtils.isEmpty(flower.getImagePath())) {
+            padding = Res.getDimensionPixelSize(R.dimen.ff_image_start_padding);
+            imageView.setImageResource(R.drawable.ic_photo_camera);
+        } else {
             Picasso.with(getActivity())
                     .load(new File(flower.getImagePath()))
                     .transform(new CircleTransformation(0, 0))
                     .into(imageView);
-            imageView.setPadding(0, 0, 0, 0);
+            padding = Res.getDimensionPixelSize(R.dimen.ff_image_padding);
         }
+
+        imageView.setPadding(padding, padding, padding, padding);
     }
 
     private void refreshChangeIconEnabled() {

@@ -1,5 +1,7 @@
 <resources>
 
+    <attr name="collapsedMarginStart" format="dimension" />
+
     <declare-styleable name="NotificationStatus">
         <attr name="progress" format="integer" />
         <attr name="progressTint" format="color" />

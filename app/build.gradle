@@ -90,7 +90,7 @@ android {
 }
 
 dependencies {
-    def supportLibVersion = "27.0.2"
+    def supportLibVersion = "27.1.0"
     def utilsVersion = "1.1.2"
     def roomVersion = "1.1.0-alpha2"
     compile fileTree(include: ['*.jar'], dir: 'libs')
