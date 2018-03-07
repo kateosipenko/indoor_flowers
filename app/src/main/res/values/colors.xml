@@ -4,7 +4,7 @@
     <color name="window_bg">@color/material_white</color>
 
     <!--primary-->
-    <color name="primary50">#BAE2CD</color>
+    <color name="primary50">#D3FFE7</color>
     <color name="primary100">#A3E0C0</color>
     <color name="primary200">#83C6A2</color>
     <color name="primary300">#20E588</color>
