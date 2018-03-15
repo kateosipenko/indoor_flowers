@@ -16,6 +16,7 @@
         <attr name="potSize" format="dimension" />
         <attr name="waterColor" format="color" />
         <attr name="fertilizerColor" format="color" />
+        <attr name="fertilizerGroundColor" format="color" />
         <attr name="circleColor" format="color" />
         <attr name="circleMiddleColor" format="color" />
         <attr name="circleMinimumColor" format="color" />

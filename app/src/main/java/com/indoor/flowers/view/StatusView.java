@@ -2,6 +2,8 @@ package com.indoor.flowers.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -9,20 +11,28 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.support.v4.graphics.ColorUtils;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Pair;
 import android.view.View;
 
 import com.indoor.flowers.R;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class StatusView extends View {
 
     private static final String PERCENT_FORMAT = "%1$s%%";
+    private static final float CIRCLES_IN_ROW = 30f;
 
     private Paint potPaint = new Paint();
     private Paint groundPaint = new Paint();
     private Paint waterPaint = new Paint();
+    private Paint fertilizerPaint = new Paint();
     private Paint circlePaint = new Paint();
     private TextPaint textPaint = new TextPaint();
 
@@ -31,6 +41,7 @@ public class StatusView extends View {
     private Path groundPath = new Path();
 
     private Float waterLevel = null;
+    private Float fertilizerLevel = null;
 
     private RectF drawingRect = new RectF();
     private Rect textBounds = new Rect();
@@ -38,6 +49,8 @@ public class StatusView extends View {
     private int circleColor = Color.WHITE;
     private int circleMiddleColor = Color.WHITE;
     private int circleMinimumColor = Color.WHITE;
+    private int fertilizerColor = Color.GRAY;
+    private int fertilizerGroundColor = Color.GRAY;
 
     public StatusView(Context context) {
         super(context);
@@ -54,9 +67,28 @@ public class StatusView extends View {
         init(attrs);
     }
 
-    public void setWaterLevel(Float waterLevel) {
-        this.waterLevel = waterLevel;
-        updatePaths();
+    public void setWaterLevel(Float value) {
+        this.fertilizerLevel = null;
+        this.waterLevel = value;
+        if (waterLevel > 1f) {
+            waterLevel = 1f;
+        } else if (waterLevel < 0f) {
+            waterLevel = 0f;
+        }
+        refreshData();
+        invalidate();
+    }
+
+    public void setFertilizerLevel(Float value) {
+        this.waterLevel = null;
+        this.fertilizerLevel = value;
+        if (fertilizerLevel > 1f) {
+            fertilizerLevel = 1f;
+        } else if (fertilizerLevel < 0f) {
+            fertilizerLevel = 0f;
+        }
+
+        refreshData();
         invalidate();
     }
 
@@ -64,8 +96,10 @@ public class StatusView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawPath(potPath, potPaint);
-        canvas.drawPath(groundPath, groundPaint);
-        if (waterLevel != null) {
+        if (fertilizerLevel != null) {
+            canvas.drawPath(waterPath, fertilizerPaint);
+        } else if (waterLevel != null) {
+            canvas.drawPath(groundPath, groundPaint);
             canvas.save();
             canvas.clipRect(0, getMeasuredHeight() * (1 - waterLevel), getMeasuredWidth(), getMeasuredHeight());
             canvas.drawPath(waterPath, waterPaint);
@@ -74,45 +108,126 @@ public class StatusView extends View {
 
         circlePaint.setColor(getCircleColor());
         canvas.drawCircle(drawingRect.centerX(), drawingRect.centerY(),
-                drawingRect.width() / 3, circlePaint);
+                drawingRect.width() < drawingRect.height() ?
+                        drawingRect.width() / 3f : drawingRect.height() / 3f, circlePaint);
         canvas.drawText(getText(), textBounds.left, textBounds.bottom, textPaint);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        updatePaths();
+        refreshData();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        updatePaths();
+        refreshData();
     }
 
-    private void updatePaths() {
+    private int getCircleColor() {
+        int result = circleColor;
+        Float currentValue = fertilizerLevel != null ? fertilizerLevel : waterLevel;
+        if (currentValue != null) {
+            if (currentValue < 0.3f) {
+                result = circleMinimumColor;
+            } else if (currentValue < 0.6f) {
+                result = circleMiddleColor;
+            }
+        }
+        return result;
+    }
+
+    private String getText() {
+        if (fertilizerLevel != null) {
+            return String.format(PERCENT_FORMAT, (int) (fertilizerLevel * 100));
+        }
+        if (waterLevel != null) {
+            return String.format(PERCENT_FORMAT, (int) (waterLevel * 100));
+        }
+
+        return "";
+    }
+
+    private void refreshData() {
         float strokeWidth = potPaint.getStrokeWidth();
-        float width = getMeasuredWidth() - strokeWidth / 2;
-        float height = getMeasuredHeight() - strokeWidth / 2;
-
-        float left = strokeWidth + (width - height) / 2;
-        float right = left + width;
-
-        drawingRect.set(left, strokeWidth, right, height - strokeWidth);
+        drawingRect.set(strokeWidth, strokeWidth, getMeasuredWidth() - strokeWidth,
+                getMeasuredHeight() - strokeWidth);
         refreshPotPath();
         refreshWaterPath();
         refreshGroundPath();
         refreshTextBounds();
+
+        int groundSourceColor = fertilizerLevel != null ? fertilizerGroundColor : waterPaint.getColor();
+        int groundColor = ColorUtils.compositeColors(ColorUtils.setAlphaComponent(groundSourceColor, 60),
+                ColorUtils.setAlphaComponent(Color.WHITE, 210));
+        groundPaint.setColor(groundColor);
+
+        refreshFertilizerPaint();
+    }
+
+    private void refreshFertilizerPaint() {
+        if (fertilizerLevel == null || drawingRect.isEmpty()) {
+            return;
+        }
+
+        List<Pair<Integer, Integer>> filledIndexes = new ArrayList<>();
+        float radius = (int) (drawingRect.width() / CIRCLES_IN_ROW);
+        float step = radius * 2f;
+        int verticalCount = (int) (((getMeasuredHeight()) / (step)));
+        int horizontalCount = (int) (((getMeasuredWidth()) / (step)));
+        int totalCircleCount = verticalCount * horizontalCount;
+        int filledCount = (int) (totalCircleCount * fertilizerLevel);
+
+        List<Pair<Integer, Integer>> allIndexes = new ArrayList<>();
+        for (int j = 0; j < verticalCount; j++) {
+            for (int i = 0; i < horizontalCount; i++) {
+                allIndexes.add(new Pair<>(i, j));
+            }
+        }
+
+        Collections.shuffle(allIndexes);
+        for (int i = 0; i < filledCount; i++) {
+            filledIndexes.add(allIndexes.get(i));
+        }
+
+        Bitmap shaderBitmap = Bitmap.createBitmap((int) drawingRect.width(),
+                (int) drawingRect.height(), Bitmap.Config.ARGB_8888);
+
+        fertilizerPaint.setShader(null);
+        Canvas canvas = new Canvas(shaderBitmap);
+        for (int y = 0; y < verticalCount; y++) {
+            canvas.save();
+            if (y % 2 == 0) {
+                canvas.translate(-radius, 0);
+            }
+            for (int x = 0; x < horizontalCount; x++) {
+                if (filledIndexes.contains(new Pair<>(x, y))) {
+                    fertilizerPaint.setColor(fertilizerColor);
+                } else {
+                    fertilizerPaint.setColor(fertilizerGroundColor);
+                }
+
+                canvas.drawCircle(x * step, y * step, radius, fertilizerPaint);
+            }
+
+            canvas.restore();
+        }
+
+        BitmapShader bitmapShader = new BitmapShader(shaderBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        fertilizerPaint.setShader(bitmapShader);
     }
 
     private void refreshTextBounds() {
-        textPaint.setTextSize(getMeasuredHeight() / 4f);
+        int smallerSize = getMeasuredHeight() < getMeasuredWidth()
+                ? getMeasuredHeight() : getMeasuredWidth();
+        textPaint.setTextSize(smallerSize / 4f);
 
         String text = getText();
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
-        textBounds.bottom = (int) (textBounds.top + textBounds.height() / 2f);
-        textBounds.offsetTo((int) drawingRect.centerX(), (int) drawingRect.centerY());
-        textBounds.offset((int) (-textBounds.width() / 2f), (int) (-textBounds.height() / 2f));
+
+        textBounds.offsetTo((int) (drawingRect.left + (drawingRect.width() - textBounds.width()) / 2f),
+                (int) (drawingRect.top + (drawingRect.height() - textBounds.height()) / 2f));
     }
 
     private void refreshPotPath() {
@@ -160,20 +275,6 @@ public class StatusView extends View {
         groundPath.close();
     }
 
-    private int getCircleColor() {
-        int result = circleColor;
-        if (waterLevel < 0.3f) {
-            result = circleMinimumColor;
-        } else if (waterLevel < 0.6f) {
-            result = circleMiddleColor;
-        }
-        return result;
-    }
-
-    private String getText() {
-        return String.format(PERCENT_FORMAT, (int) (waterLevel * 100));
-    }
-
     private void init(AttributeSet attrs) {
         setWillNotDraw(false);
         setupPaints();
@@ -193,6 +294,19 @@ public class StatusView extends View {
             }
             if (typedArray.hasValue(R.styleable.StatusView_waterLevel)) {
                 waterLevel = typedArray.getFloat(R.styleable.StatusView_waterLevel, 1f);
+                if (waterLevel > 1f) {
+                    waterLevel = 1f;
+                } else if (waterLevel < 0f) {
+                    waterLevel = 0f;
+                }
+            }
+            if (typedArray.hasValue(R.styleable.StatusView_fertilizerLevel)) {
+                fertilizerLevel = typedArray.getFloat(R.styleable.StatusView_fertilizerLevel, 1f);
+                if (fertilizerLevel > 1f) {
+                    fertilizerLevel = 1f;
+                } else if (fertilizerLevel < 0f) {
+                    fertilizerLevel = 0f;
+                }
             }
             if (typedArray.hasValue(R.styleable.StatusView_circleColor)) {
                 circleColor = typedArray.getColor(R.styleable.StatusView_circleColor, Color.WHITE);
@@ -203,37 +317,42 @@ public class StatusView extends View {
             if (typedArray.hasValue(R.styleable.StatusView_circleMinimumColor)) {
                 circleMinimumColor = typedArray.getColor(R.styleable.StatusView_circleMinimumColor, Color.WHITE);
             }
-
-            int groundColor = ColorUtils.compositeColors(ColorUtils.setAlphaComponent(waterPaint.getColor(), 60),
-                    ColorUtils.setAlphaComponent(Color.WHITE, 210));
-            groundPaint.setColor(groundColor);
+            if (typedArray.hasValue(R.styleable.StatusView_fertilizerColor)) {
+                fertilizerColor = typedArray.getColor(R.styleable.StatusView_fertilizerColor, Color.GREEN);
+            }
+            if (typedArray.hasValue(R.styleable.StatusView_fertilizerGroundColor)) {
+                fertilizerGroundColor = typedArray.getColor(R.styleable.StatusView_fertilizerGroundColor, Color.GRAY);
+            }
 
             typedArray.recycle();
         }
 
-        updatePaths();
+        refreshData();
         invalidate();
     }
 
     private void setupPaints() {
         potPaint = new Paint();
-        potPaint.setAntiAlias(true);
-        potPaint.setStyle(Paint.Style.FILL);
-
         waterPaint = new Paint();
-        waterPaint.setAntiAlias(true);
-        waterPaint.setStyle(Paint.Style.FILL);
-
+        fertilizerPaint = new Paint();
         groundPaint = new Paint();
-        groundPaint.setAntiAlias(true);
-        groundPaint.setStyle(Paint.Style.FILL);
-
-        textPaint = new TextPaint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setAntiAlias(true);
-
         circlePaint = new Paint();
-        circlePaint.setAntiAlias(true);
+        textPaint = new TextPaint();
+
+
+        initPaint(potPaint);
+        initPaint(waterPaint);
+        initPaint(fertilizerPaint);
+        initPaint(groundPaint);
+        initPaint(textPaint);
+        initPaint(circlePaint);
+
+        textPaint.setColor(Color.WHITE);
         circlePaint.setAlpha(110);
+    }
+
+    private void initPaint(Paint paint) {
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
     }
 }

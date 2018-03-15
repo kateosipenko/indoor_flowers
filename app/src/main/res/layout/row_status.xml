@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/ff_status_height">
 
@@ -12,9 +13,11 @@
         app:circleColor="@color/rs_circle_normal_color"
         app:circleMiddleColor="@color/rs_circle_middle_color"
         app:circleMinimumColor="@color/rs_circle_minimum_color"
+        app:fertilizerColor="@color/event_fertilizer"
+        app:fertilizerGroundColor="@color/material_grey_primary400"
         app:potColor="@color/material_blue_grey_primary600"
         app:potSize="10dp"
         app:waterColor="@color/material_light_blue_primary500"
-        app:waterLevel="0.4" />
+        tools:fertilizerLevel="0.2" />
 
 </RelativeLayout>

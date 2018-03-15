@@ -25,7 +25,7 @@ public class StatusDataAdapter extends RecyclerListAdapter<NotificationWithTarge
 
     @Override
     public ViewHolder onCreateViewHolder(View view) {
-        return new ViewHolder(view, this);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -38,19 +38,17 @@ public class StatusDataAdapter extends RecyclerListAdapter<NotificationWithTarge
         @BindView(R.id.rs_status_view)
         StatusView statusView;
 
-        private StatusDataAdapter adapter;
-
-        public ViewHolder(View itemView, StatusDataAdapter adapter) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.adapter = adapter;
         }
 
         private void update(NotificationWithTarget notification) {
             float daysDiff = CalendarUtils.getDaysDiff(notification.getEventDate(), Calendar.getInstance());
-            float currentLevel = daysDiff / notification.getNotification().getFrequency();
+            float currentLevel = 1f - daysDiff / notification.getNotification().getFrequency();
             switch (notification.getNotification().getType()) {
                 case NotificationType.FERTILIZER:
+                    statusView.setFertilizerLevel(currentLevel);
                     break;
                 case NotificationType.WATERING:
                     statusView.setWaterLevel(currentLevel);
