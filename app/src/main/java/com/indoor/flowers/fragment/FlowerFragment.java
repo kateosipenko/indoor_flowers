@@ -29,12 +29,15 @@ import com.indoor.flowers.adapter.EventsAdapter;
 import com.indoor.flowers.adapter.FlowerPagerAdapter;
 import com.indoor.flowers.adapter.GalleryAdapter;
 import com.indoor.flowers.adapter.GroupsAdapter;
+import com.indoor.flowers.adapter.StatusDataAdapter;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
+import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.model.PhotoItem;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FilesUtils.DataPart;
@@ -49,6 +52,7 @@ import com.indoor.flowers.view.NameView.NameChangeListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -93,6 +97,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     private EventsAdapter eventsAdapter;
     private GroupsAdapter groupsAdapter;
     private GalleryAdapter galleryAdapter;
+    private StatusDataAdapter statusDataAdapter;
 
     private boolean isProfilePhotoChoosing = false;
 
@@ -200,6 +205,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     void onAddEventClicked() {
         switch (tabLayout.getSelectedTabPosition()) {
             case FlowerPagerAdapter.POSITION_EVENTS:
+            case FlowerPagerAdapter.POSITION_STATUS:
                 Fragments.replace(getFragmentManager(), android.R.id.content,
                         NotificationFragment.newInstance(flower.getId(), Flower.TABLE_NAME),
                         null, true);
@@ -285,6 +291,16 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     private void reloadEvents() {
         List<Notification> events = notificationsProvider.getEventsForTarget(flower.getId(), Flower.TABLE_NAME);
         eventsAdapter.setItems(events);
+
+        List<NotificationWithTarget> statusEvents = new ArrayList<>();
+        for (Notification item : events) {
+            if (item.getType() == NotificationType.WATERING || item.getType() == NotificationType.FERTILIZER) {
+                NotificationWithTarget withTarget = notificationsProvider.getNotificationWithTarget(item.getId());
+                statusEvents.add(withTarget);
+            }
+        }
+
+        statusDataAdapter.setItems(statusEvents);
     }
 
     private void reloadGroups() {
@@ -300,7 +316,7 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
     private void setupViewPager() {
         initAdapters();
         setupAdaptersListeners();
-        pagerAdapter.setAdapters(groupsAdapter, eventsAdapter, galleryAdapter);
+        pagerAdapter.setAdapters(groupsAdapter, eventsAdapter, galleryAdapter, statusDataAdapter);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -317,6 +333,9 @@ public class FlowerFragment extends Fragment implements OnPhotoTakenListener,
         }
         if (galleryAdapter == null) {
             galleryAdapter = new GalleryAdapter();
+        }
+        if (statusDataAdapter == null) {
+            statusDataAdapter = new StatusDataAdapter();
         }
     }
 

@@ -53,4 +53,9 @@
 
     <color name="gallery_background">#161616</color>
 
+    <!--StatusView-->
+    <color name="rs_circle_normal_color">#8C007FA3</color>
+    <color name="rs_circle_middle_color">#8CF7AC4A</color>
+    <color name="rs_circle_minimum_color">#8CFF5000</color>
+
 </resources>

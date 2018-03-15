@@ -57,7 +57,11 @@ public abstract class NotificationDao {
             "    case when target_table='FlowerTable' " +
             "    then (select image_path from FlowerTable where _id=target_id) " +
             "    else (select image_path from GroupTable where _id=target_id) " +
-            "    end as image_path " +
+            "    end as image_path, " +
+            "                 " +
+            "    (select max(date) from EventActionTable " +
+            "     where EventActionTable.notification_id=NotificationTable._id) " +
+            "     as " + Columns.EVENT_DATE +
             " from NotificationTable " +
             " where _id=:notificationId")
     public abstract NotificationWithTarget getNotificationWithTarget(long notificationId);

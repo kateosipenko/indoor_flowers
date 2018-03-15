@@ -53,6 +53,7 @@
     <string name="faf_tab_notifications">Уведомления</string>
     <string name="faf_tab_gallery">Галерея</string>
     <string name="faf_tab_groups">Группы</string>
+    <string name="faf_tab_status">Статус</string>
     <string name="faf_error_name_empty">Задайте имя цветка</string>
     <string name="faf_date_not_set">Не задано</string>
 

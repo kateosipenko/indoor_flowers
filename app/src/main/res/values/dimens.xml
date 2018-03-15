@@ -40,6 +40,7 @@
     <dimen name="ff_image_start_padding">30dp</dimen>
     <dimen name="ff_name_width">250dp</dimen>
     <dimen name="ff_name_collapsed_margin">100dp</dimen>
+    <dimen name="ff_status_height">180dp</dimen>
 
     <!--CalendarView-->
     <dimen name="vc_month_title_height">40dp</dimen>

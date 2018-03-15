@@ -18,21 +18,24 @@ import java.util.Objects;
 
 public class FlowerPagerAdapter extends PagerAdapter {
 
-    public static final int POSITION_EVENTS = 0;
-    public static final int POSITION_GALLERY = 1;
-    public static final int POSITION_GROUPS = 2;
+    public static final int POSITION_STATUS = 0;
+    public static final int POSITION_EVENTS = 1;
+    public static final int POSITION_GALLERY = 2;
+    public static final int POSITION_GROUPS = 3;
 
-    private static final int ITEMS_COUNT = 3;
+    private static final int ITEMS_COUNT = 4;
 
     private GroupsAdapter groupsAdapter;
     private EventsAdapter eventsAdapter;
     private GalleryAdapter galleryAdapter;
+    private StatusDataAdapter statusDataAdapter;
 
     public void setAdapters(GroupsAdapter groupsAdapter, EventsAdapter eventsAdapter,
-                            GalleryAdapter galleryAdapter) {
+                            GalleryAdapter galleryAdapter, StatusDataAdapter statusDataAdapter) {
         this.groupsAdapter = groupsAdapter;
         this.eventsAdapter = eventsAdapter;
         this.galleryAdapter = galleryAdapter;
+        this.statusDataAdapter = statusDataAdapter;
         notifyDataSetChanged();
     }
 
@@ -49,6 +52,9 @@ public class FlowerPagerAdapter extends PagerAdapter {
                 break;
             case POSITION_GALLERY:
                 result = Res.getString(R.string.faf_tab_gallery);
+                break;
+            case POSITION_STATUS:
+                result = Res.getString(R.string.faf_tab_status);
                 break;
         }
         return result;
@@ -90,6 +96,7 @@ public class FlowerPagerAdapter extends PagerAdapter {
     private RecyclerView.LayoutManager getLayoutManager(Context context, int position) {
         switch (position) {
             case POSITION_GALLERY:
+            case POSITION_STATUS:
                 return new GridLayoutManager(context, 2, LinearLayoutManager.VERTICAL, false);
             default:
                 return new LinearLayoutManager(context);
@@ -104,6 +111,8 @@ public class FlowerPagerAdapter extends PagerAdapter {
                 return eventsAdapter;
             case POSITION_GALLERY:
                 return galleryAdapter;
+            case POSITION_STATUS:
+                return statusDataAdapter;
         }
 
         return null;

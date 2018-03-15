@@ -9,6 +9,18 @@
         <attr name="textColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="StatusView">
+        <attr name="waterLevel" format="float" />
+        <attr name="fertilizerLevel" format="float" />
+        <attr name="potColor" format="color" />
+        <attr name="potSize" format="dimension" />
+        <attr name="waterColor" format="color" />
+        <attr name="fertilizerColor" format="color" />
+        <attr name="circleColor" format="color" />
+        <attr name="circleMiddleColor" format="color" />
+        <attr name="circleMinimumColor" format="color" />
+    </declare-styleable>
+
     <style name="ImageButtonStyle">
         <item name="android:background">@drawable/sel_image_btn_bg</item>
         <item name="android:layout_height">wrap_content</item>
