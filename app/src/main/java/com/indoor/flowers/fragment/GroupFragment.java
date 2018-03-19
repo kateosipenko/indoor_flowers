@@ -42,6 +42,7 @@ import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.Notification;
 import com.indoor.flowers.model.PhotoItem;
+import com.indoor.flowers.util.DialogUtils;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.util.OnItemClickListener;
@@ -236,9 +237,7 @@ public class GroupFragment extends Fragment implements OnItemClickListener<Notif
                         null, true);
                 break;
             case GroupPagerAdapter.POSITION_FLOWERS:
-                Fragments.replace(getFragmentManager(), android.R.id.content,
-                        FlowerFragment.newInstance(),
-                        null, true);
+                DialogUtils.showCreateFlowerDialog(getActivity(), getFragmentManager());
                 break;
             case GroupPagerAdapter.POSITION_GALLERY:
                 addPhotoToGallery();

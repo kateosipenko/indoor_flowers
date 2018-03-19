@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ffp_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ffp_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ff_collapsing_bar_size">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shape_flower_third_layer"
+            android:backgroundTint="@color/primary50" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shape_flower_second_layer"
+            android:backgroundTint="@color/primary100" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shape_flower" />
+
+        <ImageView
+            android:id="@+id/ffp_icon"
+            android:layout_width="@dimen/ff_image_size"
+            android:layout_height="@dimen/ff_image_size"
+            android:background="@drawable/bg_flower_profile_icon"
+            android:elevation="8dp"
+            android:padding="@dimen/ff_image_start_padding"
+            android:src="@drawable/ic_photo_camera"
+            app:layout_constraintBottom_toTopOf="@+id/ff_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/ffp_change_icon"
+            style="@style/ImageButtonStyle"
+            android:elevation="10dp"
+            android:src="@drawable/ic_photo_camera"
+            android:tint="@color/accent"
+            app:layout_constraintEnd_toEndOf="@id/ffp_icon"
+            tools:ignore="ContentDescription" />
+
+        <com.indoor.flowers.view.NameView
+            android:id="@+id/ffp_name"
+            android:layout_width="@dimen/ff_name_width"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_default"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/black_primary_text"
+            android:textColorHint="@color/black_secondary_text"
+            android:textCursorDrawable="@drawable/shape_accent_cursor"
+            android:textSize="@dimen/text_headline_big"
+            app:collapsedMarginStart="@dimen/ff_name_collapsed_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="ASd asd " />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ffp_status_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ffp_header_container">
+
+        <com.indoor.flowers.view.StatusView
+            android:id="@+id/ffp_water_status"
+            style="@style/StatusViewDefaultStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginStart="@dimen/margin_default"
+            android:visibility="gone"
+            tools:waterLevel="0.5" />
+
+        <com.indoor.flowers.view.StatusView
+            android:id="@+id/ffp_fertilizer_status"
+            style="@style/StatusViewDefaultStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:visibility="gone"
+            tools:fertilizerLevel="0.5" />
+    </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/ffp_snackbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:theme="@style/AppThemeDark" />
+
+    <FrameLayout
+        android:id="@+id/ffp_progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_shadow"
+        android:clickable="true"
+        android:elevation="@dimen/margin_fab"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:theme="@style/Dialog.ProgressDialog" />
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

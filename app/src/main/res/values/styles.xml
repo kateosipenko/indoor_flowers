@@ -97,4 +97,15 @@
         <item name="android:layout_marginEnd">@dimen/margin_default</item>
     </style>
 
+    <style name="StatusViewDefaultStyle">
+        <item name="circleColor">@color/rs_circle_normal_color</item>
+        <item name="circleMiddleColor">@color/rs_circle_middle_color</item>
+        <item name="circleMinimumColor">@color/rs_circle_minimum_color</item>
+        <item name="fertilizerColor">@color/material_light_green_primary200</item>
+        <item name="fertilizerGroundColor">@color/material_grey_primary400</item>
+        <item name="potColor">@color/material_blue_grey_primary700</item>
+        <item name="potSize">@dimen/margin_small</item>
+        <item name="waterColor">@color/material_light_blue_accent400</item>
+    </style>
+
 </resources>

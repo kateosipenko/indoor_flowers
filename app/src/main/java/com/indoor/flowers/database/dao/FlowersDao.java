@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.indoor.flowers.model.EventAction;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.FlowerWithWatering;
 import com.indoor.flowers.model.NotificationType;
@@ -61,4 +62,17 @@ public interface FlowersDao {
 
     @Query("select name from FlowerTable where _id=:targetId")
     String getFlowerName(long targetId);
+
+    @Query("select * from EventActionTable " +
+            " where notification_id in " +
+            "(  select _id from NotificationTable where " +
+            "     type=:type and " +
+            "     (target_id=:flowerId and target_table='FlowerTable' " +
+            "     or target_table='GroupTable' and " +
+            "        (select distinct(_id) from FlowerTable where _id in " +
+            "              (select flower_id from GroupFlowerTable where group_id=target_id)" +
+            "        )==1" +
+            "     )" +
+            ") order by date limit 1")
+    EventAction getLastNotificationAction(long flowerId, @NotificationType int type);
 }

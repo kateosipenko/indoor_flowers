@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mfb_status"
+        android:icon="@drawable/ic_flower"
+        android:title="@string/faf_tab_status"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mfb_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/faf_tab_notifications"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mfb_gallery"
+        android:icon="@drawable/ic_gallery"
+        android:title="@string/faf_tab_gallery"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mfb_groups"
+        android:icon="@drawable/ic_grouping"
+        android:title="@string/faf_tab_groups"
+        app:showAsAction="never" />
+</menu>

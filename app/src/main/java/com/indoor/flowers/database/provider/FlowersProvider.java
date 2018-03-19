@@ -2,10 +2,13 @@ package com.indoor.flowers.database.provider;
 
 import android.content.Context;
 
+import com.indoor.flowers.model.EventAction;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.FlowerWithWatering;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.GroupWithWatering;
+import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.model.PhotoItem;
 
 import java.util.List;
@@ -58,6 +61,20 @@ public class FlowersProvider extends DatabaseProvider {
     // endregion GROUP
 
     // region FLOWER
+
+    public NotificationWithTarget getLastNotificationAction(long flowerId, @NotificationType int type) {
+        EventAction action = database.getFlowersDao().getLastNotificationAction(flowerId, type);
+        NotificationWithTarget result = null;
+        if (action != null) {
+            result = database.getNotificationDao().getNotificationWithTarget(
+                    action.getNotificationId());
+            if (result != null) {
+                result.setEventDate(action.getDate());
+            }
+        }
+
+        return result;
+    }
 
     public void updateFlower(Flower flower) {
         database.getFlowersDao().update(flower);

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.MainPagerAdapter;
+import com.indoor.flowers.util.DialogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,8 +102,7 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
     @OnClick(R.id.fm_fab)
     void onFloatingButtonClicked() {
         if (pager.getCurrentItem() == MainPagerAdapter.POSITION_FLOWERS) {
-            Fragments.replace(getFragmentManager(), android.R.id.content,
-                    FlowerFragment.newInstance(), null, true);
+            DialogUtils.showCreateFlowerDialog(getActivity(), getFragmentManager());
         } else if (pager.getCurrentItem() == MainPagerAdapter.POSITION_GROUPS) {
             Fragments.replace(getFragmentManager(), android.R.id.content,
                     GroupFragment.newInstance(), null, true);

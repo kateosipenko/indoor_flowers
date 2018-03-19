@@ -24,6 +24,7 @@ import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.model.NotificationWithTarget;
 import com.indoor.flowers.service.FlowersAlarmsService;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +35,15 @@ public class NotificationsUtils {
     private static final String CHANEL_WATERING_ID = "6fc42723-0016-4964-b748-5f78fccb1b1f";
     private static final String CHANEL_FERTILIZING_ID = "2a55b7d6-1294-493f-a53f-09349171c3e9";
     private static final String CHANEL_TRANSPLANTING_ID = "f1e1e4fc-b244-495e-a861-a29cd4286f62";
+
+    public static Float getNotificationLevel(NotificationWithTarget notification) {
+        if (notification == null || notification.getNotification().getFrequency() == null) {
+            return null;
+        }
+
+        float daysDiff = CalendarUtils.getDaysDiff(notification.getEventDate(), Calendar.getInstance());
+        return 1f - daysDiff / notification.getNotification().getFrequency();
+    }
 
     public static void cancelEventNotifications(Context context, List<Notification> events) {
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);

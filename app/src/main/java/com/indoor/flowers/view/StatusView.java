@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.v4.graphics.ColorUtils;
+import android.support.v7.view.ContextThemeWrapper;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Pair;
@@ -54,26 +55,37 @@ public class StatusView extends View {
 
     public StatusView(Context context) {
         super(context);
-        init(null);
+        TypedArray typedArray = null;
+        if (context instanceof ContextThemeWrapper) {
+            ContextThemeWrapper wrapper = (ContextThemeWrapper) context;
+            typedArray = getContext().obtainStyledAttributes(wrapper.getThemeResId(),
+                    R.styleable.StatusView);
+        }
+
+        init(typedArray);
     }
 
     public StatusView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatusView);
+        init(typedArray);
     }
 
     public StatusView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(defStyleAttr, R.styleable.StatusView);
+        init(typedArray);
     }
 
     public void setWaterLevel(Float value) {
         this.fertilizerLevel = null;
         this.waterLevel = value;
-        if (waterLevel > 1f) {
-            waterLevel = 1f;
-        } else if (waterLevel < 0f) {
-            waterLevel = 0f;
+        if (waterLevel != null) {
+            if (waterLevel > 1f) {
+                waterLevel = 1f;
+            } else if (waterLevel < 0f) {
+                waterLevel = 0f;
+            }
         }
         refreshData();
         invalidate();
@@ -82,10 +94,12 @@ public class StatusView extends View {
     public void setFertilizerLevel(Float value) {
         this.waterLevel = null;
         this.fertilizerLevel = value;
-        if (fertilizerLevel > 1f) {
-            fertilizerLevel = 1f;
-        } else if (fertilizerLevel < 0f) {
-            fertilizerLevel = 0f;
+        if (fertilizerLevel != null) {
+            if (fertilizerLevel > 1f) {
+                fertilizerLevel = 1f;
+            } else if (fertilizerLevel < 0f) {
+                fertilizerLevel = 0f;
+            }
         }
 
         refreshData();
@@ -174,8 +188,8 @@ public class StatusView extends View {
         List<Pair<Integer, Integer>> filledIndexes = new ArrayList<>();
         float radius = (int) (drawingRect.width() / CIRCLES_IN_ROW);
         float step = radius * 2f;
-        int verticalCount = (int) (((getMeasuredHeight()) / (step)));
-        int horizontalCount = (int) (((getMeasuredWidth()) / (step)));
+        int verticalCount = (int) (((getMeasuredHeight() * 2) / (step)));
+        int horizontalCount = (int) (((getMeasuredWidth() * 2) / (step)));
         int totalCircleCount = verticalCount * horizontalCount;
         int filledCount = (int) (totalCircleCount * fertilizerLevel);
 
@@ -191,8 +205,8 @@ public class StatusView extends View {
             filledIndexes.add(allIndexes.get(i));
         }
 
-        Bitmap shaderBitmap = Bitmap.createBitmap((int) drawingRect.width(),
-                (int) drawingRect.height(), Bitmap.Config.ARGB_8888);
+        Bitmap shaderBitmap = Bitmap.createBitmap(getMeasuredWidth(),
+                getMeasuredHeight(), Bitmap.Config.ARGB_8888);
 
         fertilizerPaint.setShader(null);
         Canvas canvas = new Canvas(shaderBitmap);
@@ -275,11 +289,10 @@ public class StatusView extends View {
         groundPath.close();
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(TypedArray typedArray) {
         setWillNotDraw(false);
         setupPaints();
-        if (attrs != null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatusView);
+        if (typedArray != null) {
             if (typedArray.hasValue(R.styleable.StatusView_potColor)) {
                 int color = typedArray.getColor(R.styleable.StatusView_potColor, Color.GRAY);
                 potPaint.setColor(color);
