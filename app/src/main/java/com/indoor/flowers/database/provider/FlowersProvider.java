@@ -46,8 +46,12 @@ public class FlowersProvider extends DatabaseProvider {
         }
     }
 
-    public void refreshGroupFlowers(Group group, List<Flower> flowers) {
-        database.getGroupDao().updateGroupFlowers(group.getId(), flowers);
+    public void updateGroup(Group group) {
+        database.getGroupDao().update(group);
+    }
+
+    public void refreshGroupFlowers(long groupId, List<Flower> flowers) {
+        database.getGroupDao().updateGroupFlowers(groupId, flowers);
     }
 
     public List<Group> getAllGroups() {
@@ -62,8 +66,11 @@ public class FlowersProvider extends DatabaseProvider {
 
     // region FLOWER
 
-    public NotificationWithTarget getLastNotificationAction(long flowerId, @NotificationType int type) {
-        EventAction action = database.getFlowersDao().getLastNotificationAction(flowerId, type);
+    public NotificationWithTarget getLastNotificationAction(String targetTable, long targetId,
+                                                            @NotificationType int type) {
+        EventAction action = Flower.TABLE_NAME.equals(targetTable)
+                ? database.getFlowersDao().getFlowerLastNotificationAction(targetId, type)
+                : database.getFlowersDao().getGrouprLastNotificationAction(targetId, type);
         NotificationWithTarget result = null;
         if (action != null) {
             result = database.getNotificationDao().getNotificationWithTarget(

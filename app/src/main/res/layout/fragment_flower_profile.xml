@@ -12,18 +12,21 @@
         android:layout_height="@dimen/ff_collapsing_bar_size">
 
         <View
+            android:id="@+id/ffp_back_layer_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shape_flower_third_layer"
             android:backgroundTint="@color/primary50" />
 
         <View
+            android:id="@+id/ffp_back_layer_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shape_flower_second_layer"
             android:backgroundTint="@color/primary100" />
 
         <View
+            android:id="@+id/ffp_back_layer_three"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shape_flower" />
@@ -36,7 +39,7 @@
             android:elevation="8dp"
             android:padding="@dimen/ff_image_start_padding"
             android:src="@drawable/ic_photo_camera"
-            app:layout_constraintBottom_toTopOf="@+id/ff_name"
+            app:layout_constraintBottom_toTopOf="@+id/ffp_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

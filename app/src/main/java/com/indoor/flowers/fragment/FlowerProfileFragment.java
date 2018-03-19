@@ -45,7 +45,7 @@ import butterknife.Unbinder;
 public class FlowerProfileFragment extends Fragment implements NameChangeListener,
         OnPhotoTakenListener {
 
-    private static final String KEY_FLOWER_ID = "key_flower_id";
+    protected static final String KEY_ITEM_ID = "key_item_id";
 
     @BindView(R.id.ffp_snackbar)
     CoordinatorLayout snackbarContainer;
@@ -64,8 +64,8 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
 
     private Unbinder unbinder;
     private PermissionHelper permissionHelper;
-    private FlowersProvider flowersProvider;
-    private NotificationsProvider notificationsProvider;
+    protected FlowersProvider flowersProvider;
+    protected NotificationsProvider notificationsProvider;
 
     private Flower flower;
 
@@ -76,7 +76,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
 
     public static FlowerProfileFragment newInstance(long flowerId) {
         Bundle args = new Bundle();
-        args.putLong(KEY_FLOWER_ID, flowerId);
+        args.putLong(KEY_ITEM_ID, flowerId);
         FlowerProfileFragment fragment = new FlowerProfileFragment();
         fragment.setArguments(args);
         return fragment;
@@ -87,7 +87,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         super.onCreate(savedInstanceState);
         flowersProvider = new FlowersProvider(getActivity());
         notificationsProvider = new NotificationsProvider(getActivity());
-        long flowerId = getFlowerIdFromArgs();
+        long flowerId = getIdFromArgs();
         flower = flowersProvider.getFlowerById(flowerId);
     }
 
@@ -97,7 +97,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         View view = inflater.inflate(R.layout.fragment_flower_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
         permissionHelper.setSnackbarContainer(snackbarContainer);
-        refreshViewWithFlower();
+        refreshViewWithData();
 
         statusContainer.post(new Runnable() {
             @Override
@@ -163,7 +163,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
     @Override
     public void onPhotoTaken(File photo) {
         flower.setImagePath(photo.getPath());
-        refreshFlowerImage();
+        refreshImage();
         flowersProvider.updateFlower(flower);
 
         PhotoItem photoItem = new PhotoItem();
@@ -190,7 +190,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         view.setLayoutParams(params);
     }
 
-    private void refreshViewWithFlower() {
+    protected void refreshViewWithData() {
         if (nameView == null) {
             return;
         }
@@ -200,15 +200,23 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
             nameView.startEditing();
         }
 
-        refreshFlowerImage();
+        refreshImage();
     }
 
-    private void refreshStatusData() {
-        NotificationWithTarget waterNotification = flowersProvider.getLastNotificationAction(flower.getId(),
+    protected void refreshStatusData() {
+        NotificationWithTarget waterNotification = flowersProvider.getLastNotificationAction(
+                Flower.TABLE_NAME,
+                flower.getId(),
                 NotificationType.WATERING);
-        NotificationWithTarget fertilizerNotification = flowersProvider.getLastNotificationAction(flower.getId(),
+        NotificationWithTarget fertilizerNotification = flowersProvider.getLastNotificationAction(
+                Flower.TABLE_NAME,
+                flower.getId(),
                 NotificationType.FERTILIZER);
+        updateStatusViews(waterNotification, fertilizerNotification);
+    }
 
+    protected void updateStatusViews(NotificationWithTarget waterNotification,
+                                     NotificationWithTarget fertilizerNotification) {
         if (waterNotification != null) {
             waterStatusView.setWaterLevel(NotificationsUtils.getNotificationLevel(waterNotification));
             waterStatusView.setVisibility(View.VISIBLE);
@@ -232,7 +240,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         }
     }
 
-    private void refreshFlowerImage() {
+    protected void refreshImage() {
         if (imageView == null) {
             return;
         }
@@ -252,10 +260,10 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         imageView.setPadding(padding, padding, padding, padding);
     }
 
-    private long getFlowerIdFromArgs() {
+    protected long getIdFromArgs() {
         Bundle args = getArguments();
-        return args != null && args.containsKey(KEY_FLOWER_ID)
-                ? args.getLong(KEY_FLOWER_ID, DatabaseProvider.DEFAULT_ID)
+        return args != null && args.containsKey(KEY_ITEM_ID)
+                ? args.getLong(KEY_ITEM_ID, DatabaseProvider.DEFAULT_ID)
                 : DatabaseProvider.DEFAULT_ID;
     }
 
@@ -267,7 +275,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         progressContainer.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgress() {
+    protected void hideProgress() {
         if (progressContainer == null) {
             return;
         }

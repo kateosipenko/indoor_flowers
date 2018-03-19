@@ -61,6 +61,7 @@
 
     <!--Create group-->
     <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
+    <string name="fg_status">Статус</string>
     <string name="fg_group_flowers">Цветы</string>
     <string name="fg_notifications">Уведомления</string>
     <string name="fg_gallery">Галерея</string>

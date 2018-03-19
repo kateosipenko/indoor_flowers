@@ -21,6 +21,7 @@
     <color name="accent200">#FFA347</color>
     <color name="accent400">#FF7D05</color>
     <color name="accent700">#CE6204</color>
+    <color name="accent_dark">#994603</color>
 
     <color name="primary">@color/primary500</color>
     <color name="primary_dark">@color/primary800</color>

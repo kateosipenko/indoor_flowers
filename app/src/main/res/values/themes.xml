@@ -39,6 +39,12 @@
 
     <style name="PopupTheme" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AccentPopupTheme" parent="PopupTheme">
+        <item name="colorPrimary">@color/accent200</item>
+        <item name="colorPrimaryDark">@color/accent700</item>
+        <item name="colorAccent">@color/primary</item>
+    </style>
+
     <style name="LightToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/black_secondary_text</item>
         <item name="colorControlActivated">@color/black_secondary_text</item>

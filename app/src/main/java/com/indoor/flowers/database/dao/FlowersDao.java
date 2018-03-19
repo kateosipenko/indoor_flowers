@@ -74,5 +74,14 @@ public interface FlowersDao {
             "        )==1" +
             "     )" +
             ") order by date limit 1")
-    EventAction getLastNotificationAction(long flowerId, @NotificationType int type);
+    EventAction getFlowerLastNotificationAction(long flowerId, @NotificationType int type);
+
+    @Query("select * from EventActionTable " +
+            " where notification_id in " +
+            "(  select _id from NotificationTable where " +
+            "     type=:type and " +
+            "     (target_id=:groupId and target_table='GroupTable' " +
+            "     )" +
+            ") order by date limit 1")
+    EventAction getGrouprLastNotificationAction(long groupId, @NotificationType int type);
 }

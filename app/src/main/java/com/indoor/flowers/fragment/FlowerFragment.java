@@ -39,7 +39,8 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     Toolbar toolbar;
 
     private Flower flower;
-    private FlowersProvider provider;
+
+    protected FlowersProvider provider;
 
     private Unbinder unbinder;
 
@@ -113,7 +114,7 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
         return true;
     }
 
-    private void navigateToMenuItem(int itemId) {
+    protected void navigateToMenuItem(int itemId) {
         Fragment fragment = null;
         switch (itemId) {
             case R.id.mfb_status:
