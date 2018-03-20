@@ -18,7 +18,8 @@
     <string name="action_repeat">Повторять</string>
     <string name="action_calendar">Календарь</string>
 
-    <string name="create_flower">Создания цветка</string>
+    <string name="create_flower">Создание цветка</string>
+    <string name="create_group">Создание группы</string>
 
     <!--Notifications-->
     <string name="notifications_channel_watering">Уведомления про полив</string>

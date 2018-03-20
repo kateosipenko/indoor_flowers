@@ -29,8 +29,6 @@ import com.indoor.flowers.util.PermissionHelper;
 import com.indoor.flowers.util.PermissionUtil;
 import com.indoor.flowers.util.TakePhotoUtils;
 import com.indoor.flowers.util.TakePhotoUtils.OnPhotoTakenListener;
-import com.indoor.flowers.view.NameView;
-import com.indoor.flowers.view.NameView.NameChangeListener;
 import com.indoor.flowers.view.StatusView;
 import com.squareup.picasso.Picasso;
 
@@ -42,8 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class FlowerProfileFragment extends Fragment implements NameChangeListener,
-        OnPhotoTakenListener {
+public class FlowerProfileFragment extends Fragment implements OnPhotoTakenListener {
 
     protected static final String KEY_ITEM_ID = "key_item_id";
 
@@ -53,8 +50,6 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
     ViewGroup progressContainer;
     @BindView(R.id.ffp_icon)
     ImageView imageView;
-    @BindView(R.id.ffp_name)
-    NameView nameView;
     @BindView(R.id.ffp_water_status)
     StatusView waterStatusView;
     @BindView(R.id.ffp_fertilizer_status)
@@ -97,8 +92,7 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         View view = inflater.inflate(R.layout.fragment_flower_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
         permissionHelper.setSnackbarContainer(snackbarContainer);
-        refreshViewWithData();
-
+        refreshImage();
         statusContainer.post(new Runnable() {
             @Override
             public void run() {
@@ -153,14 +147,6 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
     }
 
     @Override
-    public void onNameChanged(String name) {
-        if (!TextUtils.isEmpty(name) && !name.equals(flower.getName())) {
-            flower.setName(name);
-            flowersProvider.updateFlower(flower);
-        }
-    }
-
-    @Override
     public void onPhotoTaken(File photo) {
         flower.setImagePath(photo.getPath());
         refreshImage();
@@ -188,19 +174,6 @@ public class FlowerProfileFragment extends Fragment implements NameChangeListene
         params.height = height;
         params.width = width;
         view.setLayoutParams(params);
-    }
-
-    protected void refreshViewWithData() {
-        if (nameView == null) {
-            return;
-        }
-
-        nameView.setText(flower.getName());
-        if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
-            nameView.startEditing();
-        }
-
-        refreshImage();
     }
 
     protected void refreshStatusData() {

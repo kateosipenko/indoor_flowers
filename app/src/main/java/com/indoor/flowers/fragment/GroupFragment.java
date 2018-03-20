@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,6 +109,14 @@ public class GroupFragment extends FlowerFragment {
     }
 
     @Override
+    public void onNameChanged(String name) {
+        if (!TextUtils.isEmpty(name) && !name.equals(group.getName())) {
+            group.setName(name);
+            provider.updateGroup(group);
+        }
+    }
+
+    @Override
     protected void navigateToMenuItem(int itemId) {
         Fragment fragment = null;
         switch (itemId) {
@@ -127,6 +136,18 @@ public class GroupFragment extends FlowerFragment {
 
         if (fragment != null) {
             Fragments.replace(getChildFragmentManager(), R.id.ff_container, fragment, null);
+        }
+    }
+
+    @Override
+    protected void refreshName() {
+        if (nameView == null) {
+            return;
+        }
+
+        nameView.setText(group.getName());
+        if (group.getId() == DatabaseProvider.DEFAULT_ID) {
+            nameView.startEditing();
         }
     }
 }

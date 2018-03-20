@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +25,15 @@ import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
+import com.indoor.flowers.view.NameView;
+import com.indoor.flowers.view.NameView.NameChangeListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FlowerFragment extends Fragment implements OnNavigationItemSelectedListener {
+public class FlowerFragment extends Fragment implements OnNavigationItemSelectedListener,
+        NameChangeListener {
 
     private static final String KEY_FLOWER_ID = "key_flower_id";
 
@@ -37,6 +41,8 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     BottomNavigationView bottomNavigationView;
     @BindView(R.id.ff_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.ff_name)
+    NameView nameView;
 
     private Flower flower;
 
@@ -67,7 +73,9 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
         View view = inflater.inflate(R.layout.fragment_flower, container, false);
         unbinder = ButterKnife.bind(this, view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        nameView.setListener(this);
         setupActionBar();
+        refreshName();
         if (savedInstanceState == null) {
             navigateToMenuItem(bottomNavigationView.getSelectedItemId());
         }
@@ -114,6 +122,14 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
         return true;
     }
 
+    @Override
+    public void onNameChanged(String name) {
+        if (!TextUtils.isEmpty(name) && !name.equals(flower.getName())) {
+            flower.setName(name);
+            provider.updateFlower(flower);
+        }
+    }
+
     protected void navigateToMenuItem(int itemId) {
         Fragment fragment = null;
         switch (itemId) {
@@ -133,6 +149,17 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
 
         if (fragment != null) {
             Fragments.replace(getChildFragmentManager(), R.id.ff_container, fragment, null);
+        }
+    }
+
+    protected void refreshName() {
+        if (nameView == null) {
+            return;
+        }
+
+        nameView.setText(flower.getName());
+        if (flower.getId() == DatabaseProvider.DEFAULT_ID) {
+            nameView.startEditing();
         }
     }
 

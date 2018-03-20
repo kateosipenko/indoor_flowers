@@ -35,12 +35,12 @@
             android:id="@+id/ffp_icon"
             android:layout_width="@dimen/ff_image_size"
             android:layout_height="@dimen/ff_image_size"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_default"
             android:background="@drawable/bg_flower_profile_icon"
             android:elevation="8dp"
             android:padding="@dimen/ff_image_start_padding"
             android:src="@drawable/ic_photo_camera"
-            app:layout_constraintBottom_toTopOf="@+id/ffp_name"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -51,27 +51,9 @@
             android:elevation="10dp"
             android:src="@drawable/ic_photo_camera"
             android:tint="@color/accent"
+            app:layout_constraintBottom_toBottomOf="@id/ffp_icon"
             app:layout_constraintEnd_toEndOf="@id/ffp_icon"
             tools:ignore="ContentDescription" />
-
-        <com.indoor.flowers.view.NameView
-            android:id="@+id/ffp_name"
-            android:layout_width="@dimen/ff_name_width"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_default"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/black_primary_text"
-            android:textColorHint="@color/black_secondary_text"
-            android:textCursorDrawable="@drawable/shape_accent_cursor"
-            android:textSize="@dimen/text_headline_big"
-            app:collapsedMarginStart="@dimen/ff_name_collapsed_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="ASd asd " />
 
     </android.support.constraint.ConstraintLayout>
 

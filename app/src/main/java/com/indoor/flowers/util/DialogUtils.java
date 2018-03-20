@@ -14,7 +14,9 @@ import com.indoor.flowers.R;
 import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.fragment.FlowerFragment;
+import com.indoor.flowers.fragment.GroupFragment;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.model.Group;
 
 public final class DialogUtils {
 
@@ -35,7 +37,7 @@ public final class DialogUtils {
                             Flower flower = new Flower();
                             flower.setId(DatabaseProvider.DEFAULT_ID);
                             flower.setName(editText.getText().toString().trim());
-                            flowersProvider.createOrUpdateFlower(flower);
+                            flowersProvider.createFlower(flower);
 
                             Fragments.replace(fragmentManager, android.R.id.content,
                                     FlowerFragment.newInstance(flower.getId()), null, true);
@@ -48,4 +50,33 @@ public final class DialogUtils {
                 .create().show();
     }
 
+    public static void showCreateGroupDialog(final Context context,
+                                             final FragmentManager fragmentManager) {
+        final EditText editText = new EditText(context);
+        editText.setTextColor(Res.getColor(R.color.black_primary_text));
+        editText.setSingleLine();
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        new AlertDialog.Builder(context, R.style.Dialog)
+                .setTitle(R.string.create_group)
+                .setView(editText)
+                .setPositiveButton(R.string.action_save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!Utils.isEmpty(editText)) {
+                            FlowersProvider flowersProvider = new FlowersProvider(context);
+                            Group group = new Group();
+                            group.setId(DatabaseProvider.DEFAULT_ID);
+                            group.setName(editText.getText().toString().trim());
+                            flowersProvider.createGroup(group);
+
+                            Fragments.replace(fragmentManager, android.R.id.content,
+                                    GroupFragment.newInstance(group.getId()), null, true);
+
+                            flowersProvider.unbind();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.action_cancel, null)
+                .create().show();
+    }
 }

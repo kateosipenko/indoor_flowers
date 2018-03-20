@@ -104,8 +104,7 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
         if (pager.getCurrentItem() == MainPagerAdapter.POSITION_FLOWERS) {
             DialogUtils.showCreateFlowerDialog(getActivity(), getFragmentManager());
         } else if (pager.getCurrentItem() == MainPagerAdapter.POSITION_GROUPS) {
-            Fragments.replace(getFragmentManager(), android.R.id.content,
-                    GroupFragment.newInstance(), null, true);
+            DialogUtils.showCreateGroupDialog(getActivity(), getFragmentManager());
         }
     }
 

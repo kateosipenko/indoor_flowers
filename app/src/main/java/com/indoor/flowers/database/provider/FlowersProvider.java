@@ -35,15 +35,11 @@ public class FlowersProvider extends DatabaseProvider {
         database.getGroupDao().deleteGroup(group);
     }
 
-    public void createOrUpdateGroup(Group group) {
-        if (database.getGroupDao().hasGroup(group.getId())) {
-            database.getGroupDao().update(group);
-        } else {
-            group.setId(invalidateIdForInsert(group.getId()));
-            long id = database.getGroupDao().insert(group);
-            group.setId(id);
-            createEventForCreation(group.getId(), Group.TABLE_NAME, group.getName());
-        }
+    public void createGroup(Group group) {
+        group.setId(invalidateIdForInsert(group.getId()));
+        long id = database.getGroupDao().insert(group);
+        group.setId(id);
+        createEventForCreation(group.getId(), Group.TABLE_NAME, group.getName());
     }
 
     public void updateGroup(Group group) {
@@ -87,16 +83,12 @@ public class FlowersProvider extends DatabaseProvider {
         database.getFlowersDao().update(flower);
     }
 
-    public void createOrUpdateFlower(Flower flower) {
-        if (database.getFlowersDao().hasFlower(flower.getId())) {
-            database.getFlowersDao().update(flower);
-        } else {
-            flower.setId(invalidateIdForInsert(flower.getId()));
-            long id = database.getFlowersDao().insert(flower);
-            flower.setId(id);
+    public void createFlower(Flower flower) {
+        flower.setId(invalidateIdForInsert(flower.getId()));
+        long id = database.getFlowersDao().insert(flower);
+        flower.setId(id);
 
-            createEventForCreation(id, Flower.TABLE_NAME, flower.getName());
-        }
+        createEventForCreation(id, Flower.TABLE_NAME, flower.getName());
     }
 
     public List<Flower> getAllFlowers() {

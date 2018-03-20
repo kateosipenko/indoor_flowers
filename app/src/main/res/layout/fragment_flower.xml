@@ -19,7 +19,25 @@
         app:layout_collapseMode="pin"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:popupTheme="@style/PopupTheme"
-        tools:ignore="UnusedAttribute" />
+        tools:ignore="UnusedAttribute">
+
+        <com.indoor.flowers.view.NameView
+            android:id="@+id/ff_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_small"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/white_primary_text"
+            android:textColorHint="@color/white_secondary_text"
+            android:textCursorDrawable="@drawable/shape_accent_cursor"
+            android:textSize="@dimen/text_body_big"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="ASd asd " />
+    </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/ff_bottom_menu"

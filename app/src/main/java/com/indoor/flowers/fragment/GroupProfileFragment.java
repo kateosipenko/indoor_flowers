@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import com.evgeniysharafan.utils.Res;
 import com.evgeniysharafan.utils.picasso.CircleTransformation;
 import com.indoor.flowers.R;
-import com.indoor.flowers.database.provider.DatabaseProvider;
-import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.NotificationType;
 import com.indoor.flowers.model.NotificationWithTarget;
@@ -68,14 +66,6 @@ public class GroupProfileFragment extends FlowerProfileFragment {
     }
 
     @Override
-    public void onNameChanged(String name) {
-        if (!TextUtils.isEmpty(name) && !name.equals(group.getName())) {
-            group.setName(name);
-            flowersProvider.updateGroup(group);
-        }
-    }
-
-    @Override
     public void onPhotoTaken(File photo) {
         group.setImagePath(photo.getPath());
         refreshImage();
@@ -86,24 +76,10 @@ public class GroupProfileFragment extends FlowerProfileFragment {
         photoItem.setImagePath(filePath);
 
         photoItem.setTargetId(group.getId());
-        photoItem.setTargetTable(Flower.TABLE_NAME);
+        photoItem.setTargetTable(Group.TABLE_NAME);
         photoItem.setDate(Calendar.getInstance());
         flowersProvider.addPhoto(photoItem);
         hideProgress();
-    }
-
-    @Override
-    protected void refreshViewWithData() {
-        if (nameView == null) {
-            return;
-        }
-
-        nameView.setText(group.getName());
-        if (group.getId() == DatabaseProvider.DEFAULT_ID) {
-            nameView.startEditing();
-        }
-
-        refreshImage();
     }
 
     @Override

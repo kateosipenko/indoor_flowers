@@ -31,7 +31,6 @@ public class NotificationStatus extends RelativeLayout {
 
     private int tintColor = Color.WHITE;
 
-    private int frequency = 0;
     private int daysLeft = 0;
 
     public NotificationStatus(Context context) {
@@ -58,6 +57,7 @@ public class NotificationStatus extends RelativeLayout {
         int progress = (int) (((double) daysLeft / frequency) * 100);
         progressBar.setProgress(progress);
         titleView.setText(String.valueOf(daysLeft));
+        this.daysLeft = daysLeft;
         onProgressChanged();
     }
 
@@ -97,7 +97,9 @@ public class NotificationStatus extends RelativeLayout {
         int progress = progressBar.getProgress();
         int colorAlpha = (int) (ALPHA_MIN + (ALPHA_MAX - ALPHA_MIN) * (progress / 100d));
 
-        int currentColor = ColorUtils.setAlphaComponent(tintColor, colorAlpha);
+        int currentColor = daysLeft >= 0
+                ? ColorUtils.setAlphaComponent(tintColor, colorAlpha)
+                : Res.getColor(R.color.material_red_primary400);
         int backgroundColor = ColorUtils.setAlphaComponent(currentColor, (int) (colorAlpha / 2f));
 
         progressBar.setBackgroundTintList(ColorStateList.valueOf(backgroundColor));
