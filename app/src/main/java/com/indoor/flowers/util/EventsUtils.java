@@ -2,6 +2,7 @@ package com.indoor.flowers.util;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.util.SparseArray;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
@@ -13,7 +14,6 @@ import com.indoor.flowers.model.NotificationWithTarget;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class EventsUtils {
@@ -79,10 +79,10 @@ public class EventsUtils {
         return result;
     }
 
-    public static HashMap<Integer, List<NotificationWithTarget>> createDayNotificationsMap(
+    public static SparseArray<List<NotificationWithTarget>> createDayNotificationsMap(
             List<Notification> notifications, FlowersDatabase database,
             Calendar minDate, Calendar maxDate) {
-        HashMap<Integer, List<NotificationWithTarget>> eventsByDays = new HashMap<>();
+        SparseArray<List<NotificationWithTarget>> eventsByDays = new SparseArray<>();
         int daysCount = CalendarUtils.getDaysDiff(minDate, maxDate);
         int startDayOfYear = minDate.get(Calendar.DAY_OF_YEAR);
         for (int i = 0; i < daysCount; i++) {
@@ -127,7 +127,7 @@ public class EventsUtils {
     }
 
     private static void addNotificationForDay(Notification notification, Calendar date,
-                                              HashMap<Integer, List<NotificationWithTarget>> eventsByDays) {
+                                              SparseArray<List<NotificationWithTarget>> eventsByDays) {
         NotificationWithTarget target = new NotificationWithTarget();
         target.setNotification(notification);
         target.setEventDate(date);

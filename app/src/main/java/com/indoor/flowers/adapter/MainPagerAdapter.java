@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.evgeniysharafan.utils.Res;
 import com.indoor.flowers.R;
+import com.indoor.flowers.fragment.CalendarNearbyNotificationsFragment;
 import com.indoor.flowers.fragment.FlowersFragment;
 import com.indoor.flowers.fragment.GroupsFragment;
-import com.indoor.flowers.fragment.NotificationsFragment;
 
 public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -28,7 +28,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         Fragment result = null;
         switch (position) {
             case POSITION_NOTIFICATIONS:
-                result = NotificationsFragment.newInstance();
+                result = CalendarNearbyNotificationsFragment.newInstance();
                 break;
             case POSITION_FLOWERS:
                 result = FlowersFragment.newInstance();

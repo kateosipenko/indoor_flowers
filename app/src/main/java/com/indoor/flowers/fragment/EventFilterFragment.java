@@ -36,9 +36,10 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+@SuppressWarnings("ConstantConditions")
 public class EventFilterFragment extends Fragment implements OnCheckedChangeListener {
 
-    public static final String EXTRA_FILTER = "extra_filter";
+    static final String EXTRA_FILTER = "extra_filter";
 
     @BindView(R.id.fef_filter_elements_group)
     RadioGroup elementsGroup;
@@ -135,6 +136,9 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
                 break;
             case FilterElements.SELECTED:
                 checkedId = R.id.fef_selected_only;
+                break;
+            case FilterElements.NONE:
+                checkedId = R.id.fef_elements_all;
                 break;
         }
 

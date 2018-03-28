@@ -21,9 +21,9 @@ public class NotificationWithTarget {
     @ColumnInfo(name = Columns.EVENT_DATE)
     private Calendar eventDate;
 
-    public NotificationWithTarget clone() {
+    public NotificationWithTarget getCopy() {
         NotificationWithTarget result = new NotificationWithTarget();
-        result.setNotification(notification != null ? notification.clone() : null);
+        result.setNotification(notification != null ? notification.getCopy() : null);
         result.setImagePath(imagePath);
         result.setName(name);
         result.setEventDate(eventDate != null ? (Calendar) eventDate.clone() : null);

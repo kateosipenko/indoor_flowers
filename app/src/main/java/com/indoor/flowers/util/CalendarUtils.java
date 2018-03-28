@@ -31,8 +31,7 @@ public class CalendarUtils {
             return false;
 
         Calendar current = Calendar.getInstance();
-        return current.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
-                && current.get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR);
+        return isSameDate(calendar, current);
     }
 
     public static boolean isOldDate(Calendar date) {
@@ -43,5 +42,12 @@ public class CalendarUtils {
         current.set(Calendar.HOUR_OF_DAY, 0);
         current.set(Calendar.MINUTE, 0);
         return date.before(current);
+    }
+
+    public static boolean isSameDate(Calendar first, Calendar second) {
+        return !(first == null || second == null)
+                && first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
+                && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR);
+
     }
 }

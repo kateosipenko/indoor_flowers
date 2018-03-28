@@ -1,5 +1,6 @@
 package com.indoor.flowers.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -45,6 +46,7 @@ public class NameView extends android.support.v7.widget.AppCompatEditText {
         }, 100);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN && !isEnabled()) {
@@ -80,11 +82,6 @@ public class NameView extends android.support.v7.widget.AppCompatEditText {
         } else {
             onEditDone();
         }
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
     }
 
     private void onEditDone() {

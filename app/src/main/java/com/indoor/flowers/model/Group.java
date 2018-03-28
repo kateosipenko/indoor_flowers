@@ -47,11 +47,9 @@ public class Group {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Group)) {
-            return false;
-        }
+        return !(obj == null || !(obj instanceof Group))
+                && Objects.equals(this.id, ((Group) obj).getId());
 
-        return Objects.equals(this.id, ((Group) obj).getId());
     }
 
     @Override

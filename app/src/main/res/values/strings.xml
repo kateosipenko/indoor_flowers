@@ -15,8 +15,6 @@
     <string name="action_delete">Удалить</string>
     <string name="action_done">Готово</string>
     <string name="action_filter">Фильтровать</string>
-    <string name="action_repeat">Повторять</string>
-    <string name="action_calendar">Календарь</string>
 
     <string name="create_flower">Создание цветка</string>
     <string name="create_group">Создание группы</string>
@@ -30,7 +28,6 @@
     <string name="fm_notifications">События</string>
     <string name="fm_flowers">Цветы</string>
     <string name="fm_groups">Группы</string>
-    <string name="fm_calendar">Календарь</string>
 
     <!--Flowers-->
     <string name="mf_filter_all_flowers">Все цветы</string>
@@ -40,33 +37,25 @@
     <string name="full_date_format">%1$td %1$tB %1$ty</string>
     <string name="full_time_format">%1$tH:%1$tM</string>
     <string name="month_title_format">%1$s %2$tY</string>
-    <string name="day_title_format">%1$td %1$tb</string>
 
     <!--Events-->
-    <string name="event_created_flower">Добавлен цветок</string>
-    <string name="event_created_group">Добавлена группа</string>
     <string name="event_created">Создан</string>
     <string name="event_watering">Полить</string>
     <string name="event_fertilizer">Подкормить</string>
     <string name="event_transplanting">Пересадить</string>
 
     <!--Add flower-->
-    <string name="faf_flower_name_hint">Имя вашего растения</string>
-    <string name="faf_add_event">Добавить уведомление</string>
     <string name="faf_tab_notifications">Уведомления</string>
     <string name="faf_tab_gallery">Галерея</string>
     <string name="faf_tab_groups">Группы</string>
     <string name="faf_tab_status">Статус</string>
-    <string name="faf_error_name_empty">Задайте имя цветка</string>
     <string name="faf_date_not_set">Не задано</string>
 
     <!--Create group-->
-    <string name="fcr_name_group_error">Пожалуйста, задайте имя для группы</string>
     <string name="fg_status">Статус</string>
     <string name="fg_group_flowers">Цветы</string>
     <string name="fg_notifications">Уведомления</string>
     <string name="fg_gallery">Галерея</string>
-    <string name="fg_name_hint">Имя группы</string>
 
     <!--Event-->
     <string name="fef_by_type">По типу события</string>

@@ -50,11 +50,9 @@ public class Flower {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Flower)) {
-            return false;
-        }
+        return !(obj == null || !(obj instanceof Flower))
+                && Objects.equals(this.id, ((Flower) obj).getId());
 
-        return Objects.equals(this.id, ((Flower) obj).getId());
     }
 
     @Override

@@ -10,7 +10,6 @@ public @interface Columns {
     String FLOWER_ID = "flower_id";
     String TYPE = "type";
     String TARGET_ID = "target_id";
-    String CREATION_DATE = "creation_date";
     String EVENT_DATE = "event_date";
     String TARGET_TABLE = "target_table";
     String FREQUENCY = "frequency";

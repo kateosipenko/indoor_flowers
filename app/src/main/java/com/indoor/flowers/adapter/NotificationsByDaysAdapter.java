@@ -65,7 +65,7 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
 
         items.remove(position);
         notifyItemRemoved(position);
-        notifyItemChanged(position > 0 ? --position : ++position, "RefreshDay");
+        notifyItemChanged(position > 0 ? --position : ++position);
     }
 
     @Nullable
@@ -89,19 +89,8 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
         holder.update(getItemByPosition(position));
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
-        if (payloads == null || payloads.size() == 0) {
-            super.onBindViewHolder(holder, position, payloads);
-        } else {
-            holder.refreshDateView(getItemByPosition(position));
-        }
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.rn_day_title)
-        TextView dayTitle;
         @BindView(R.id.rn_comment)
         TextView commentView;
         @BindView(R.id.rn_title)
@@ -166,19 +155,6 @@ public class NotificationsByDaysAdapter extends RecyclerListAdapter<Notification
             } else if (notification.getEventDate().after(adapter.today)) {
                 eventsContainer.setBackgroundTintList(ColorStateList.valueOf(
                         Res.getColor(R.color.material_grey_primary100)));
-            }
-
-            refreshDateView(notification);
-        }
-
-        private void refreshDateView(NotificationWithTarget notification) {
-            NotificationWithTarget previous = adapter.getItemByPosition(getAdapterPosition() - 1);
-            dayTitle.setText(Res.getString(R.string.day_title_format, notification.getEventDate()));
-            if (adapter.editable) {
-                dayTitle.setVisibility(previous == null
-                        || CalendarUtils.getDaysDiff(previous.getEventDate(),
-                        notification.getEventDate()) > 0
-                        ? View.VISIBLE : View.GONE);
             }
         }
     }

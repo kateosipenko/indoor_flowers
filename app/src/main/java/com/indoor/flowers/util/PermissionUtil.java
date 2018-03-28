@@ -116,6 +116,7 @@ public class PermissionUtil {
         activity.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(data));
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean isPermissionGranted(String permission) {
         return ContextCompat.checkSelfPermission(Utils.getApp(), permission) == PERMISSION_GRANTED;
     }

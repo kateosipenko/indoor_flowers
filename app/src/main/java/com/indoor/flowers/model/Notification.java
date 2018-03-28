@@ -39,7 +39,7 @@ public class Notification {
     @ColumnInfo(name = Columns.ACTIVE)
     private boolean isActive;
 
-    public Notification clone() {
+    public Notification getCopy() {
         Notification result = new Notification();
         result.setId(id);
         result.setType(type);

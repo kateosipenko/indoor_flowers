@@ -79,6 +79,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/material_white"
-        android:overScrollMode="never" />
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        tools:layoutManager="android.support.v7.widget.GridLayoutManager"
+        tools:listitem="@layout/row_calendar_day" />
 
 </merge>

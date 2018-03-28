@@ -178,6 +178,7 @@ public class FilesUtils {
             ObjectInputStream stream = null;
             try {
                 stream = new ObjectInputStream(new FileInputStream(file));
+                //noinspection unchecked
                 result = (T) stream.readObject();
             } catch (Exception ex) {
                 L.w(ex);
@@ -340,7 +341,7 @@ public class FilesUtils {
         return result;
     }
 
-    public static void invalidateEmpty() {
+    private static void invalidateEmpty() {
         deleteEmptyFolders(getCacheDir());
     }
 

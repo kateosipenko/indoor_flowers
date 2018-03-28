@@ -2,10 +2,12 @@ package com.indoor.flowers.database.provider;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import com.indoor.flowers.database.Columns;
 import com.indoor.flowers.database.dao.NotificationDao;
 import com.indoor.flowers.model.CalendarFilter;
+import com.indoor.flowers.model.CalendarFilter.FilterElements;
 import com.indoor.flowers.model.EventAction;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
@@ -15,7 +17,6 @@ import com.indoor.flowers.util.CalendarUtils;
 import com.indoor.flowers.util.EventsUtils;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class NotificationsProvider extends DatabaseProvider {
@@ -44,8 +45,8 @@ public class NotificationsProvider extends DatabaseProvider {
         return database.getNotificationDao().getNotificationForTarget(targetId, targetTable);
     }
 
-    public HashMap<Integer, List<NotificationWithTarget>> getEventsForPeriod(Calendar startDate, Calendar endDate,
-                                                                             CalendarFilter filter) {
+    public SparseArray<List<NotificationWithTarget>> getEventsForPeriod(Calendar startDate, Calendar endDate,
+                                                                        CalendarFilter filter) {
         String query = buildNotificationsCalendarQuery(filter, startDate, endDate);
         List<Notification> notifications = database.getNotificationDao().getNotificationForSelection(query);
         return EventsUtils.createDayNotificationsMap(notifications, database, startDate, endDate);
@@ -55,13 +56,13 @@ public class NotificationsProvider extends DatabaseProvider {
                                                    Calendar endDate) {
         String selection = "";
         switch (filter.getElementsFilterType()) {
-            case CalendarFilter.FilterElements.FLOWERS:
+            case FilterElements.FLOWERS:
                 selection += Columns.TARGET_TABLE + "='" + Flower.TABLE_NAME + "'";
                 break;
-            case CalendarFilter.FilterElements.GROUPS:
+            case FilterElements.GROUPS:
                 selection += Columns.TARGET_TABLE + "='" + Group.TABLE_NAME + "'";
                 break;
-            case CalendarFilter.FilterElements.SELECTED:
+            case FilterElements.SELECTED:
                 if (filter.getSelectedFlowers() != null && filter.getSelectedFlowers().size() > 0) {
                     selection += "(" + Columns.TARGET_TABLE + "='" + Flower.TABLE_NAME + "'"
                             + " and " + Columns.TARGET_ID + " in ("
@@ -83,6 +84,9 @@ public class NotificationsProvider extends DatabaseProvider {
                     selection = "(" + selection + ")";
                 }
 
+                break;
+            case FilterElements.NONE:
+                selection = "";
                 break;
         }
 

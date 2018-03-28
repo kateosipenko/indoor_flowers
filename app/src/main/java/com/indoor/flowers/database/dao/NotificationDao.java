@@ -119,7 +119,7 @@ public abstract class NotificationDao {
                 }
 
                 do {
-                    NotificationWithTarget periodically = notificationWithTarget.clone();
+                    NotificationWithTarget periodically = notificationWithTarget.getCopy();
                     periodically.setEventDate(eventDate);
                     result.add(periodically);
                     eventDate = (Calendar) eventDate.clone();

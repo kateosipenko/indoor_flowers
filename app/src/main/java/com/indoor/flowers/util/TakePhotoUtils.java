@@ -10,10 +10,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.media.ExifInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 
@@ -433,7 +433,7 @@ public class TakePhotoUtils {
         return path;
     }
 
-    private void getImageFromExternalContentProvider(Uri uri, File file) throws IOException {
+    private void getImageFromExternalContentProvider(Uri uri, File file) {
         InputStream is = null;
         OutputStream outStream = null;
 

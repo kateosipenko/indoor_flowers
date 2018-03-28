@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +17,6 @@ import com.indoor.flowers.adapter.CalendarDaysAdapter.OnDayClickedListener;
 import com.indoor.flowers.model.NotificationWithTarget;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,6 +60,14 @@ public class CalendarView extends LinearLayout {
         return daysAdapter.getEndDate();
     }
 
+    public Calendar getCurrentDate() {
+        return currentDate;
+    }
+
+    public List<NotificationWithTarget> getNotificationsPerCurrentDay() {
+        return daysAdapter.getNotificationsPerDay(currentDate);
+    }
+
     @OnClick(R.id.vc_previous_month)
     void onPreviousMonthClicked() {
         currentDate.add(Calendar.MONTH, -1);
@@ -85,8 +93,12 @@ public class CalendarView extends LinearLayout {
         this.daysAdapter.setDayClickListener(listener);
     }
 
-    public void setEventsForMonth(HashMap<Integer, List<NotificationWithTarget>> events) {
+    public void setEventsForMonth(SparseArray<List<NotificationWithTarget>> events) {
         daysAdapter.setEvents(events);
+    }
+
+    public void setSelectedDate(Calendar date) {
+        daysAdapter.setSelected(date);
     }
 
     private void initialize() {
@@ -94,10 +106,12 @@ public class CalendarView extends LinearLayout {
         ButterKnife.bind(this);
         setOrientation(VERTICAL);
 
-        currentDate = Calendar.getInstance();
-        setupWeekDays();
-        setupDaysList();
-        onMonthUpdated();
+        if (!isInEditMode()) {
+            currentDate = Calendar.getInstance();
+            setupWeekDays();
+            setupDaysList();
+            onMonthUpdated();
+        }
     }
 
     private void setupDaysList() {
@@ -127,8 +141,14 @@ public class CalendarView extends LinearLayout {
     }
 
     private String getTextForMonth(int monthNumber) {
-        int id = Res.get().getIdentifier("month_" + monthNumber, "string", Utils.getPackageName());
-        return Res.getString(id);
+        String result = null;
+        try {
+            int id = Res.get().getIdentifier("month_" + monthNumber, "string", Utils.getPackageName());
+            result = Res.getString(id);
+        } catch (Exception ignore) {
+        }
+
+        return result;
     }
 
 

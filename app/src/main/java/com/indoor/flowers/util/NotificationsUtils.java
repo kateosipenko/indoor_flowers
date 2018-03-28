@@ -102,6 +102,9 @@ public class NotificationsUtils {
             case NotificationType.WATERING:
                 builder.setSubText(Res.getString(R.string.event_watering));
                 break;
+            case NotificationType.CREATED:
+                builder.setSubText(Res.getString(R.string.event_created));
+                break;
         }
 
         builder.setSmallIcon(R.drawable.ic_notification_time);
@@ -156,6 +159,8 @@ public class NotificationsUtils {
                 return Res.getString(R.string.notifications_channel_transplanting);
             case NotificationType.WATERING:
                 return Res.getString(R.string.notifications_channel_watering);
+            case NotificationType.CREATED:
+                return null;
         }
 
         return null;
@@ -169,6 +174,8 @@ public class NotificationsUtils {
                 return CHANEL_TRANSPLANTING_ID;
             case NotificationType.WATERING:
                 return CHANEL_WATERING_ID;
+            case NotificationType.CREATED:
+                return null;
         }
 
         return null;

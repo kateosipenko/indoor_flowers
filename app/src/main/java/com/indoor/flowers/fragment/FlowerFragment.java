@@ -44,10 +44,9 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     @BindView(R.id.ff_name)
     NameView nameView;
 
+    FlowersProvider provider;
+
     private Flower flower;
-
-    protected FlowersProvider provider;
-
     private Unbinder unbinder;
 
     public static FlowerFragment newInstance(long flowerId) {
@@ -130,7 +129,7 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
         }
     }
 
-    protected void navigateToMenuItem(int itemId) {
+    void navigateToMenuItem(int itemId) {
         Fragment fragment = null;
         switch (itemId) {
             case R.id.mfb_status:
@@ -152,7 +151,7 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
         }
     }
 
-    protected void refreshName() {
+    void refreshName() {
         if (nameView == null) {
             return;
         }

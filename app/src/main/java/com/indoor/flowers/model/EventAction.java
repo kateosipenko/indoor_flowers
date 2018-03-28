@@ -21,7 +21,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                         parentColumns = Columns.ID)})
 @TypeConverters({DbTypesConverter.class})
 public class EventAction {
-    public static final String TABLE_NAME = "EventActionTable";
+    static final String TABLE_NAME = "EventActionTable";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Columns.ID)

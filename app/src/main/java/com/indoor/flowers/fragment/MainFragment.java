@@ -11,9 +11,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -45,12 +42,6 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
         return new MainFragment();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +49,7 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
         unbinder = ButterKnife.bind(this, view);
         setupToolbar();
         setupPager();
+        onPageSelected(pager.getCurrentItem());
         return view;
     }
 
@@ -69,30 +61,19 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.mm_calendar) {
-            Fragments.replace(getFragmentManager(), android.R.id.content,
-                    EventsCalendarFragment.newInstance(), null, true);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
 
     @Override
     public void onPageSelected(int position) {
-        floatingActionButton.setVisibility(adapter.canShowFloatingButton(position)
-                ? View.VISIBLE : View.GONE);
-        getActivity().invalidateOptionsMenu();
+        switch (position) {
+            case MainPagerAdapter.POSITION_NOTIFICATIONS:
+                floatingActionButton.setImageResource(R.drawable.ic_filter);
+                break;
+            default:
+                floatingActionButton.setImageResource(R.drawable.ic_add);
+                break;
+        }
     }
 
     @Override
@@ -101,10 +82,17 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
 
     @OnClick(R.id.fm_fab)
     void onFloatingButtonClicked() {
-        if (pager.getCurrentItem() == MainPagerAdapter.POSITION_FLOWERS) {
-            DialogUtils.showCreateFlowerDialog(getActivity(), getFragmentManager());
-        } else if (pager.getCurrentItem() == MainPagerAdapter.POSITION_GROUPS) {
-            DialogUtils.showCreateGroupDialog(getActivity(), getFragmentManager());
+        switch (pager.getCurrentItem()) {
+            case MainPagerAdapter.POSITION_FLOWERS:
+                DialogUtils.showCreateFlowerDialog(getActivity(), getFragmentManager());
+                break;
+            case MainPagerAdapter.POSITION_GROUPS:
+                DialogUtils.showCreateGroupDialog(getActivity(), getFragmentManager());
+                break;
+            case MainPagerAdapter.POSITION_NOTIFICATIONS:
+                Fragments.replace(getFragmentManager(), android.R.id.content,
+                        EventFilterFragment.newInstance(), null, true);
+                break;
         }
     }
 

@@ -11,7 +11,6 @@ import com.indoor.flowers.util.NotificationsUtils;
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     public static final String ACTION_SHOW_NOTIFICATION = "action_show_notification";
-    public static final String ACTION_POSTPONE = "action_postpone";
 
     public static final String KEY_EVENT_ID = "key_event_id";
 

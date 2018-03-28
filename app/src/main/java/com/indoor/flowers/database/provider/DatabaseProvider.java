@@ -18,11 +18,11 @@ public abstract class DatabaseProvider {
 
     public static final int DEFAULT_ID = -1;
 
-    protected FlowersDatabase database;
+    FlowersDatabase database;
 
     private Context context;
 
-    public DatabaseProvider(Context context) {
+    DatabaseProvider(Context context) {
         this.context = context;
         this.database = FlowersApp.getDatabase();
     }
@@ -61,11 +61,11 @@ public abstract class DatabaseProvider {
      * @param id Id of inserting entity
      * @return Invalidated id.
      */
-    public static int invalidateIdForInsert(int id) {
+    private static int invalidateIdForInsert(int id) {
         return id == DEFAULT_ID ? 0 : id;
     }
 
-    public static long invalidateIdForInsert(long id) {
+    static long invalidateIdForInsert(long id) {
         return id == DEFAULT_ID ? 0 : id;
     }
 
