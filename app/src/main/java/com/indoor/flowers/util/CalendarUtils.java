@@ -45,7 +45,7 @@ public class CalendarUtils {
     }
 
     public static boolean isSameDate(Calendar first, Calendar second) {
-        return !(first == null || second == null)
+        return first != null && second != null
                 && first.get(Calendar.YEAR) == second.get(Calendar.YEAR)
                 && first.get(Calendar.DAY_OF_YEAR) == second.get(Calendar.DAY_OF_YEAR);
 

@@ -16,8 +16,8 @@
     <string name="action_done">Готово</string>
     <string name="action_filter">Фильтровать</string>
 
-    <string name="create_flower">Создание цветка</string>
-    <string name="create_group">Создание группы</string>
+    <string name="create_flower">Как назвать новый цветок?</string>
+    <string name="create_group">Как назвать новую группу?</string>
 
     <!--Notifications-->
     <string name="notifications_channel_watering">Уведомления про полив</string>

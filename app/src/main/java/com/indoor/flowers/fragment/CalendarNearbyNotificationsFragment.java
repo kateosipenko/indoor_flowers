@@ -75,7 +75,6 @@ public class CalendarNearbyNotificationsFragment extends Fragment implements OnD
         onMonthChanged(calendarView.getStartDate(), calendarView.getEndDate());
         calendarView.setDayClickListener(this);
         calendarView.setMonthChangedListener(this);
-        calendarView.setSelectedDate(calendarView.getCurrentDate());
         onDayClicked(calendarView.getCurrentDate(), calendarView.getNotificationsPerCurrentDay());
         return view;
     }

@@ -78,8 +78,8 @@ public class CalendarDaysAdapter extends RecyclerView.Adapter<CalendarDaysAdapte
         int oldPosition = getPositionForDate(selectedDate);
         int position = getPositionForDate(calendar);
         this.selectedDate = calendar;
-        notifyItemChanged(position);
-        notifyItemChanged(oldPosition);
+        notifyItemChanged(position, position);
+        notifyItemChanged(oldPosition, oldPosition);
     }
 
     @Override

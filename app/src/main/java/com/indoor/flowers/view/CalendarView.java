@@ -1,11 +1,22 @@
 package com.indoor.flowers.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +47,8 @@ public class CalendarView extends LinearLayout {
     private Calendar currentDate;
     private CalendarDaysAdapter daysAdapter;
     private OnMonthChangedListener monthChangedListener;
+
+    private boolean animateNextMonth = true;
 
     public CalendarView(Context context) {
         super(context);
@@ -70,16 +83,16 @@ public class CalendarView extends LinearLayout {
 
     @OnClick(R.id.vc_previous_month)
     void onPreviousMonthClicked() {
+        animateNextMonth = false;
         currentDate.add(Calendar.MONTH, -1);
-        daysAdapter.setMonthDate(currentDate);
-        onMonthUpdated();
+        onMonthUpdated(true);
     }
 
     @OnClick(R.id.vc_next_month)
     void onNextMonthClicked() {
+        animateNextMonth = true;
         currentDate.add(Calendar.MONTH, 1);
-        daysAdapter.setMonthDate(currentDate);
-        onMonthUpdated();
+        onMonthUpdated(true);
     }
 
     public void setMonthChangedListener(OnMonthChangedListener listener) {
@@ -97,10 +110,6 @@ public class CalendarView extends LinearLayout {
         daysAdapter.setEvents(events);
     }
 
-    public void setSelectedDate(Calendar date) {
-        daysAdapter.setSelected(date);
-    }
-
     private void initialize() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_calendar, this, true);
         ButterKnife.bind(this);
@@ -110,7 +119,7 @@ public class CalendarView extends LinearLayout {
             currentDate = Calendar.getInstance();
             setupWeekDays();
             setupDaysList();
-            onMonthUpdated();
+            onMonthUpdated(false);
         }
     }
 
@@ -131,10 +140,19 @@ public class CalendarView extends LinearLayout {
         }
     }
 
-    private void onMonthUpdated() {
+    private void onMonthUpdated(boolean playAnimation) {
+        if (playAnimation) {
+            Drawable monthDrawable = getDrawingCache(currentMonthView);
+            Drawable daysDrawable = getDrawingCache(daysList);
+            animateViewMonthChanged(currentMonthView, monthDrawable).start();
+            animateViewMonthChanged(daysList, daysDrawable).start();
+        }
+
         currentMonthView.setText(Res.getString(R.string.month_title_format,
                 getTextForMonth(currentDate.get(Calendar.MONTH)),
                 currentDate));
+        daysAdapter.setMonthDate(currentDate);
+
         if (monthChangedListener != null) {
             monthChangedListener.onMonthChanged(daysAdapter.getStartDate(), daysAdapter.getEndDate());
         }
@@ -151,6 +169,48 @@ public class CalendarView extends LinearLayout {
         return result;
     }
 
+    private AnimatorSet animateViewMonthChanged(final View animatedView, final Drawable start) {
+        float translationStep = animatedView.getMeasuredWidth() / 2f;
+
+        if (start != null) {
+            start.setBounds(0, 0, animatedView.getMeasuredWidth(), animatedView.getMeasuredHeight());
+            animatedView.getOverlay().add(start);
+        }
+
+        AnimatorSet hidePrevious = new AnimatorSet();
+        hidePrevious.playTogether(ObjectAnimator.ofFloat(animatedView, View.TRANSLATION_X,
+                animatedView.getTranslationX(), animateNextMonth ? -translationStep : translationStep),
+                ObjectAnimator.ofFloat(animatedView, View.ALPHA, 1f, 0f));
+        hidePrevious.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animatedView.getOverlay().clear();
+            }
+        });
+
+        AnimatorSet showNext = new AnimatorSet();
+        showNext.playTogether(ObjectAnimator.ofFloat(animatedView, View.TRANSLATION_X,
+                animateNextMonth ? translationStep : -translationStep, 0),
+                ObjectAnimator.ofFloat(animatedView, View.ALPHA, 0f, 1f));
+
+        AnimatorSet set = new AnimatorSet();
+        set.playSequentially(hidePrevious, showNext);
+        set.setDuration(500);
+        set.setInterpolator(new AccelerateDecelerateInterpolator());
+        return set;
+    }
+
+    private Drawable getDrawingCache(View view) {
+        Bitmap result = null;
+        if (view.getMeasuredWidth() > 0 && view.getMeasuredHeight() > 0) {
+            result = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(result);
+            canvas.drawColor(Color.WHITE);
+            view.draw(canvas);
+        }
+        return result != null ? new BitmapDrawable(Res.get(), result) : null;
+    }
 
     public interface OnMonthChangedListener {
         void onMonthChanged(Calendar startDate, Calendar endDate);
