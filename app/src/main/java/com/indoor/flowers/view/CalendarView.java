@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -142,8 +141,8 @@ public class CalendarView extends LinearLayout {
 
     private void onMonthUpdated(boolean playAnimation) {
         if (playAnimation) {
-            Drawable monthDrawable = getDrawingCache(currentMonthView);
-            Drawable daysDrawable = getDrawingCache(daysList);
+            Bitmap monthDrawable = getDrawingCache(currentMonthView);
+            Bitmap daysDrawable = getDrawingCache(daysList);
             animateViewMonthChanged(currentMonthView, monthDrawable).start();
             animateViewMonthChanged(daysList, daysDrawable).start();
         }
@@ -169,10 +168,11 @@ public class CalendarView extends LinearLayout {
         return result;
     }
 
-    private AnimatorSet animateViewMonthChanged(final View animatedView, final Drawable start) {
+    private AnimatorSet animateViewMonthChanged(final View animatedView, final Bitmap startViewDrawingCache) {
         float translationStep = animatedView.getMeasuredWidth() / 2f;
 
-        if (start != null) {
+        if (startViewDrawingCache != null) {
+            BitmapDrawable start = new BitmapDrawable(getResources(), startViewDrawingCache);
             start.setBounds(0, 0, animatedView.getMeasuredWidth(), animatedView.getMeasuredHeight());
             animatedView.getOverlay().add(start);
         }
@@ -185,6 +185,10 @@ public class CalendarView extends LinearLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                if (startViewDrawingCache != null) {
+                    startViewDrawingCache.recycle();
+                }
+
                 animatedView.getOverlay().clear();
             }
         });
@@ -201,7 +205,7 @@ public class CalendarView extends LinearLayout {
         return set;
     }
 
-    private Drawable getDrawingCache(View view) {
+    private Bitmap getDrawingCache(View view) {
         Bitmap result = null;
         if (view.getMeasuredWidth() > 0 && view.getMeasuredHeight() > 0) {
             result = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
@@ -209,7 +213,7 @@ public class CalendarView extends LinearLayout {
             canvas.drawColor(Color.WHITE);
             view.draw(canvas);
         }
-        return result != null ? new BitmapDrawable(Res.get(), result) : null;
+        return result;
     }
 
     public interface OnMonthChangedListener {

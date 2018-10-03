@@ -7,9 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
@@ -24,6 +28,7 @@ import com.indoor.flowers.model.CalendarFilter.FilterElements;
 import com.indoor.flowers.model.Flower;
 import com.indoor.flowers.model.Group;
 import com.indoor.flowers.model.NotificationType;
+import com.indoor.flowers.util.AnimationUtils;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.SpaceItemDecoration;
 
@@ -67,6 +72,7 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupTransitions();
         filter = FilesUtils.getCalendarFilter();
     }
 
@@ -257,5 +263,23 @@ public class EventFilterFragment extends Fragment implements OnCheckedChangeList
 
         selectedItemsList.setAdapter(adapter);
         selectedItemsList.addItemDecoration(new SpaceItemDecoration(Res.getDimensionPixelSize(R.dimen.margin_normal)));
+    }
+
+    private void setupTransitions() {
+        TransitionSet exitTransition = new TransitionSet();
+        exitTransition.addTransition(new Slide(AnimationUtils.getGravityDirection(Gravity.END))
+                .addTarget(R.id.fef_data_container));
+        exitTransition.addTransition(new Slide(Gravity.BOTTOM)
+                .addTarget(R.id.fef_filter));
+        exitTransition.setDuration(AnimationUtils.TRANSITION_DURATION);
+        exitTransition.setInterpolator(new OvershootInterpolator());
+
+        setReturnTransition(exitTransition);
+        setExitTransition(exitTransition);
+
+        TransitionSet enterTransition = exitTransition.clone();
+        enterTransition.setStartDelay(AnimationUtils.TRANSITION_DELAY);
+        setEnterTransition(enterTransition);
+        setReenterTransition(enterTransition);
     }
 }

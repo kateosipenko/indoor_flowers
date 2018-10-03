@@ -6,16 +6,21 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
@@ -23,6 +28,8 @@ import com.indoor.flowers.database.provider.DatabaseProvider;
 import com.indoor.flowers.database.provider.FlowersProvider;
 import com.indoor.flowers.database.provider.NotificationsProvider;
 import com.indoor.flowers.model.Flower;
+import com.indoor.flowers.transition.FlowerSharedTransition;
+import com.indoor.flowers.util.AnimationUtils;
 import com.indoor.flowers.util.FilesUtils;
 import com.indoor.flowers.util.FlowersAlarmsUtils;
 import com.indoor.flowers.view.NameView;
@@ -43,6 +50,8 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     Toolbar toolbar;
     @BindView(R.id.ff_name)
     NameView nameView;
+    @BindView(R.id.ff_container)
+    ViewGroup dataContainer;
 
     FlowersProvider provider;
 
@@ -60,6 +69,13 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupTransitions();
+
+        setSharedElementEnterTransition(new FlowerSharedTransition(false)
+                .setDuration(5000));
+        setSharedElementReturnTransition(new FlowerSharedTransition(true)
+                .setDuration(5000));
+
         setHasOptionsMenu(true);
         provider = new FlowersProvider(getActivity());
         long flowerId = getFlowerIdFromArgs();
@@ -71,6 +87,9 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flower, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        ViewCompat.setTransitionName(dataContainer, flower.getName());
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         nameView.setListener(this);
         setupActionBar();
@@ -178,5 +197,22 @@ public class FlowerFragment extends Fragment implements OnNavigationItemSelected
     private long getFlowerIdFromArgs() {
         return getArguments() != null && getArguments().containsKey(KEY_FLOWER_ID)
                 ? getArguments().getLong(KEY_FLOWER_ID, -1) : -1;
+    }
+
+    private void setupTransitions() {
+        TransitionSet exitTransition = new TransitionSet();
+        exitTransition.addTransition(new Slide(Gravity.TOP).addTarget(R.id.ff_toolbar));
+        exitTransition.addTransition(new Slide(Gravity.BOTTOM).addTarget(R.id.ff_bottom_menu));
+        exitTransition.setDuration(AnimationUtils.TRANSITION_DURATION);
+        exitTransition.setInterpolator(new OvershootInterpolator());
+
+        setExitTransition(exitTransition);
+        setReturnTransition(exitTransition);
+
+        TransitionSet enterTransition = exitTransition.clone();
+        enterTransition.setStartDelay(AnimationUtils.TRANSITION_DELAY);
+
+        setEnterTransition(enterTransition);
+        setReenterTransition(enterTransition);
     }
 }

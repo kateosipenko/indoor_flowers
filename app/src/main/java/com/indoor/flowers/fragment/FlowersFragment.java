@@ -108,8 +108,17 @@ public class FlowersFragment extends Fragment implements OnItemClickListener<Flo
         FragmentManager manager = getParentFragment() != null
                 ? getParentFragment().getFragmentManager() : getFragmentManager();
         if (manager != null) {
-            Fragments.replace(manager, android.R.id.content,
-                    FlowerFragment.newInstance(item.getFlower().getId()), null, true);
+            Fragment fragment = FlowerFragment.newInstance(item.getFlower().getId());
+            RecyclerView.ViewHolder holder = flowersList.findViewHolderForAdapterPosition(adapter.getItemPosition(item));
+            if (holder != null && holder.itemView != null) {
+                manager.beginTransaction()
+                        .addSharedElement(holder.itemView, holder.itemView.getTransitionName())
+                        .replace(android.R.id.content, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Fragments.replace(manager, android.R.id.content, fragment, null, true);
+            }
         }
     }
 

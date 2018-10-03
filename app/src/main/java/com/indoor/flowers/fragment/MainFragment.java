@@ -10,13 +10,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.TransitionSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.evgeniysharafan.utils.Fragments;
 import com.indoor.flowers.R;
 import com.indoor.flowers.adapter.MainPagerAdapter;
+import com.indoor.flowers.util.AnimationUtils;
 import com.indoor.flowers.util.DialogUtils;
 
 import butterknife.BindView;
@@ -40,6 +46,12 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
 
     public static MainFragment newInstance() {
         return new MainFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupTransitions();
     }
 
     @Nullable
@@ -119,5 +131,26 @@ public class MainFragment extends Fragment implements OnPageChangeListener {
             toolbar.setTitle(R.string.app_name);
             activity.setSupportActionBar(toolbar);
         }
+    }
+
+    private void setupTransitions() {
+        TransitionSet enterTransition = new TransitionSet();
+        enterTransition.addTransition(new Slide(Gravity.TOP)
+                .addTarget(R.id.toolbar));
+        enterTransition.addTransition(new Slide(Gravity.TOP)
+                .addTarget(R.id.fm_tabs));
+        enterTransition.addTransition(new Slide(AnimationUtils.getGravityDirection(Gravity.START))
+                .addTarget(R.id.fm_pager));
+        enterTransition.addTransition(new Fade()
+                .addTarget(R.id.fm_fab));
+        enterTransition.setDuration(AnimationUtils.TRANSITION_DURATION);
+        enterTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+        setEnterTransition(enterTransition);
+        setExitTransition(enterTransition);
+
+        TransitionSet reenterTransition = enterTransition.clone();
+        reenterTransition.setStartDelay(AnimationUtils.TRANSITION_DELAY);
+        setReenterTransition(reenterTransition);
+        setReturnTransition(reenterTransition);
     }
 }

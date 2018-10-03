@@ -1,5 +1,6 @@
 package com.indoor.flowers.adapter;
 
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,6 +24,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FlowersWithWateringAdapter extends RecyclerListAdapter<FlowerWithWatering, FlowersWithWateringAdapter.ViewHolder> {
+
+    public int getItemPosition(FlowerWithWatering item) {
+        return this.items.indexOf(item);
+    }
 
     @Override
     public int getRowLayoutRes() {
@@ -64,6 +69,7 @@ public class FlowersWithWateringAdapter extends RecyclerListAdapter<FlowerWithWa
         }
 
         private void update(FlowerWithWatering flowerWithWatering) {
+            ViewCompat.setTransitionName(itemView, flowerWithWatering.getFlower().getName());
             Flower flower = flowerWithWatering.getFlower();
 
             if (flowerWithWatering.getDate() != null) {
